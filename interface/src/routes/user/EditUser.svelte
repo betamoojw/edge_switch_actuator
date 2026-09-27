@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { modals } from 'svelte-modals';
+	import { modals, type ModalProps } from 'svelte-modals';
 	import { fly } from 'svelte/transition';
 	import InputPassword from '$lib/components/InputPassword.svelte';
 	import Cancel from '~icons/tabler/x';
@@ -8,7 +8,7 @@
 
 	// provided by <Modals />
 
-	interface Props {
+	interface Props extends ModalProps {
 		isOpen: boolean;
 		title: string;
 		onSaveUser: any;
@@ -22,7 +22,9 @@
 		user: _user = {
 			username: '',
 			password: '',
-			admin: false
+			admin: false,
+			role: 'viewer',
+			channels: 63
 		}
 	}: Props = $props();
 
@@ -51,10 +53,10 @@
 		}
 	}
 
-	function preventDefault(fn) {
-		return function (event) {
+	function preventDefault(fn: () => void) {
+		return function (event: SubmitEvent) {
 			event.preventDefault();
-			fn.call(this, event);
+			fn();
 		};
 	}
 </script>
@@ -90,12 +92,27 @@
 						>Username must be between 3 and 32 characters long</span
 					></label
 				>
-				<label class="label" for="pwd">Password </label>
+				<label class="label" for="pwd">Password (blank keeps current) </label>
 				<InputPassword bind:value={user.password} id="pwd" />
 				<label class="label my-auto cursor-pointer justify-start gap-4 mt-4">
 					<input type="checkbox" bind:checked={user.admin} class="checkbox checkbox-primary" />
 					<span class="">Is Admin?</span>
 				</label>
+				<label class="label" for="role">Actuator role</label>
+				<select id="role" class="select" bind:value={user.role} disabled={user.admin}>
+					<option value="viewer">Viewer</option><option value="operator">Operator</option><option
+						value="installer">Installer</option
+					>
+				</select>
+				<label class="label" for="channels">Allowed relay bit mask (1–63; 0 denies all)</label>
+				<input
+					id="channels"
+					class="input"
+					type="number"
+					min="0"
+					max="63"
+					bind:value={user.channels}
+				/>
 				<div class="divider my-2"></div>
 				<div class="flex justify-end gap-2">
 					<button

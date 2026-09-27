@@ -13,44 +13,24 @@
  **/
 
 #include <NTPSettingsService.h>
-#if FT_ENABLED(FT_ETHERNET)
-#include <ETH.h>
-#endif
+#include <NetworkSupport.h>
 
-NTPSettingsService::NTPSettingsService(PsychicHttpServer *server,
-                                       FS *fs,
-                                       SecurityManager *securityManager) : _server(server),
-                                                                           _securityManager(securityManager),
-                                                                           _httpEndpoint(NTPSettings::read, NTPSettings::update, this, server, NTP_SETTINGS_SERVICE_PATH, securityManager),
-                                                                           _fsPersistence(NTPSettings::read, NTPSettings::update, this, fs, NTP_SETTINGS_FILE)
+NTPSettingsService::NTPSettingsService(PsychicHttpServer *server, FS *fs, SecurityManager *securityManager)
+    : _server(server), _securityManager(securityManager),
+      _httpEndpoint(NTPSettings::read, NTPSettings::update, this, server, NTP_SETTINGS_SERVICE_PATH, securityManager),
+      _fsPersistence(NTPSettings::read, NTPSettings::update, this, fs, NTP_SETTINGS_FILE)
 {
-    addUpdateHandler([&](const String &originId)
-                     { configureNTP(); },
-                     false);
+    addUpdateHandler([&](const String &originId) { configureNTP(); }, false);
 }
 
 void NTPSettingsService::begin()
 {
-    WiFi.onEvent(
-        std::bind(&NTPSettingsService::onNetworkDisconnected, this, std::placeholders::_1, std::placeholders::_2),
-        WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
-    WiFi.onEvent(std::bind(&NTPSettingsService::onNetworkGotIP, this, std::placeholders::_1, std::placeholders::_2),
-                 WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_GOT_IP);
-
-#if FT_ENABLED(FT_ETHERNET)
-    WiFi.onEvent(
-        std::bind(&NTPSettingsService::onNetworkDisconnected, this, std::placeholders::_1, std::placeholders::_2),
-        WiFiEvent_t::ARDUINO_EVENT_ETH_DISCONNECTED);
-    WiFi.onEvent(std::bind(&NTPSettingsService::onNetworkGotIP, this, std::placeholders::_1, std::placeholders::_2),
-                 WiFiEvent_t::ARDUINO_EVENT_ETH_GOT_IP);
-#endif
-
     _httpEndpoint.begin();
-    _server->on(TIME_PATH,
-                HTTP_POST,
-                _securityManager->wrapCallback(
-                    std::bind(&NTPSettingsService::configureTime, this, std::placeholders::_1, std::placeholders::_2),
-                    AuthenticationPredicates::IS_ADMIN));
+    _server->on(
+        TIME_PATH,
+        HTTP_POST,
+        _securityManager->wrapCallback(std::bind(&NTPSettingsService::configureTime, this, std::placeholders::_1, std::placeholders::_2),
+                                       AuthenticationPredicates::IS_ADMIN));
 
     ESP_LOGV(SVK_TAG, "Registered POST endpoint: %s", TIME_PATH);
 
@@ -58,29 +38,21 @@ void NTPSettingsService::begin()
     configureNTP();
 }
 
-void NTPSettingsService::onNetworkGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
+void NTPSettingsService::loop()
 {
-#ifdef SERIAL_INFO
-    Serial.println(F("Got IP address, starting NTP Synchronization"));
-#endif
-    configureNTP();
-}
-
-void NTPSettingsService::onNetworkDisconnected(WiFiEvent_t event, WiFiEventInfo_t info)
-{
-#ifdef SERIAL_INFO
-    Serial.println(F("Network connection dropped, stopping NTP."));
-#endif
-    configureNTP();
+    const auto address = NetworkSupport::localIP();
+    const int interface = NetworkSupport::interfaceIndex();
+    if (address != _networkAddress || interface != _networkInterface)
+    {
+        _networkAddress = address;
+        _networkInterface = interface;
+        configureNTP();
+    }
 }
 
 void NTPSettingsService::configureNTP()
 {
-    bool networkConnected = WiFi.isConnected();
-#if FT_ENABLED(FT_ETHERNET)
-    networkConnected = networkConnected || ETH.connected();
-#endif
-    if (networkConnected && _state.enabled)
+    if (NetworkSupport::online() && _state.enabled)
     {
 #ifdef SERIAL_INFO
         Serial.println(F("Starting NTP..."));
@@ -89,7 +61,6 @@ void NTPSettingsService::configureNTP()
     }
     else
     {
-
 #ifdef CONFIG_LWIP_TCPIP_CORE_LOCKING
         if (!sys_thread_tcpip(LWIP_CORE_LOCK_QUERY_HOLDER))
         {

@@ -15,16 +15,16 @@
  *   the terms of the LGPL v3 license. See the LICENSE file for details.
  **/
 
-#include <WiFi.h>
 #include <ETH.h>
-#include <SettingValue.h>
-#include <StatefulService.h>
 #include <EventSocket.h>
 #include <FSPersistence.h>
 #include <HttpEndpoint.h>
 #include <JsonUtils.h>
-#include <SecurityManager.h>
+#include <Network.h>
 #include <PsychicHttp.h>
+#include <SecurityManager.h>
+#include <SettingValue.h>
+#include <StatefulService.h>
 #include <vector>
 
 #ifndef FACTORY_ETHERNET_HOSTNAME
@@ -33,7 +33,7 @@
 
 #define ETHERNET_EVENT_DELAY 500
 
-#define ETHERNET_SETTINGS_FILE "/config/ethernetSettings.json"
+#define ETHERNET_SETTINGS_FILE         "/config/ethernetSettings.json"
 #define ETHERNET_SETTINGS_SERVICE_PATH "/rest/ethernetSettings"
 
 #define EVENT_ETHERNET "ethernet"
@@ -91,7 +91,8 @@ public:
         // Turning off static ip config if we don't meet the minimum requirements
         // of ipAddress and subnet. This may change to static ip only
         // as sensible defaults can be assumed for gateway and subnet
-        if (settings.ethernetSettings.staticIPConfig && (IPUtils::isNotSet(settings.ethernetSettings.localIP) || IPUtils::isNotSet(settings.ethernetSettings.subnetMask)))
+        if (settings.ethernetSettings.staticIPConfig &&
+            (IPUtils::isNotSet(settings.ethernetSettings.localIP) || IPUtils::isNotSet(settings.ethernetSettings.subnetMask)))
         {
             settings.ethernetSettings.staticIPConfig = false;
         }
@@ -101,7 +102,7 @@ public:
     };
 };
 
-class EthernetSettingsService : public StatefulService<EthernetSettings>
+class EthernetSettingsService: public StatefulService<EthernetSettings>
 {
 public:
     EthernetSettingsService(PsychicHttpServer *server, FS *fs, SecurityManager *securityManager, EventSocket *socket);

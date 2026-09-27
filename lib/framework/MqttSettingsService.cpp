@@ -13,6 +13,7 @@
  **/
 
 #include <MqttSettingsService.h>
+#include <NetworkSupport.h>
 
 /**
  * Load the root certificate bundle embedded by the build process
@@ -34,7 +35,7 @@ static char *retainCstr(const char *cstr, char **ptr)
     // dynamically allocate and copy cstr (if non null)
     if (cstr != nullptr)
     {
-        *ptr = (char *)malloc(strlen(cstr) + 1);
+        *ptr = (char *) malloc(strlen(cstr) + 1);
         strcpy(*ptr, cstr);
     }
 
@@ -42,25 +43,16 @@ static char *retainCstr(const char *cstr, char **ptr)
     return *ptr;
 }
 
-MqttSettingsService::MqttSettingsService(PsychicHttpServer *server,
-                                         FS *fs,
-                                         SecurityManager *securityManager) : _server(server),
-                                                                             _securityManager(securityManager),
-                                                                             _httpEndpoint(MqttSettings::read, MqttSettings::update, this, server, MQTT_SETTINGS_SERVICE_PATH, securityManager),
-                                                                             _fsPersistence(MqttSettings::read, MqttSettings::update, this, fs, MQTT_SETTINGS_FILE),
-                                                                             _retainedHost(nullptr),
-                                                                             _retainedClientId(nullptr),
-                                                                             _retainedUsername(nullptr),
-                                                                             _retainedPassword(nullptr),
-                                                                             _reconfigureMqtt(false),
-                                                                             _mqttClient(),
-                                                                             _lastError("None")
+MqttSettingsService::MqttSettingsService(PsychicHttpServer *server, FS *fs, SecurityManager *securityManager)
+    : _server(server), _securityManager(securityManager),
+      _httpEndpoint(MqttSettings::read, MqttSettings::update, this, server, MQTT_SETTINGS_SERVICE_PATH, securityManager),
+      _fsPersistence(MqttSettings::read, MqttSettings::update, this, fs, MQTT_SETTINGS_FILE), _retainedHost(nullptr),
+      _retainedClientId(nullptr), _retainedUsername(nullptr), _retainedPassword(nullptr), _reconfigureMqtt(false), _mqttClient(),
+      _lastError("None")
 {
     String status_topic = SettingValue::format(FACTORY_MQTT_STATUS_TOPIC);
     retainCstr(status_topic.c_str(), &_retainedWillTopic);
-    addUpdateHandler([&](const String &originId)
-                     { onConfigUpdated(); },
-                     false);
+    addUpdateHandler([&](const String &originId) { onConfigUpdated(); }, false);
 
 #if ESP_ARDUINO_VERSION_MAJOR == 3
     _mqttClient.setCACertBundle(rootca_crt_bundle_start, rootca_crt_bundle_end - rootca_crt_bundle_start);
@@ -75,11 +67,6 @@ MqttSettingsService::~MqttSettingsService()
 
 void MqttSettingsService::begin()
 {
-    WiFi.onEvent(
-        std::bind(&MqttSettingsService::onStationModeDisconnected, this, std::placeholders::_1, std::placeholders::_2),
-        WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
-    WiFi.onEvent(std::bind(&MqttSettingsService::onStationModeGotIP, this, std::placeholders::_1, std::placeholders::_2),
-                 WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_GOT_IP);
     _mqttClient.onConnect(std::bind(&MqttSettingsService::onMqttConnect, this, std::placeholders::_1));
     _mqttClient.onDisconnect(std::bind(&MqttSettingsService::onMqttDisconnect, this, std::placeholders::_1));
     _mqttClient.onError(std::bind(&MqttSettingsService::onMqttError, this, std::placeholders::_1));
@@ -90,6 +77,14 @@ void MqttSettingsService::begin()
 
 void MqttSettingsService::loop()
 {
+    const auto address = NetworkSupport::localIP();
+    const int interface = NetworkSupport::interfaceIndex();
+    if (address != _networkAddress || interface != _networkInterface)
+    {
+        _networkAddress = address;
+        _networkInterface = interface;
+        _reconfigureMqtt = true;
+    }
     if (_reconfigureMqtt)
     {
         // reconfigure MQTT client
@@ -128,7 +123,6 @@ String MqttSettingsService::getLastError()
 
 void MqttSettingsService::onMqttConnect(bool sessionPresent)
 {
-
 #if ESP_IDF_VERSION_MAJOR == 5
     String uri = _mqttClient.getMqttConfig()->broker.address.uri;
 #else
@@ -166,30 +160,12 @@ void MqttSettingsService::onConfigUpdated()
     _reconfigureMqtt = true;
 }
 
-void MqttSettingsService::onStationModeGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
-{
-    if (_state.enabled)
-    {
-        ESP_LOGI(SVK_TAG, "WiFi connection established, starting MQTT client.");
-        onConfigUpdated();
-    }
-}
-
-void MqttSettingsService::onStationModeDisconnected(WiFiEvent_t event, WiFiEventInfo_t info)
-{
-    if (_state.enabled)
-    {
-        ESP_LOGI(SVK_TAG, "WiFi connection dropped, stopping MQTT client.");
-        onConfigUpdated();
-    }
-}
-
 void MqttSettingsService::configureMqtt()
 {
     disconnect();
 
-    // only connect if WiFi is connected and MQTT is enabled
-    if (_state.enabled && WiFi.isConnected())
+    // Connect through the core-selected uplink when MQTT is enabled.
+    if (_state.enabled && NetworkSupport::online())
     {
 #ifdef SERIAL_INFO
         Serial.println("Connecting to MQTT...");
@@ -197,9 +173,8 @@ void MqttSettingsService::configureMqtt()
         _mqttClient.setServer(retainCstr(_state.uri.c_str(), &_retainedHost));
         if (_state.username.length() > 0)
         {
-            _mqttClient.setCredentials(
-                retainCstr(_state.username.c_str(), &_retainedUsername),
-                retainCstr(_state.password.length() > 0 ? _state.password.c_str() : nullptr, &_retainedPassword));
+            _mqttClient.setCredentials(retainCstr(_state.username.c_str(), &_retainedUsername),
+                                       retainCstr(_state.password.length() > 0 ? _state.password.c_str() : nullptr, &_retainedPassword));
         }
         else
         {

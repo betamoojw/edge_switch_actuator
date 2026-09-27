@@ -14,22 +14,14 @@
 
 #include <WiFiSettingsService.h>
 
-WiFiSettingsService::WiFiSettingsService(PsychicHttpServer *server,
-                                         FS *fs,
-                                         SecurityManager *securityManager,
-                                         EventSocket *socket) : _server(server),
-                                                                _securityManager(securityManager),
-                                                                _httpEndpoint(WiFiSettings::read, WiFiSettings::update, this, server, WIFI_SETTINGS_SERVICE_PATH, securityManager,
-                                                                              AuthenticationPredicates::IS_ADMIN),
-                                                                _fsPersistence(WiFiSettings::read, WiFiSettings::update, this, fs, WIFI_SETTINGS_FILE),
-                                                                _lastConnectionAttempt(0),
-                                                                _delayedReconnectTime(0),
-                                                                _delayedReconnectPending(false),
-                                                                _socket(socket)
+WiFiSettingsService::WiFiSettingsService(PsychicHttpServer *server, FS *fs, SecurityManager *securityManager, EventSocket *socket)
+    : _server(server), _securityManager(securityManager),
+      _httpEndpoint(WiFiSettings::read, WiFiSettings::update, this, server, WIFI_SETTINGS_SERVICE_PATH, securityManager,
+                    AuthenticationPredicates::IS_ADMIN),
+      _fsPersistence(WiFiSettings::read, WiFiSettings::update, this, fs, WIFI_SETTINGS_FILE), _lastConnectionAttempt(0),
+      _delayedReconnectTime(0), _delayedReconnectPending(false), _socket(socket)
 {
-    addUpdateHandler([&](const String &originId)
-                     { delayedReconnect(); },
-                     false);
+    addUpdateHandler([&](const String &originId) { delayedReconnect(); }, false);
 }
 
 void WiFiSettingsService::initWiFi()
@@ -40,11 +32,10 @@ void WiFiSettingsService::initWiFi()
     WiFi.persistent(false);
     WiFi.setAutoReconnect(false);
 
-    WiFi.onEvent(
-        std::bind(&WiFiSettingsService::onStationModeDisconnected, this, std::placeholders::_1, std::placeholders::_2),
-        WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
-    WiFi.onEvent(std::bind(&WiFiSettingsService::onStationModeStop, this, std::placeholders::_1, std::placeholders::_2),
-                 WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_STOP);
+    Network.onEvent(std::bind(&WiFiSettingsService::onStationModeDisconnected, this, std::placeholders::_1, std::placeholders::_2),
+                    ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
+    Network.onEvent(std::bind(&WiFiSettingsService::onStationModeStop, this, std::placeholders::_1, std::placeholders::_2),
+                    ARDUINO_EVENT_WIFI_STA_STOP);
 
     _fsPersistence.readFromFS();
     reconfigureWiFiConnection();
@@ -80,18 +71,18 @@ void WiFiSettingsService::reconfigureWiFiConnection()
 
     switch (_state.staConnectionMode)
     {
-    case (u_int8_t)STAConnectionMode::OFFLINE:
-        connectionMode = "OFFLINE";
-        break;
-    case (u_int8_t)STAConnectionMode::PRIORITY:
-        connectionMode = "PRIORITY";
-        break;
-    case (u_int8_t)STAConnectionMode::STRENGTH:
-        connectionMode = "STRENGTH";
-        break;
-    default:
-        connectionMode = "UNKNOWN";
-        break;
+        case (u_int8_t) STAConnectionMode::OFFLINE:
+            connectionMode = "OFFLINE";
+            break;
+        case (u_int8_t) STAConnectionMode::PRIORITY:
+            connectionMode = "PRIORITY";
+            break;
+        case (u_int8_t) STAConnectionMode::STRENGTH:
+            connectionMode = "STRENGTH";
+            break;
+        default:
+            connectionMode = "UNKNOWN";
+            break;
     }
 
     ESP_LOGI(SVK_TAG, "Reconfiguring WiFi connection to: %s", connectionMode.c_str());
@@ -115,13 +106,13 @@ void WiFiSettingsService::loop()
         reconfigureWiFiConnection();
     }
 
-    if (!_lastConnectionAttempt || (unsigned long)(currentMillis - _lastConnectionAttempt) >= WIFI_RECONNECTION_DELAY)
+    if (!_lastConnectionAttempt || (unsigned long) (currentMillis - _lastConnectionAttempt) >= WIFI_RECONNECTION_DELAY)
     {
         _lastConnectionAttempt = currentMillis;
         manageSTA();
     }
 
-    if (!_lastRssiUpdate || (unsigned long)(currentMillis - _lastRssiUpdate) >= RSSI_EVENT_DELAY)
+    if (!_lastRssiUpdate || (unsigned long) (currentMillis - _lastRssiUpdate) >= RSSI_EVENT_DELAY)
     {
         _lastRssiUpdate = currentMillis;
         updateRSSI();
@@ -135,9 +126,9 @@ String WiFiSettingsService::getHostname()
 
 String WiFiSettingsService::getIP()
 {
-    if (WiFi.isConnected())
+    if (WiFi.STA.hasIP())
     {
-        return WiFi.localIP().toString();
+        return WiFi.STA.localIP().toString();
     }
     return "Not connected";
 }
@@ -145,7 +136,7 @@ String WiFiSettingsService::getIP()
 void WiFiSettingsService::manageSTA()
 {
     // Abort if already connected, if we have no SSID, or are in offline mode
-    if (WiFi.isConnected() || _state.wifiSettings.empty() || _state.staConnectionMode == (u_int8_t)STAConnectionMode::OFFLINE)
+    if (WiFi.STA.hasIP() || _state.wifiSettings.empty() || _state.staConnectionMode == (u_int8_t) STAConnectionMode::OFFLINE)
     {
         return;
     }
@@ -193,7 +184,8 @@ void WiFiSettingsService::connectToWiFi()
             int32_t chan_scan;
 
             WiFi.getNetworkInfo(i, ssid_scan, sec_scan, rssi_scan, BSSID_scan, chan_scan);
-            ESP_LOGV(SVK_TAG, "SSID: %s, BSSID: " MACSTR ", RSSI: %d dbm, Channel: %d", ssid_scan.c_str(), MAC2STR(BSSID_scan), rssi_scan, chan_scan);
+            ESP_LOGV(SVK_TAG, "SSID: %s, BSSID: " MACSTR ", RSSI: %d dbm, Channel: %d", ssid_scan.c_str(), MAC2STR(BSSID_scan), rssi_scan,
+                     chan_scan);
 
             for (auto &network : _state.wifiSettings)
             {
@@ -220,7 +212,7 @@ void WiFiSettingsService::connectToWiFi()
         }
 
         // Connection mode PRIORITY: connect to the first available network
-        if (_state.staConnectionMode == (u_int8_t)STAConnectionMode::PRIORITY)
+        if (_state.staConnectionMode == (u_int8_t) STAConnectionMode::PRIORITY)
         {
             for (auto &network : _state.wifiSettings)
             {
@@ -233,11 +225,12 @@ void WiFiSettingsService::connectToWiFi()
             }
         }
         // Connection mode STRENGTH: connect to the strongest network
-        else if (_state.staConnectionMode == (u_int8_t)STAConnectionMode::STRENGTH)
+        else if (_state.staConnectionMode == (u_int8_t) STAConnectionMode::STRENGTH)
         {
             if (bestNetwork)
             {
-                ESP_LOGI(SVK_TAG, "Connecting to strongest network: %s, BSSID: " MACSTR " ", bestNetwork->ssid.c_str(), MAC2STR(bestNetwork->bssid));
+                ESP_LOGI(SVK_TAG, "Connecting to strongest network: %s, BSSID: " MACSTR " ", bestNetwork->ssid.c_str(),
+                         MAC2STR(bestNetwork->bssid));
                 configureNetwork(*bestNetwork);
             }
             else
@@ -246,7 +239,7 @@ void WiFiSettingsService::connectToWiFi()
             }
         }
         // Connection mode OFFLINE: do not connect to any network
-        else if (_state.staConnectionMode == (u_int8_t)STAConnectionMode::OFFLINE)
+        else if (_state.staConnectionMode == (u_int8_t) STAConnectionMode::OFFLINE)
         {
             ESP_LOGI(SVK_TAG, "WiFi connection mode is OFFLINE, not connecting to any network.");
         }
@@ -263,17 +256,19 @@ void WiFiSettingsService::connectToWiFi()
 
 void WiFiSettingsService::configureNetwork(wifi_settings_t &network)
 {
+    // NetworkInterface configuration requires an initialized station netif.
+    WiFi.STA.begin();
     if (network.staticIPConfig)
     {
         // configure for static IP
-        WiFi.config(network.localIP, network.gatewayIP, network.subnetMask, network.dnsIP1, network.dnsIP2);
+        WiFi.STA.config(network.localIP, network.gatewayIP, network.subnetMask, network.dnsIP1, network.dnsIP2);
     }
     else
     {
         // configure for DHCP
-        WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE);
+        WiFi.STA.config(INADDR_NONE, INADDR_NONE, INADDR_NONE);
     }
-    WiFi.setHostname(_state.hostname.c_str());
+    WiFi.STA.setHostname(_state.hostname.c_str());
 
     // attempt to connect to the network
     WiFi.begin(network.ssid.c_str(), network.password.c_str(), network.channel, network.bssid);
@@ -288,17 +283,17 @@ void WiFiSettingsService::updateRSSI()
 {
     JsonDocument doc;
     doc["rssi"] = WiFi.RSSI();
-    doc["ssid"] = WiFi.isConnected() ? WiFi.SSID() : "disconnected";
+    doc["ssid"] = WiFi.STA.hasIP() ? WiFi.SSID() : "disconnected";
     JsonObject jsonObject = doc.as<JsonObject>();
     _socket->emitEvent(EVENT_RSSI, jsonObject);
 }
 
-void WiFiSettingsService::onStationModeDisconnected(WiFiEvent_t event, WiFiEventInfo_t info)
+void WiFiSettingsService::onStationModeDisconnected(arduino_event_id_t event, arduino_event_info_t info)
 {
     manageSTA();
 }
 
-void WiFiSettingsService::onStationModeStop(WiFiEvent_t event, WiFiEventInfo_t info)
+void WiFiSettingsService::onStationModeStop(arduino_event_id_t event, arduino_event_info_t info)
 {
     if (_stopping)
     {

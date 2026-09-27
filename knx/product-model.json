@@ -1,0 +1,12 @@
+{
+  "name": "Edge S3 Relay 6CH DEVELOPMENT",
+  "manufacturerId": 250,
+  "applicationNumber": 600,
+  "applicationVersion": 1,
+  "maskVersion": "MV-57B0",
+  "channels": 6,
+  "parameterBytes": 52,
+  "maxGroupAddresses": 64,
+  "maxAssociations": 96,
+  "developmentOnly": true
+}

@@ -1,3 +1,4 @@
+#include <NetworkSupport.h>
 /**
  *   ESP32 SvelteKit
  *
@@ -14,19 +15,13 @@
 
 #include <APSettingsService.h>
 
-APSettingsService::APSettingsService(PsychicHttpServer *server,
-                                     FS *fs,
-                                     SecurityManager *securityManager) : _server(server),
-                                                                         _securityManager(securityManager),
-                                                                         _httpEndpoint(APSettings::read, APSettings::update, this, server, AP_SETTINGS_SERVICE_PATH, securityManager),
-                                                                         _fsPersistence(APSettings::read, APSettings::update, this, fs, AP_SETTINGS_FILE),
-                                                                         _dnsServer(nullptr),
-                                                                         _lastManaged(0),
-                                                                         _reconfigureAp(false)
+APSettingsService::APSettingsService(PsychicHttpServer *server, FS *fs, SecurityManager *securityManager)
+    : _server(server), _securityManager(securityManager),
+      _httpEndpoint(APSettings::read, APSettings::update, this, server, AP_SETTINGS_SERVICE_PATH, securityManager),
+      _fsPersistence(APSettings::read, APSettings::update, this, fs, AP_SETTINGS_FILE), _dnsServer(nullptr), _lastManaged(0),
+      _reconfigureAp(false)
 {
-    addUpdateHandler([&](const String &originId)
-                     { reconfigureAP(); },
-                     false);
+    addUpdateHandler([&](const String &originId) { reconfigureAP(); }, false);
 }
 
 void APSettingsService::begin()
@@ -56,7 +51,7 @@ void APSettingsService::recoveryMode()
 void APSettingsService::loop()
 {
     unsigned long currentMillis = millis();
-    unsigned long manageElapsed = (unsigned long)(currentMillis - _lastManaged);
+    unsigned long manageElapsed = (unsigned long) (currentMillis - _lastManaged);
     if (manageElapsed >= MANAGE_NETWORK_DELAY)
     {
         _lastManaged = currentMillis;
@@ -68,16 +63,15 @@ void APSettingsService::loop()
 void APSettingsService::manageAP()
 {
     WiFiMode_t currentWiFiMode = WiFi.getMode();
-    if (_state.provisionMode == AP_MODE_ALWAYS ||
-        (_state.provisionMode == AP_MODE_DISCONNECTED && WiFi.status() != WL_CONNECTED) || _recoveryMode)
+    if (_state.provisionMode == AP_MODE_ALWAYS || (_state.provisionMode == AP_MODE_DISCONNECTED && !NetworkSupport::online()) ||
+        _recoveryMode)
     {
         if (_reconfigureAp || currentWiFiMode == WIFI_OFF || currentWiFiMode == WIFI_STA)
         {
             startAP();
         }
     }
-    else if ((currentWiFiMode == WIFI_AP || currentWiFiMode == WIFI_AP_STA) &&
-             (_reconfigureAp || !WiFi.softAPgetStationNum()))
+    else if ((currentWiFiMode == WIFI_AP || currentWiFiMode == WIFI_AP_STA) && (_reconfigureAp || !WiFi.softAPgetStationNum()))
     {
         stopAP();
     }
@@ -135,7 +129,7 @@ APNetworkStatus APSettingsService::getAPNetworkStatus()
 {
     WiFiMode_t currentWiFiMode = WiFi.getMode();
     bool apActive = currentWiFiMode == WIFI_AP || currentWiFiMode == WIFI_AP_STA;
-    if (apActive && _state.provisionMode != AP_MODE_ALWAYS && WiFi.status() == WL_CONNECTED)
+    if (apActive && _state.provisionMode != AP_MODE_ALWAYS && NetworkSupport::online())
     {
         return APNetworkStatus::LINGERING;
     }

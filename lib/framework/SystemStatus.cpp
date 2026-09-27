@@ -12,6 +12,7 @@
  *   the terms of the LGPL v3 license. See the LICENSE file for details.
  **/
 
+#include <NetworkSupport.h>
 #include <SystemStatus.h>
 #include <esp32-hal.h>
 
@@ -39,82 +40,80 @@
 #define STRINGIZE(s) #s
 #endif
 #define ARDUINO_VERSION_STR(major, minor, patch) "v" STRINGIZE(major) "." STRINGIZE(minor) "." STRINGIZE(patch)
-#define ARDUINO_VERSION ARDUINO_VERSION_STR(ESP_ARDUINO_VERSION_MAJOR, ESP_ARDUINO_VERSION_MINOR, ESP_ARDUINO_VERSION_PATCH)
+#define ARDUINO_VERSION                          ARDUINO_VERSION_STR(ESP_ARDUINO_VERSION_MAJOR, ESP_ARDUINO_VERSION_MINOR, ESP_ARDUINO_VERSION_PATCH)
 #endif
 
 String verbosePrintResetReason(int reason)
 {
     switch (reason)
     {
-    case ESP_RST_UNKNOWN:
-        return ("Reset reason can not be determined");
-        break;
-    case ESP_RST_POWERON:
-        return ("Reset due to power-on event");
-        break;
-    case ESP_RST_EXT:
-        return ("Reset by external pin (not applicable for ESP32)");
-        break;
-    case ESP_RST_SW:
-        return ("Software reset via esp_restart");
-        break;
-    case ESP_RST_PANIC:
-        return ("Software reset due to exception/panic");
-        break;
-    case ESP_RST_INT_WDT:
-        return ("Reset (software or hardware) due to interrupt watchdog");
-        break;
-    case ESP_RST_TASK_WDT:
-        return ("Reset due to task watchdog");
-        break;
-    case ESP_RST_WDT:
-        return ("Reset due to other watchdogs");
-        break;
-    case ESP_RST_DEEPSLEEP:
-        return ("Reset after exiting deep sleep mode");
-        break;
-    case ESP_RST_BROWNOUT:
-        return ("Brownout reset (software or hardware)");
-        break;
-    case ESP_RST_SDIO:
-        return ("Reset over SDIO");
-        break;
+        case ESP_RST_UNKNOWN:
+            return ("Reset reason can not be determined");
+            break;
+        case ESP_RST_POWERON:
+            return ("Reset due to power-on event");
+            break;
+        case ESP_RST_EXT:
+            return ("Reset by external pin (not applicable for ESP32)");
+            break;
+        case ESP_RST_SW:
+            return ("Software reset via esp_restart");
+            break;
+        case ESP_RST_PANIC:
+            return ("Software reset due to exception/panic");
+            break;
+        case ESP_RST_INT_WDT:
+            return ("Reset (software or hardware) due to interrupt watchdog");
+            break;
+        case ESP_RST_TASK_WDT:
+            return ("Reset due to task watchdog");
+            break;
+        case ESP_RST_WDT:
+            return ("Reset due to other watchdogs");
+            break;
+        case ESP_RST_DEEPSLEEP:
+            return ("Reset after exiting deep sleep mode");
+            break;
+        case ESP_RST_BROWNOUT:
+            return ("Brownout reset (software or hardware)");
+            break;
+        case ESP_RST_SDIO:
+            return ("Reset over SDIO");
+            break;
 #ifdef ESP_RST_USB
-    case ESP_RST_USB:
-        return ("Reset by USB peripheral");
-        break;
+        case ESP_RST_USB:
+            return ("Reset by USB peripheral");
+            break;
 #endif
 #ifdef ESP_RST_JSVK_TAG
-    case ESP_RST_JSVK_TAG:
-        return ("Reset by JSVK_TAG");
-        break;
+        case ESP_RST_JSVK_TAG:
+            return ("Reset by JSVK_TAG");
+            break;
 #endif
 #ifdef ESP_RST_EFUSE
-    case ESP_RST_EFUSE:
-        return ("Reset due to efuse error");
-        break;
+        case ESP_RST_EFUSE:
+            return ("Reset due to efuse error");
+            break;
 #endif
 #ifdef ESP_RST_PWR_GLITCH
-    case ESP_RST_PWR_GLITCH:
-        return ("Reset due to power glitch detected");
-        break;
+        case ESP_RST_PWR_GLITCH:
+            return ("Reset due to power glitch detected");
+            break;
 #endif
 #ifdef ESP_RST_CPU_LOCKUP
-    case ESP_RST_CPU_LOCKUP:
-        return ("Reset due to CPU lock up (double exception)");
-        break;
+        case ESP_RST_CPU_LOCKUP:
+            return ("Reset due to CPU lock up (double exception)");
+            break;
 #endif
-    default:
-        char buffer[50];
-        snprintf(buffer, sizeof(buffer), "Unknown reset reason (%d)", reason);
-        return String(buffer);
-        break;
+        default:
+            char buffer[50];
+            snprintf(buffer, sizeof(buffer), "Unknown reset reason (%d)", reason);
+            return String(buffer);
+            break;
     }
 }
 
-SystemStatus::SystemStatus(PsychicHttpServer *server,
-                           SecurityManager *securityManager) : _server(server),
-                                                               _securityManager(securityManager)
+SystemStatus::SystemStatus(PsychicHttpServer *server, SecurityManager *securityManager) : _server(server), _securityManager(securityManager)
 {
 }
 
@@ -132,6 +131,10 @@ esp_err_t SystemStatus::systemStatus(PsychicRequest *request)
 {
     PsychicJsonResponse response = PsychicJsonResponse(request, false);
     JsonObject root = response.getRoot();
+    auto network = root["network"].to<JsonObject>();
+    network["online"] = NetworkSupport::online();
+    network["interface"] = NetworkSupport::interfaceName();
+    network["ip"] = NetworkSupport::localIP().toString();
 
     root["esp_platform"] = ESP_TARGET;
     root["firmware_version"] = APP_VERSION;

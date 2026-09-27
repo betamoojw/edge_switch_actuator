@@ -18,32 +18,32 @@
 
 #include <Arduino.h>
 
+#include <Network.h>
 #include <Update.h>
-#include <WiFi.h>
 
-#include <PsychicHttp.h>
-#include <SecurityManager.h>
-#include <RestartService.h>
 #include <EventSocket.h>
 #include <FirmwareUpdateEvents.h>
+#include <PsychicHttp.h>
+#include <RestartService.h>
+#include <SecurityManager.h>
 
 #define UPLOAD_FIRMWARE_PATH "/rest/uploadFirmware"
 
 // Firmware upload constants
-constexpr size_t MD5_LENGTH = 32;              // MD5 hash length
-constexpr uint8_t ESP_MAGIC_BYTE = 0xE9;       // ESP binary magic byte
+constexpr size_t MD5_LENGTH = 32;        // MD5 hash length
+constexpr uint8_t ESP_MAGIC_BYTE = 0xE9; // ESP binary magic byte
 
 // ESP32 chip type identifiers (byte offset 12 in firmware)
 #if CONFIG_IDF_TARGET_ESP32
-    constexpr uint8_t ESP_CHIP_ID = 0;
+constexpr uint8_t ESP_CHIP_ID = 0;
 #elif CONFIG_IDF_TARGET_ESP32S2
-    constexpr uint8_t ESP_CHIP_ID = 2;
+constexpr uint8_t ESP_CHIP_ID = 2;
 #elif CONFIG_IDF_TARGET_ESP32C3
-    constexpr uint8_t ESP_CHIP_ID = 5;
+constexpr uint8_t ESP_CHIP_ID = 5;
 #elif CONFIG_IDF_TARGET_ESP32S3
-    constexpr uint8_t ESP_CHIP_ID = 9;
+constexpr uint8_t ESP_CHIP_ID = 9;
 #else
-    #error "Unsupported ESP32 target"
+#error "Unsupported ESP32 target"
 #endif
 
 enum FileType
@@ -55,7 +55,7 @@ enum FileType
 
 /**
  * @brief Service for handling firmware uploads over HTTP with OTA support
- * 
+ *
  * Supports chunked uploads of .bin firmware files and .md5 hash files for validation.
  * Emits real-time progress updates via WebSocket and validates chip compatibility.
  */
@@ -111,20 +111,15 @@ private:
      * @param final true if this is the last chunk
      * @return ESP_OK on success, error code on failure
      */
-    esp_err_t handleUpload(PsychicRequest *request,
-                           const String &filename,
-                           uint64_t index,
-                           uint8_t *data,
-                           size_t len,
-                           bool final);
-    
+    esp_err_t handleUpload(PsychicRequest *request, const String &filename, uint64_t index, uint8_t *data, size_t len, bool final);
+
     /**
      * @brief Called after upload finished (i.e. all chunks received)
      * @param request HTTP request object
      * @return ESP_OK on success, error code on failure
      */
     esp_err_t uploadComplete(PsychicRequest *request);
-    
+
     /**
      * @brief Handle upload errors and emit error events
      * @param request HTTP request object
@@ -133,7 +128,7 @@ private:
      * @return ESP_OK (error already handled)
      */
     esp_err_t handleError(PsychicRequest *request, int code, const char *message = nullptr);
-    
+
     /**
      * @brief Handle client disconnection during upload
      * @return ESP_OK on successful cleanup

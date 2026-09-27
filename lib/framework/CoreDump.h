@@ -17,9 +17,9 @@
 
 #include <ArduinoJson.h>
 #include <ESPFS.h>
+#include <Network.h>
 #include <PsychicHttp.h>
 #include <SecurityManager.h>
-#include <WiFi.h>
 
 #define CORE_DUMP_SERVICE_PATH "/rest/coreDump"
 

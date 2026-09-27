@@ -18,8 +18,8 @@
 #include <WiFi.h>
 
 #include <ArduinoJson.h>
-#include <PsychicHttp.h>
 #include <IPUtils.h>
+#include <PsychicHttp.h>
 #include <SecurityManager.h>
 
 #define WIFI_STATUS_SERVICE_PATH "/rest/wifiStatus"
@@ -38,9 +38,9 @@ private:
     SecurityManager *_securityManager;
 
     // static functions for logging WiFi events to the UART
-    static void onStationModeConnected(WiFiEvent_t event, WiFiEventInfo_t info);
-    static void onStationModeDisconnected(WiFiEvent_t event, WiFiEventInfo_t info);
-    static void onStationModeGotIP(WiFiEvent_t event, WiFiEventInfo_t info);
+    static void onStationModeConnected(arduino_event_id_t event, arduino_event_info_t info);
+    static void onStationModeDisconnected(arduino_event_id_t event, arduino_event_info_t info);
+    static void onStationModeGotIP(arduino_event_id_t event, arduino_event_info_t info);
     esp_err_t wifiStatus(PsychicRequest *request);
 };
 

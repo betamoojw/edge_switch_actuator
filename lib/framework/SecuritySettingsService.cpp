@@ -1,3 +1,4 @@
+#include <esp_timer.h>
 /**
  *   ESP32 SvelteKit
  *
@@ -16,27 +17,24 @@
 
 #if FT_ENABLED(FT_SECURITY)
 
-SecuritySettingsService::SecuritySettingsService(PsychicHttpServer *server, FS *fs) : _server(server),
-                                                                                      _httpEndpoint(SecuritySettings::read, SecuritySettings::update, this, server, SECURITY_SETTINGS_PATH, this),
-                                                                                      _fsPersistence(SecuritySettings::read, SecuritySettings::update, this, fs, SECURITY_SETTINGS_FILE),
-                                                                                      _jwtHandler(FACTORY_JWT_SECRET)
+SecuritySettingsService::SecuritySettingsService(PsychicHttpServer *server, FS *fs)
+    : _server(server), _httpEndpoint(SecuritySettings::publicRead, SecuritySettings::update, this, server, SECURITY_SETTINGS_PATH, this),
+      _fsPersistence(SecuritySettings::read, SecuritySettings::update, this, fs, SECURITY_SETTINGS_FILE), _jwtHandler(FACTORY_JWT_SECRET)
 {
-    addUpdateHandler([&](const String &originId)
-                     { configureJWTHandler(); },
-                     false);
+    addUpdateHandler([&](const String &originId) { configureJWTHandler(); }, false);
 }
 
 void SecuritySettingsService::begin()
 {
-    _server->on(GENERATE_TOKEN_PATH,
-                HTTP_GET,
-                wrapRequest(std::bind(&SecuritySettingsService::generateToken, this, std::placeholders::_1),
-                            AuthenticationPredicates::IS_ADMIN));
+    _server->on(
+        GENERATE_TOKEN_PATH, HTTP_GET,
+        wrapRequest(std::bind(&SecuritySettingsService::generateToken, this, std::placeholders::_1), AuthenticationPredicates::IS_ADMIN));
 
     ESP_LOGV(SVK_TAG, "Registered GET endpoint: %s", GENERATE_TOKEN_PATH);
 
     _httpEndpoint.begin();
     _fsPersistence.readFromFS();
+    _fsPersistence.writeToFS();
     configureJWTHandler();
 }
 
@@ -90,7 +88,7 @@ Authentication SecuritySettingsService::authenticate(const String &username, con
 {
     for (User _user : _state.users)
     {
-        if (_user.username == username && _user.password == password)
+        if (_user.username == username && Password::verify(password, _user.password))
         {
             return Authentication(_user);
         }
@@ -98,18 +96,21 @@ Authentication SecuritySettingsService::authenticate(const String &username, con
     return Authentication();
 }
 
+static const uint32_t sessionNonce = esp_random();
+
 inline void populateJWTPayload(JsonObject &payload, User *user)
 {
     payload["username"] = user->username;
     payload["admin"] = user->admin;
+    payload["boot"] = uint32_t(ESP.getEfuseMac()) ^ sessionNonce;
+    payload["issued"] = uint64_t(esp_timer_get_time() / 1000);
 }
 
 boolean SecuritySettingsService::validatePayload(JsonObject &parsedPayload, User *user)
 {
-    JsonDocument jsonDocument;
-    JsonObject payload = jsonDocument.to<JsonObject>();
-    populateJWTPayload(payload, user);
-    return payload == parsedPayload;
+    return parsedPayload["username"] == user->username && parsedPayload["admin"] == user->admin &&
+           parsedPayload["boot"] == (uint32_t(ESP.getEfuseMac()) ^ sessionNonce) && parsedPayload["issued"].is<uint64_t>() &&
+           uint64_t(esp_timer_get_time() / 1000) - parsedPayload["issued"].as<uint64_t>() < 8ull * 60ull * 60ull * 1000ull;
 }
 
 String SecuritySettingsService::generateJWT(User *user)
@@ -128,7 +129,8 @@ PsychicRequestFilterFunction SecuritySettingsService::filterRequest(Authenticati
         // ESP_LOGV(SVK_TAG, "Request Method: %s", request->methodStr().c_str());
 
         // TODO: This is a hack to allow bogus websocket filter requests to pass through
-        // This is a temporary fix until the PsychicHttp websocket handler is fixed to not send a bogus filter request
+        // This is a temporary fix until the PsychicHttp websocket handler is fixed to not send a
+        // bogus filter request
 
         // Check if we have a bogus filter request and return true
         if (request->uri().isEmpty() && request->method() == HTTP_DELETE)
@@ -137,7 +139,9 @@ PsychicRequestFilterFunction SecuritySettingsService::filterRequest(Authenticati
             return true;
         }
         else
+        {
             request->loadParams();
+        }
 
         Authentication authentication = authenticateRequest(request);
         bool result = predicate(authentication);
@@ -195,6 +199,7 @@ User ADMIN_USER = User(FACTORY_ADMIN_USERNAME, FACTORY_ADMIN_PASSWORD, true);
 SecuritySettingsService::SecuritySettingsService(PsychicHttpServer *server, FS *fs) : SecurityManager()
 {
 }
+
 SecuritySettingsService::~SecuritySettingsService()
 {
 }
@@ -215,14 +220,12 @@ Authentication SecuritySettingsService::authenticateRequest(PsychicRequest *requ
 }
 
 // Return the function unwrapped
-PsychicHttpRequestCallback SecuritySettingsService::wrapRequest(PsychicHttpRequestCallback onRequest,
-                                                                AuthenticationPredicate predicate)
+PsychicHttpRequestCallback SecuritySettingsService::wrapRequest(PsychicHttpRequestCallback onRequest, AuthenticationPredicate predicate)
 {
     return onRequest;
 }
 
-PsychicJsonRequestCallback SecuritySettingsService::wrapCallback(PsychicJsonRequestCallback onRequest,
-                                                                 AuthenticationPredicate predicate)
+PsychicJsonRequestCallback SecuritySettingsService::wrapCallback(PsychicJsonRequestCallback onRequest, AuthenticationPredicate predicate)
 {
     return onRequest;
 }

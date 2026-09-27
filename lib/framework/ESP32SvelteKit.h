@@ -17,35 +17,35 @@
 
 #include <Arduino.h>
 
-#include <WiFi.h>
-#include <ESPmDNS.h>
-#include <AnalyticsService.h>
-#include <FeaturesService.h>
 #include <APSettingsService.h>
 #include <APStatus.h>
+#include <AnalyticsService.h>
 #include <AuthenticationService.h>
 #include <BatteryService.h>
-#include <FactoryResetService.h>
+#include <CoreDump.h>
 #include <DownloadFirmwareService.h>
+#include <ESPFS.h>
+#include <ESPmDNS.h>
+#include <EthernetSettingsService.h>
+#include <EthernetStatus.h>
 #include <EventSocket.h>
+#include <FactoryResetService.h>
+#include <FeaturesService.h>
 #include <MqttSettingsService.h>
 #include <MqttStatus.h>
-#include <NotificationService.h>
 #include <NTPSettingsService.h>
 #include <NTPStatus.h>
-#include <UploadFirmwareService.h>
+#include <Network.h>
+#include <NotificationService.h>
+#include <PsychicHttp.h>
 #include <RestartService.h>
 #include <SecuritySettingsService.h>
 #include <SleepService.h>
 #include <SystemStatus.h>
-#include <CoreDump.h>
+#include <UploadFirmwareService.h>
 #include <WiFiScanner.h>
 #include <WiFiSettingsService.h>
 #include <WiFiStatus.h>
-#include <EthernetSettingsService.h>
-#include <EthernetStatus.h>
-#include <ESPFS.h>
-#include <PsychicHttp.h>
 #include <vector>
 
 #ifdef EMBED_WWW
@@ -81,9 +81,13 @@ enum class ConnectionStatus
     OFFLINE,
     AP,
     AP_CONNECTED,
-    STA,
-    STA_CONNECTED,
-    STA_MQTT
+    NETWORK,
+    NETWORK_CONNECTED,
+    NETWORK_MQTT,
+    // Source compatibility for existing applications. Numeric status values stay unchanged.
+    STA = NETWORK,
+    STA_CONNECTED = NETWORK_CONNECTED,
+    STA_MQTT = NETWORK_MQTT
 };
 
 class ESP32SvelteKit
@@ -256,7 +260,11 @@ private:
     String _appName = APP_NAME;
 
 protected:
-    static void _loopImpl(void *_this) { static_cast<ESP32SvelteKit *>(_this)->_loop(); }
+    static void _loopImpl(void *_this)
+    {
+        static_cast<ESP32SvelteKit *>(_this)->_loop();
+    }
+
     void _loop();
 
     std::vector<loopCallback> _loopFunctions;

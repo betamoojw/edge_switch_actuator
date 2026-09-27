@@ -14,9 +14,7 @@
 
 #include <WiFiStatus.h>
 
-WiFiStatus::WiFiStatus(PsychicHttpServer *server,
-                       SecurityManager *securityManager) : _server(server),
-                                                           _securityManager(securityManager)
+WiFiStatus::WiFiStatus(PsychicHttpServer *server, SecurityManager *securityManager) : _server(server), _securityManager(securityManager)
 {
 }
 
@@ -29,12 +27,12 @@ void WiFiStatus::begin()
 
     ESP_LOGV(SVK_TAG, "Registered GET endpoint: %s", WIFI_STATUS_SERVICE_PATH);
 
-    WiFi.onEvent(onStationModeConnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_CONNECTED);
-    WiFi.onEvent(onStationModeDisconnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
-    WiFi.onEvent(onStationModeGotIP, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_GOT_IP);
+    Network.onEvent(onStationModeConnected, ARDUINO_EVENT_WIFI_STA_CONNECTED);
+    Network.onEvent(onStationModeDisconnected, ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
+    Network.onEvent(onStationModeGotIP, ARDUINO_EVENT_WIFI_STA_GOT_IP);
 }
 
-void WiFiStatus::onStationModeConnected(WiFiEvent_t event, WiFiEventInfo_t info)
+void WiFiStatus::onStationModeConnected(arduino_event_id_t event, arduino_event_info_t info)
 {
     ESP_LOGI(SVK_TAG, "WiFi Connected.");
 
@@ -43,7 +41,7 @@ void WiFiStatus::onStationModeConnected(WiFiEvent_t event, WiFiEventInfo_t info)
 #endif
 }
 
-void WiFiStatus::onStationModeDisconnected(WiFiEvent_t event, WiFiEventInfo_t info)
+void WiFiStatus::onStationModeDisconnected(arduino_event_id_t event, arduino_event_info_t info)
 {
     ESP_LOGI(SVK_TAG, "WiFi Disconnected. Reason code=%d", info.wifi_sta_disconnected.reason);
 
@@ -53,11 +51,11 @@ void WiFiStatus::onStationModeDisconnected(WiFiEvent_t event, WiFiEventInfo_t in
 #endif
 }
 
-void WiFiStatus::onStationModeGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
+void WiFiStatus::onStationModeGotIP(arduino_event_id_t event, arduino_event_info_t info)
 {
-    ESP_LOGI(SVK_TAG, "WiFi Got IP. localIP=%s, hostName=%s", WiFi.localIP().toString().c_str(), WiFi.getHostname());
+    ESP_LOGI(SVK_TAG, "WiFi Got IP. localIP=%s, hostName=%s", WiFi.STA.localIP().toString().c_str(), WiFi.STA.getHostname());
 #ifdef SERIAL_INFO
-    Serial.printf("WiFi Got IP. localIP=%s, hostName=%s\r\n", WiFi.localIP().toString().c_str(), WiFi.getHostname());
+    Serial.printf("WiFi Got IP. localIP=%s, hostName=%s\r\n", WiFi.STA.localIP().toString().c_str(), WiFi.STA.getHostname());
 #endif
 }
 
@@ -66,19 +64,19 @@ esp_err_t WiFiStatus::wifiStatus(PsychicRequest *request)
     PsychicJsonResponse response = PsychicJsonResponse(request, false);
     JsonObject root = response.getRoot();
     wl_status_t status = WiFi.status();
-    root["status"] = (uint8_t)status;
+    root["status"] = (uint8_t) status;
     if (status == WL_CONNECTED)
     {
-        root["local_ip"] = WiFi.localIP().toString();
-        root["mac_address"] = WiFi.macAddress();
+        root["local_ip"] = WiFi.STA.localIP().toString();
+        root["mac_address"] = WiFi.STA.macAddress();
         root["rssi"] = WiFi.RSSI();
         root["ssid"] = WiFi.SSID();
         root["bssid"] = WiFi.BSSIDstr();
         root["channel"] = WiFi.channel();
-        root["subnet_mask"] = WiFi.subnetMask().toString();
-        root["gateway_ip"] = WiFi.gatewayIP().toString();
-        IPAddress dnsIP1 = WiFi.dnsIP(0);
-        IPAddress dnsIP2 = WiFi.dnsIP(1);
+        root["subnet_mask"] = WiFi.STA.subnetMask().toString();
+        root["gateway_ip"] = WiFi.STA.gatewayIP().toString();
+        IPAddress dnsIP1 = WiFi.STA.dnsIP(0);
+        IPAddress dnsIP2 = WiFi.STA.dnsIP(1);
         if (IPUtils::isSet(dnsIP1))
         {
             root["dns_ip_1"] = dnsIP1.toString();

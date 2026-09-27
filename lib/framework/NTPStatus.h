@@ -15,9 +15,9 @@
  *   the terms of the LGPL v3 license. See the LICENSE file for details.
  **/
 
-#include <time.h>
-#include <WiFi.h>
+#include <Network.h>
 #include <lwip/apps/sntp.h>
+#include <time.h>
 
 #include <ArduinoJson.h>
 #include <PsychicHttp.h>

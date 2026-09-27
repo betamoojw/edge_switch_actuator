@@ -15,13 +15,13 @@
  *   the terms of the LGPL v3 license. See the LICENSE file for details.
  **/
 
-#include <StatefulService.h>
-#include <HttpEndpoint.h>
 #include <FSPersistence.h>
+#include <HttpEndpoint.h>
+#include <MqttEndpoint.h>
+#include <Network.h>
 #include <PsychicMqttClient.h>
 #include <SettingValue.h>
-#include <WiFi.h>
-#include <MqttEndpoint.h>
+#include <StatefulService.h>
 
 #ifndef FACTORY_MQTT_ENABLED
 #define FACTORY_MQTT_ENABLED false
@@ -67,7 +67,7 @@
 #define FACTORY_MQTT_MIN_MESSAGE_INTERVAL_MS 500
 #endif
 
-#define MQTT_SETTINGS_FILE "/config/mqttSettings.json"
+#define MQTT_SETTINGS_FILE         "/config/mqttSettings.json"
 #define MQTT_SETTINGS_SERVICE_PATH "/rest/mqttSettings"
 
 #define MQTT_RECONNECTION_DELAY 5000
@@ -93,8 +93,7 @@ public:
     // Publish rate limiting
     uint32_t messageIntervalMs;
 
-    static void
-    read(MqttSettings &settings, JsonObject &root)
+    static void read(MqttSettings &settings, JsonObject &root)
     {
         root["enabled"] = settings.enabled;
         root["uri"] = settings.uri;
@@ -120,7 +119,7 @@ public:
     }
 };
 
-class MqttSettingsService : public StatefulService<MqttSettings>
+class MqttSettingsService: public StatefulService<MqttSettings>
 {
 public:
     MqttSettingsService(PsychicHttpServer *server, FS *fs, SecurityManager *securityManager);
@@ -162,8 +161,8 @@ private:
     // the MQTT client instance
     PsychicMqttClient _mqttClient;
 
-    void onStationModeGotIP(WiFiEvent_t event, WiFiEventInfo_t info);
-    void onStationModeDisconnected(WiFiEvent_t event, WiFiEventInfo_t info);
+    IPAddress _networkAddress;
+    int _networkInterface = -1;
 
     void onMqttConnect(bool sessionPresent);
     void onMqttDisconnect(bool sessionPresent);

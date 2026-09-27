@@ -109,10 +109,10 @@ void update_finished()
 
 void updateTask(void *param)
 {
-    String url = *((String *)param);
-    delete (String *)param; // Clean up the allocated memory
+    String url = *((String *) param);
+    delete (String *) param; // Clean up the allocated memory
 
-    WiFiClientSecure client;
+    NetworkClientSecure client;
 
 #ifndef DOWNLOAD_OTA_SKIP_CERT_VERIFY
 
@@ -147,28 +147,28 @@ void updateTask(void *param)
 
     switch (ret)
     {
-    case HTTP_UPDATE_FAILED:
+        case HTTP_UPDATE_FAILED:
 
-        doc["status"] = "error";
-        doc["error"] = httpUpdate.getLastErrorString().c_str();
-        _emitEvent = true;
+            doc["status"] = "error";
+            doc["error"] = httpUpdate.getLastErrorString().c_str();
+            _emitEvent = true;
 
-        ESP_LOGE(SVK_TAG, "HTTP Update failed with error (%d): %s", httpUpdate.getLastError(), httpUpdate.getLastErrorString().c_str());
+            ESP_LOGE(SVK_TAG, "HTTP Update failed with error (%d): %s", httpUpdate.getLastError(), httpUpdate.getLastErrorString().c_str());
 #ifdef SERIAL_INFO
-        Serial.printf("HTTP Update failed with error (%d): %s\n", httpUpdate.getLastError(), httpUpdate.getLastErrorString().c_str());
+            Serial.printf("HTTP Update failed with error (%d): %s\n", httpUpdate.getLastError(), httpUpdate.getLastErrorString().c_str());
 #endif
-        break;
-    case HTTP_UPDATE_NO_UPDATES:
+            break;
+        case HTTP_UPDATE_NO_UPDATES:
 
-        doc["status"] = "error";
-        doc["error"] = "Update failed, has same firmware version";
-        _emitEvent = true;
+            doc["status"] = "error";
+            doc["error"] = "Update failed, has same firmware version";
+            _emitEvent = true;
 
-        ESP_LOGE(SVK_TAG, "HTTP Update failed, has same firmware version");
+            ESP_LOGE(SVK_TAG, "HTTP Update failed, has same firmware version");
 #ifdef SERIAL_INFO
-        Serial.println("HTTP Update failed, has same firmware version");
+            Serial.println("HTTP Update failed, has same firmware version");
 #endif
-        break;
+            break;
     }
 
     if (_emitEvent)
@@ -183,11 +183,8 @@ void updateTask(void *param)
     vTaskDelete(NULL);
 }
 
-DownloadFirmwareService::DownloadFirmwareService(PsychicHttpServer *server,
-                                                 SecurityManager *securityManager,
-                                                 EventSocket *socket) : _server(server),
-                                                                        _securityManager(securityManager),
-                                                                        _socket(socket)
+DownloadFirmwareService::DownloadFirmwareService(PsychicHttpServer *server, SecurityManager *securityManager, EventSocket *socket)
+    : _server(server), _securityManager(securityManager), _socket(socket)
 {
 }
 
@@ -234,15 +231,14 @@ esp_err_t DownloadFirmwareService::downloadUpdate(PsychicRequest *request, JsonV
     // Allocate memory for the URL on the heap
     String *urlPtr = new String(downloadURL);
 
-    if (xTaskCreatePinnedToCore(
-            &updateTask,                // Function that should be called
-            "Update",                   // Name of the task (for debugging)
-            OTA_TASK_STACK_SIZE,        // Stack size (bytes)
-            urlPtr,                     // Pass reference to this class instance
-            (configMAX_PRIORITIES - 1), // Pretty high task priority
-            NULL,                       // Task handle
-            1                           // Have it on application core
-            ) != pdPASS)
+    if (xTaskCreatePinnedToCore(&updateTask,                // Function that should be called
+                                "Update",                   // Name of the task (for debugging)
+                                OTA_TASK_STACK_SIZE,        // Stack size (bytes)
+                                urlPtr,                     // Pass reference to this class instance
+                                (configMAX_PRIORITIES - 1), // Pretty high task priority
+                                NULL,                       // Task handle
+                                1                           // Have it on application core
+                                ) != pdPASS)
     {
         delete urlPtr; // Clean up if task creation fails
         ESP_LOGE(SVK_TAG, "Couldn't create download OTA task");

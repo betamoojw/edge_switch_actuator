@@ -17,13 +17,13 @@
 
 #include <Features.h>
 
-#include <WiFi.h>
 #include <ArduinoJson.h>
-#include <PsychicHttp.h>
 #include <EventSocket.h>
+#include <Network.h>
+#include <PsychicHttp.h>
 #include <vector>
 
-#define FEATURES_SERVICE_PATH "/rest/features"
+#define FEATURES_SERVICE_PATH  "/rest/features"
 #define FEATURES_SERVICE_EVENT "features"
 
 typedef struct

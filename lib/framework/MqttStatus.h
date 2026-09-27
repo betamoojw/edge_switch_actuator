@@ -15,10 +15,10 @@
  *   the terms of the LGPL v3 license. See the LICENSE file for details.
  **/
 
-#include <WiFi.h>
+#include <Network.h>
 
-#include <MqttSettingsService.h>
 #include <ArduinoJson.h>
+#include <MqttSettingsService.h>
 #include <PsychicHttp.h>
 #include <SecurityManager.h>
 

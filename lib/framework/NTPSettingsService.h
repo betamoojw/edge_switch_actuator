@@ -15,12 +15,12 @@
  *   the terms of the LGPL v3 license. See the LICENSE file for details.
  **/
 
-#include <HttpEndpoint.h>
 #include <FSPersistence.h>
-#include <WiFi.h>
+#include <HttpEndpoint.h>
+#include <Network.h>
 
-#include <time.h>
 #include <lwip/apps/sntp.h>
+#include <time.h>
 
 #ifdef CONFIG_LWIP_TCPIP_CORE_LOCKING
 #include "lwip/priv/tcpip_priv.h"
@@ -42,7 +42,7 @@
 #define FACTORY_NTP_SERVER "time.google.com"
 #endif
 
-#define NTP_SETTINGS_FILE "/config/ntpSettings.json"
+#define NTP_SETTINGS_FILE         "/config/ntpSettings.json"
 #define NTP_SETTINGS_SERVICE_PATH "/rest/ntpSettings"
 
 #define TIME_PATH "/rest/time"
@@ -73,12 +73,13 @@ public:
     }
 };
 
-class NTPSettingsService : public StatefulService<NTPSettings>
+class NTPSettingsService: public StatefulService<NTPSettings>
 {
 public:
     NTPSettingsService(PsychicHttpServer *server, FS *fs, SecurityManager *securityManager);
 
     void begin();
+    void loop();
 
 private:
     PsychicHttpServer *_server;
@@ -86,8 +87,8 @@ private:
     HttpEndpoint<NTPSettings> _httpEndpoint;
     FSPersistence<NTPSettings> _fsPersistence;
 
-    void onNetworkGotIP(WiFiEvent_t event, WiFiEventInfo_t info);
-    void onNetworkDisconnected(WiFiEvent_t event, WiFiEventInfo_t info);
+    IPAddress _networkAddress;
+    int _networkInterface = -1;
     void configureNTP();
     esp_err_t configureTime(PsychicRequest *request, JsonVariant &json);
 };

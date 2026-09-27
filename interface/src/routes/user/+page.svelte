@@ -40,7 +40,7 @@
 		users: userSetting[];
 	};
 
-	let securitySettings: SecuritySettings = $state();
+	let securitySettings: SecuritySettings | undefined = $state();
 
 	async function getSecuritySettings() {
 		try {
@@ -103,6 +103,7 @@
 	}
 
 	function confirmDelete(index: number) {
+		if (!securitySettings) return;
 		modals.open(ConfirmDialog, {
 			title: 'Confirm Delete User',
 			message:
@@ -114,6 +115,7 @@
 				confirm: { label: 'Yes', icon: Check }
 			},
 			onConfirm: () => {
+				if (!securitySettings) return;
 				securitySettings.users.splice(index, 1);
 				securitySettings = securitySettings;
 				modals.close();
@@ -123,10 +125,12 @@
 	}
 
 	function handleEdit(index: number) {
+		if (!securitySettings) return;
 		modals.open(EditUser, {
 			title: 'Edit User',
 			user: { ...securitySettings.users[index] }, // Shallow Copy
 			onSaveUser: (editedUser: userSetting) => {
+				if (!securitySettings) return;
 				securitySettings.users[index] = editedUser;
 				modals.close();
 				postSecuritySettings(securitySettings);
@@ -138,6 +142,7 @@
 		modals.open(EditUser, {
 			title: 'Add User',
 			onSaveUser: (newUser: userSetting) => {
+				if (!securitySettings) return;
 				securitySettings.users = [...securitySettings.users, newUser];
 				modals.close();
 				postSecuritySettings(securitySettings);
@@ -161,72 +166,79 @@
 			{/snippet}
 			{#await getSecuritySettings()}
 				<Spinner />
-			{:then nothing}
-				<div class="relative w-full overflow-visible">
-					<button
-						class="btn btn-primary text-primary-content btn-md absolute -top-14 right-0"
-						onclick={handleNewUser}
-					>
-						<AddUser class="h-6 w-6" /></button
-					>
+			{:then}
+				{#if securitySettings}
+					<div class="relative w-full overflow-visible">
+						<button
+							class="btn btn-primary text-primary-content btn-md absolute -top-14 right-0"
+							onclick={handleNewUser}
+						>
+							<AddUser class="h-6 w-6" /></button
+						>
 
-					<div class="overflow-x-auto" transition:slide|local={{ duration: 300, easing: cubicOut }}>
-						<table class="table w-full table-auto">
-							<thead>
-								<tr class="font-bold">
-									<th align="left">Username</th>
-									<th align="center">Admin</th>
-									<th align="right" class="pr-8">Edit</th>
-								</tr>
-							</thead>
-							<tbody>
-								{#each securitySettings.users as user, index}
-									<tr>
-										<td align="left">{user.username}</td>
-										<td align="center">
-											{#if user.admin}
-												<Admin class="text-secondary" />
-											{/if}
-										</td>
-										<td align="right">
-											<span class="my-auto inline-flex flex-row space-x-2">
-												<button
-													class="btn btn-ghost btn-circle btn-xs"
-													onclick={() => handleEdit(index)}
-												>
-													<Edit class="h-6 w-6" /></button
-												>
-												<button
-													class="btn btn-ghost btn-circle btn-xs"
-													onclick={() => confirmDelete(index)}
-												>
-													<Delete class="text-error h-6 w-6" />
-												</button>
-											</span>
-										</td>
+						<div
+							class="overflow-x-auto"
+							transition:slide|local={{ duration: 300, easing: cubicOut }}
+						>
+							<table class="table w-full table-auto">
+								<thead>
+									<tr class="font-bold">
+										<th align="left">Username</th>
+										<th align="center">Admin</th>
+										<th align="right" class="pr-8">Edit</th>
 									</tr>
-								{/each}
-							</tbody>
-						</table>
+								</thead>
+								<tbody>
+									{#each securitySettings.users as user, index}
+										<tr>
+											<td align="left">{user.username}</td>
+											<td align="center">
+												{#if user.admin}
+													<Admin class="text-secondary" />
+												{/if}
+											</td>
+											<td align="right">
+												<span class="my-auto inline-flex flex-row space-x-2">
+													<button
+														class="btn btn-ghost btn-circle btn-xs"
+														onclick={() => handleEdit(index)}
+													>
+														<Edit class="h-6 w-6" /></button
+													>
+													<button
+														class="btn btn-ghost btn-circle btn-xs"
+														onclick={() => confirmDelete(index)}
+													>
+														<Delete class="text-error h-6 w-6" />
+													</button>
+												</span>
+											</td>
+										</tr>
+									{/each}
+								</tbody>
+							</table>
+						</div>
 					</div>
-				</div>
-				<div class="divider mb-0"></div>
+					<div class="divider mb-0"></div>
 
-				<span class="pb-2 text-xl font-medium">Security Settings</span>
-				<div class="alert alert-warning shadow-lg">
-					<Warning class="h-6 w-6 shrink-0" />
-					<span
-						>The JWT secret is used to sign authentication tokens. If you modify the JWT Secret, all
-						users will be signed out.</span
-					>
-				</div>
-				<label class="label" for="secret">JWT Secret</label>
-				<InputPassword bind:value={securitySettings.jwt_secret} id="secret" />
-				<div class="mt-6 flex justify-end">
-					<button class="btn btn-primary" onclick={() => postSecuritySettings(securitySettings)}
-						>Apply Settings</button
-					>
-				</div>
+					<span class="pb-2 text-xl font-medium">Security Settings</span>
+					<div class="alert alert-warning shadow-lg">
+						<Warning class="h-6 w-6 shrink-0" />
+						<span
+							>The JWT secret is used to sign authentication tokens. If you modify the JWT Secret,
+							all users will be signed out.</span
+						>
+					</div>
+					<label class="label" for="secret">JWT Secret</label>
+					<InputPassword bind:value={securitySettings.jwt_secret} id="secret" />
+					<div class="mt-6 flex justify-end">
+						<button
+							class="btn btn-primary"
+							onclick={() => securitySettings && postSecuritySettings(securitySettings)}
+							>Apply Settings</button
+						>
+					</div>
+				{/if}
 			{/await}
 		</SettingsCard>
 	</div>

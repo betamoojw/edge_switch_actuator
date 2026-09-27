@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { modals } from 'svelte-modals';
+	import { modals, type ModalProps } from 'svelte-modals';
 	import { fly } from 'svelte/transition';
 	import { slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
@@ -8,7 +8,7 @@
 	import Cancel from '~icons/tabler/x';
 	import Set from '~icons/tabler/check';
 
-	interface Props {
+	interface Props extends ModalProps {
 		isOpen: boolean;
 		title: string;
 		networkEditable?: KnownNetworkItem;
@@ -164,9 +164,7 @@
 						{#if formErrors.ssid}
 							<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 								<label for="ssid" class="label">
-									<span class="text-error">
-										SSID must be between 3 and 32 characters long.
-									</span>
+									<span class="text-error"> SSID must be between 3 and 32 characters long. </span>
 								</label>
 							</div>
 						{/if}
@@ -209,9 +207,7 @@
 							{#if formErrors.local_ip}
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="localIP" class="label">
-										<span class="text-error">
-											Local IP must be a valid IPv4 address.
-										</span>
+										<span class="text-error"> Local IP must be a valid IPv4 address. </span>
 									</label>
 								</div>
 							{/if}
@@ -234,9 +230,7 @@
 							{#if formErrors.gateway_ip}
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="gateway" class="label">
-										<span class="text-error">
-											Gateway IP must be a valid IPv4 address.
-										</span>
+										<span class="text-error"> Gateway IP must be a valid IPv4 address. </span>
 									</label>
 								</div>
 							{/if}
@@ -258,9 +252,7 @@
 							{#if formErrors.subnet_mask}
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="subnet" class="label">
-										<span class="text-error">
-											Subnet Mask must be a valid IPv4 subnet mask.
-										</span>
+										<span class="text-error"> Subnet Mask must be a valid IPv4 subnet mask. </span>
 									</label>
 								</div>
 							{/if}
@@ -282,9 +274,7 @@
 							{#if formErrors.dns_1}
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="dns_1" class="label">
-										<span class="text-error">
-											DNS 1 must be a valid IPv4 address.
-										</span>
+										<span class="text-error"> DNS 1 must be a valid IPv4 address. </span>
 									</label>
 								</div>
 							{/if}
@@ -306,9 +296,7 @@
 							{#if formErrors.dns_2}
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="dns_2" class="label">
-										<span class="text-error">
-											DNS 2 must be a valid IPv4 address.
-										</span>
+										<span class="text-error"> DNS 2 must be a valid IPv4 address. </span>
 									</label>
 								</div>
 							{/if}

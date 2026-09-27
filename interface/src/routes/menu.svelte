@@ -30,7 +30,7 @@
 
 	type menuItem = {
 		title: string;
-		icon: ConstructorOfATypedSvelteComponent;
+		icon: typeof Settings;
 		href?: string;
 		feature: boolean;
 		active?: boolean;
@@ -39,17 +39,17 @@
 
 	type subMenuItem = {
 		title: string;
-		icon: ConstructorOfATypedSvelteComponent;
+		icon: typeof Settings;
 		href: string;
 		feature: boolean;
-		active: boolean;
+		active?: boolean;
 	};
 
 	let menuItems = $state([
 		{
-			title: 'Demo App',
+			title: 'Switching Actuator',
 			icon: Control,
-			href: '/demo',
+			href: '/device',
 			feature: true
 		},
 		{

@@ -5,18 +5,18 @@
 	import { slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { Chart, registerables } from 'chart.js';
-	import * as LuxonAdapter from 'chartjs-adapter-luxon';
+	import 'chartjs-adapter-luxon';
 	import Battery from '~icons/tabler/battery-automotive';
 	import { daisyColor } from '$lib/DaisyUiHelper';
 	import { batteryHistory } from '$lib/stores/battery';
 
 	Chart.register(...registerables);
-	Chart.register(LuxonAdapter);
 
-	let heapChartElement: HTMLCanvasElement = $state();
+	let heapChartElement: HTMLCanvasElement | undefined = $state();
 	let heapChart: Chart;
 
 	onMount(() => {
+		if (!heapChartElement) return;
 		heapChart = new Chart(heapChartElement, {
 			type: 'line',
 			data: {
@@ -101,9 +101,11 @@
 			}
 		});
 
-		setInterval(() => {
-			updateData(), 5000;
-		});
+		const interval = setInterval(updateData, 5000);
+		return () => {
+			clearInterval(interval);
+			heapChart.destroy();
+		};
 	});
 
 	function updateData() {

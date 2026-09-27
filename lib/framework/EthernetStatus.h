@@ -15,12 +15,12 @@
  *   the terms of the LGPL v3 license. See the LICENSE file for details.
  **/
 
-#include <WiFi.h>
 #include <ETH.h>
+#include <Network.h>
 
 #include <ArduinoJson.h>
-#include <PsychicHttp.h>
 #include <IPUtils.h>
+#include <PsychicHttp.h>
 #include <SecurityManager.h>
 
 #define ETHERNET_STATUS_SERVICE_PATH "/rest/ethernetStatus"
@@ -41,10 +41,10 @@ private:
     SecurityManager *_securityManager;
 
     // static functions for logging Ethernet events to the UART
-    // they are using the same signature as WiFi events
-    static void onConnected(WiFiEvent_t event, WiFiEventInfo_t info);
-    static void onDisconnected(WiFiEvent_t event, WiFiEventInfo_t info);
-    static void onGotIP(WiFiEvent_t event, WiFiEventInfo_t info);
+    // Shared Network event callback signatures.
+    static void onConnected(arduino_event_id_t event, arduino_event_info_t info);
+    static void onDisconnected(arduino_event_id_t event, arduino_event_info_t info);
+    static void onGotIP(arduino_event_id_t event, arduino_event_info_t info);
     esp_err_t ethernetStatus(PsychicRequest *request);
 };
 

@@ -15,20 +15,18 @@
 #include <FactoryResetService.h>
 
 using namespace std::placeholders;
+std::function<void()> FactoryResetService::resetHandler;
 
-FactoryResetService::FactoryResetService(PsychicHttpServer *server,
-                                         FS *fs,
-                                         SecurityManager *securityManager) : _server(server),
-                                                                             fs(fs),
-                                                                             _securityManager(securityManager)
+FactoryResetService::FactoryResetService(PsychicHttpServer *server, FS *fs, SecurityManager *securityManager)
+    : _server(server), fs(fs), _securityManager(securityManager)
 {
 }
 
 void FactoryResetService::begin()
 {
-    _server->on(FACTORY_RESET_SERVICE_PATH,
-                HTTP_POST,
-                _securityManager->wrapRequest(std::bind(&FactoryResetService::handleRequest, this, _1), AuthenticationPredicates::IS_ADMIN));
+    _server->on(
+        FACTORY_RESET_SERVICE_PATH, HTTP_POST,
+        _securityManager->wrapRequest(std::bind(&FactoryResetService::handleRequest, this, _1), AuthenticationPredicates::IS_ADMIN));
 
     ESP_LOGV(SVK_TAG, "Registered POST endpoint: %s", FACTORY_RESET_SERVICE_PATH);
 }
@@ -46,6 +44,11 @@ esp_err_t FactoryResetService::handleRequest(PsychicRequest *request)
  */
 void FactoryResetService::factoryReset()
 {
+    if (resetHandler)
+    {
+        resetHandler();
+        return;
+    }
     File root = fs->open(FS_CONFIG_DIRECTORY);
     File file;
     while (file = root.openNextFile())

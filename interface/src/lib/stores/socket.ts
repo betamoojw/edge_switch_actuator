@@ -6,8 +6,8 @@ function createWebSocket() {
 	const { subscribe, set } = writable(false);
 	const socketEvents = ['open', 'close', 'error', 'message', 'unresponsive'] as const;
 	type SocketEvent = (typeof socketEvents)[number];
-	let unresponsiveTimeoutId: number;
-	let reconnectTimeoutId: number;
+	let unresponsiveTimeoutId: ReturnType<typeof setTimeout> | undefined;
+	let reconnectTimeoutId: ReturnType<typeof setTimeout> | undefined;
 	let ws: WebSocket;
 	let socketUrl: string | URL;
 	let event_use_json = false;
@@ -103,10 +103,13 @@ function createWebSocket() {
 			if (!eventListeners) {
 				eventListeners = new Set();
 				listeners.set(event, eventListeners);
-				
+
 				// Only send subscription if WebSocket is open and it's not a socket event
-				if (!socketEvents.includes(event as SocketEvent) && 
-					ws && ws.readyState === WebSocket.OPEN) {
+				if (
+					!socketEvents.includes(event as SocketEvent) &&
+					ws &&
+					ws.readyState === WebSocket.OPEN
+				) {
 					sendEvent('subscribe', event);
 				}
 			}

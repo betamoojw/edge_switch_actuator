@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { modals } from 'svelte-modals';
+	import { modals, type ModalProps } from 'svelte-modals';
 	import { focusTrap } from 'svelte-focus-trap';
 	import { fly } from 'svelte/transition';
 	import Check from '~icons/tabler/check';
 
 	// provided by <Modals />
 
-	interface Props {
+	interface Props extends ModalProps {
 		isOpen: boolean;
 		title: string;
 		message: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { modals } from 'svelte-modals';
+	import { modals, type ModalProps } from 'svelte-modals';
 	import { focusTrap } from 'svelte-focus-trap';
 	import { fly } from 'svelte/transition';
 	import { user } from '$lib/stores/user';
@@ -13,7 +13,7 @@
 	import type { NetworkItem } from '$lib/types/models';
 
 	// provided by <Modals />
-	interface Props {
+	interface Props extends ModalProps {
 		isOpen: boolean;
 		storeNetwork: any;
 	}
@@ -36,7 +36,7 @@
 
 	let scanActive = $state(false);
 
-	let pollingId: number;
+	let pollingId: ReturnType<typeof setInterval> | undefined;
 
 	async function scanNetworks() {
 		scanActive = true;
@@ -67,7 +67,7 @@
 			if (listOfNetworks.length) {
 				scanActive = false;
 				clearInterval(pollingId);
-				pollingId = 0;
+				pollingId = undefined;
 				return true;
 			} else {
 				scanActive = false;
@@ -85,7 +85,7 @@
 	onDestroy(() => {
 		if (pollingId) {
 			clearInterval(pollingId);
-			pollingId = 0;
+			pollingId = undefined;
 		}
 	});
 </script>

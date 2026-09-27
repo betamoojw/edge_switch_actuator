@@ -2,6 +2,14 @@ site_name: ESP32 SvelteKit
 
 nav:
   - Home: index.md
+  - "Switching Actuator Design":
+      - actuator-production-design.md
+      - Implementation and validation: actuator-implementation.md
+      - Network API migration: network-api-migration.md
+      - actuator-source-review.md
+      - esp32-s3-relay-6ch-hardware.md
+      - actuator-modbus-map.md
+      - actuator-knx-design.md
   - "Build Tools":
       - gettingstarted.md
       - buildprocess.md

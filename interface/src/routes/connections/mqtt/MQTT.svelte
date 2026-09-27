@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { preventDefault } from '$lib/events';
 	import { onMount, onDestroy } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
@@ -13,8 +14,8 @@
 	import Client from '~icons/tabler/robot';
 	import type { MQTTSettings, MQTTStatus } from '$lib/types/models';
 
-	let mqttSettings: MQTTSettings = $state();
-	let mqttStatus: MQTTStatus = $state();
+	let mqttSettings: MQTTSettings | undefined = $state();
+	let mqttStatus: MQTTStatus | undefined = $state();
 
 	let formField: any = $state();
 
@@ -93,6 +94,7 @@
 	}
 
 	function handleSubmitMQTT() {
+		if (!mqttSettings) return;
 		let valid = true;
 
 		// Validate Server URI
@@ -130,13 +132,6 @@
 			//alert('Form Valid');
 		}
 	}
-
-	function preventDefault(fn) {
-		return function (event) {
-			event.preventDefault();
-			fn.call(this, event);
-		};
-	}
 </script>
 
 <SettingsCard collapsible={false}>
@@ -149,54 +144,62 @@
 	<div class="w-full">
 		{#await getMQTTStatus()}
 			<Spinner />
-		{:then nothing}
-			<div
-				class="flex w-full flex-col space-y-1"
-				transition:slide|local={{ duration: 300, easing: cubicOut }}
-			>
-				<div class="rounded-box bg-base-100 flex items-center space-x-3 px-4 py-2">
-					<div
-						class="mask mask-hexagon h-auto w-10 {mqttStatus.connected === true
-							? 'bg-success'
-							: 'bg-error'}"
-					>
-						<MQTT
-							class="h-auto w-full scale-75 {mqttStatus.connected === true
-								? 'text-success-content'
-								: 'text-error-content'}"
-						/>
-					</div>
-					<div>
-						<div class="font-bold">Status</div>
-						<div class="text-sm opacity-75">
-							{#if mqttStatus.connected}
-								Connected
-							{:else if !mqttStatus.enabled}
-								MQTT Disabled
-							{:else}
-								{mqttStatus.last_error}
-							{/if}
+		{:then}
+			{#if mqttStatus}
+				<div
+					class="flex w-full flex-col space-y-1"
+					transition:slide|local={{ duration: 300, easing: cubicOut }}
+				>
+					<div class="rounded-box bg-base-100 flex items-center space-x-3 px-4 py-2">
+						<div
+							class="mask mask-hexagon h-auto w-10 {mqttStatus.connected === true
+								? 'bg-success'
+								: 'bg-error'}"
+						>
+							<MQTT
+								class="h-auto w-full scale-75 {mqttStatus.connected === true
+									? 'text-success-content'
+									: 'text-error-content'}"
+							/>
+						</div>
+						<div>
+							<div class="font-bold">Status</div>
+							<div class="text-sm opacity-75">
+								{#if mqttStatus.connected}
+									Connected
+								{:else if !mqttStatus.enabled}
+									MQTT Disabled
+								{:else}
+									{mqttStatus.last_error}
+								{/if}
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="rounded-box bg-base-100 flex items-center space-x-3 px-4 py-2">
-					<div class="mask mask-hexagon bg-primary h-auto w-10">
-						<Client class="text-primary-content h-auto w-full scale-75" />
-					</div>
-					<div>
-						<div class="font-bold">Client ID</div>
-						<div class="text-sm opacity-75">
-							{mqttStatus.client_id}
+					<div class="rounded-box bg-base-100 flex items-center space-x-3 px-4 py-2">
+						<div class="mask mask-hexagon bg-primary h-auto w-10">
+							<Client class="text-primary-content h-auto w-full scale-75" />
+						</div>
+						<div>
+							<div class="font-bold">Client ID</div>
+							<div class="text-sm opacity-75">
+								{mqttStatus.client_id}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			{/if}
 		{/await}
 	</div>
 
-	{#if !page.data.features.security || $user.admin}
-		<Collapsible open={false} class="shadow-lg" icon={null} opened={() => {}} closed={() => {}}>
+	{#if mqttSettings && (!page.data.features.security || $user.admin)}
+		<Collapsible
+			open={false}
+			class="shadow-lg"
+			icon={undefined}
+			opened={() => {}}
+			closed={() => {}}
+		>
 			{#snippet title()}
 				<span>Change MQTT Settings</span>
 			{/snippet}

@@ -15,16 +15,16 @@
  *   the terms of the LGPL v3 license. See the LICENSE file for details.
  **/
 
-#include <WiFi.h>
-#include <WiFiMulti.h>
-#include <SettingValue.h>
-#include <StatefulService.h>
 #include <EventSocket.h>
 #include <FSPersistence.h>
 #include <HttpEndpoint.h>
 #include <JsonUtils.h>
-#include <SecurityManager.h>
 #include <PsychicHttp.h>
+#include <SecurityManager.h>
+#include <SettingValue.h>
+#include <StatefulService.h>
+#include <WiFi.h>
+#include <WiFiMulti.h>
 #include <vector>
 
 #ifndef FACTORY_WIFI_SSID
@@ -43,14 +43,14 @@
 #define FACTORY_WIFI_RSSI_THRESHOLD -80
 #endif
 
-#define WIFI_SETTINGS_FILE "/config/wifiSettings.json"
+#define WIFI_SETTINGS_FILE         "/config/wifiSettings.json"
 #define WIFI_SETTINGS_SERVICE_PATH "/rest/wifiSettings"
 
 #define WIFI_RECONNECTION_DELAY 1000 * 5
-#define RSSI_EVENT_DELAY 500
-#define DELAYED_RECONNECT_MS 1000
+#define RSSI_EVENT_DELAY        500
+#define DELAYED_RECONNECT_MS    1000
 
-#define EVENT_RSSI "rssi"
+#define EVENT_RSSI      "rssi"
 #define EVENT_RECONNECT "reconnect"
 
 // Struct defining the wifi settings
@@ -140,7 +140,8 @@ public:
                 JsonObject wifi = wifiNetwork.as<JsonObject>();
 
                 // Check if SSID length is between 1 and 31 characters and password between 0 and 64 characters
-                if (wifi["ssid"].as<String>().length() < 1 || wifi["ssid"].as<String>().length() > 31 || wifi["password"].as<String>().length() > 64)
+                if (wifi["ssid"].as<String>().length() < 1 || wifi["ssid"].as<String>().length() > 31 ||
+                    wifi["password"].as<String>().length() > 64)
                 {
                     ESP_LOGE(SVK_TAG, "SSID or password length is invalid");
                 }
@@ -170,8 +171,9 @@ public:
                     // Turning off static ip config if we don't meet the minimum requirements
                     // of ipAddress, gateway and subnet. This may change to static ip only
                     // as sensible defaults can be assumed for gateway and subnet
-                    if (wifiSettings.staticIPConfig && (IPUtils::isNotSet(wifiSettings.localIP) || IPUtils::isNotSet(wifiSettings.gatewayIP) ||
-                                                        IPUtils::isNotSet(wifiSettings.subnetMask)))
+                    if (wifiSettings.staticIPConfig &&
+                        (IPUtils::isNotSet(wifiSettings.localIP) || IPUtils::isNotSet(wifiSettings.gatewayIP) ||
+                            IPUtils::isNotSet(wifiSettings.subnetMask)))
                     {
                         wifiSettings.staticIPConfig = false;
                     }
@@ -190,7 +192,7 @@ public:
             // populate with factory defaults if they are present
             if (String(FACTORY_WIFI_SSID).length() > 0)
             {
-                settings.wifiSettings.push_back(wifi_settings_t{
+                settings.wifiSettings.push_back(wifi_settings_t {
                     .ssid = FACTORY_WIFI_SSID,
                     .password = FACTORY_WIFI_PASSWORD,
                     .staticIPConfig = false,
@@ -209,7 +211,7 @@ public:
     };
 };
 
-class WiFiSettingsService : public StatefulService<WiFiSettings>
+class WiFiSettingsService: public StatefulService<WiFiSettings>
 {
 public:
     WiFiSettingsService(PsychicHttpServer *server, FS *fs, SecurityManager *securityManager, EventSocket *socket);
@@ -233,8 +235,8 @@ private:
     bool _delayedReconnectPending;
 
     bool _stopping;
-    void onStationModeDisconnected(WiFiEvent_t event, WiFiEventInfo_t info);
-    void onStationModeStop(WiFiEvent_t event, WiFiEventInfo_t info);
+    void onStationModeDisconnected(arduino_event_id_t event, arduino_event_info_t info);
+    void onStationModeStop(arduino_event_id_t event, arduino_event_info_t info);
 
     void reconfigureWiFiConnection();
     void manageSTA();

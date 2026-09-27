@@ -15,12 +15,12 @@
  *   the terms of the LGPL v3 license. See the LICENSE file for details.
  **/
 
-#include <WiFi.h>
+#include <Network.h>
 
 #include <ArduinoJson.h>
+#include <ESPFS.h>
 #include <PsychicHttp.h>
 #include <SecurityManager.h>
-#include <ESPFS.h>
 
 #define SYSTEM_STATUS_SERVICE_PATH "/rest/systemStatus"
 

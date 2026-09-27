@@ -13,39 +13,50 @@
  **/
 
 #include <ESP32SvelteKit.h>
-#include <LightMqttSettingsService.h>
-#include <LightStateService.h>
 #include <PsychicHttpServer.h>
 
-#define SERIAL_BAUD_RATE 115200
+#ifdef ACTUATOR_BOARD
+#include "device/Actuator.h"
+#else
+#include <LightMqttSettingsService.h>
+#include <LightStateService.h>
+#endif
 
 PsychicHttpServer server;
-
+#ifdef ACTUATOR_BOARD
+ESP32SvelteKit esp32sveltekit(&server, 160);
+actuator::Actuator device(esp32sveltekit);
+#else
 ESP32SvelteKit esp32sveltekit(&server, 70);
-
-LightMqttSettingsService lightMqttSettingsService = LightMqttSettingsService(&server,
-                                                                             &esp32sveltekit);
-
-LightStateService lightStateService = LightStateService(&server,
-                                                        &esp32sveltekit,
-                                                        &lightMqttSettingsService);
+LightMqttSettingsService lightMqttSettingsService(&server, &esp32sveltekit);
+LightStateService lightStateService(&server, &esp32sveltekit, &lightMqttSettingsService);
+#endif
 
 void setup()
 {
-    // start serial and filesystem
-    Serial.begin(SERIAL_BAUD_RATE);
-
-    // start ESP32-SvelteKit
+#ifdef ACTUATOR_BOARD
+    actuator::Actuator::safePins();
+#endif
+    Serial.begin(115200);
+#ifdef ACTUATOR_BOARD
+    const String setupPassword = SetupIdentity::password();
+    if (setupPassword.isEmpty())
+    {
+        Serial.println("Setup identity unavailable; provisioning stopped");
+        return;
+    }
+    Serial.printf("Device setup password (admin and factory AP): %s\n", setupPassword.c_str());
+#endif
     esp32sveltekit.begin();
-
-    // load the initial light settings
+#ifdef ACTUATOR_BOARD
+    device.begin();
+#else
     lightStateService.begin();
-    // start the light service
     lightMqttSettingsService.begin();
+#endif
 }
 
 void loop()
 {
-    // Delete Arduino loop task, as it is not needed in this example
-    vTaskDelete(NULL);
+    vTaskDelete(nullptr);
 }

@@ -1,0 +1,4 @@
+# Development CLI and source formatting tools; frontend builds use npm.
+clang-format==20.1.8
+ruff==0.12.12
+platformio==6.2.0

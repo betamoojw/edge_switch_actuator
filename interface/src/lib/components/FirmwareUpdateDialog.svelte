@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { modals, onBeforeClose } from 'svelte-modals';
+	import { modals, onBeforeClose, type ModalProps } from 'svelte-modals';
 	import { focusTrap } from 'svelte-focus-trap';
 	import { fly } from 'svelte/transition';
 	import { telemetry } from '$lib/stores/telemetry';
@@ -9,7 +9,7 @@
 	import Refresh from '~icons/tabler/refresh';
 	import Loader from '~icons/tabler/loader-2';
 
-	interface Props {
+	interface Props extends ModalProps {
 		isOpen: boolean;
 		title?: string;
 	}
@@ -34,7 +34,7 @@
 	});
 
 	const RELOAD_COUNTDOWN_SECONDS = 10;
-	
+
 	let timerId: number | undefined = $state();
 	let countdown: number = $state(RELOAD_COUNTDOWN_SECONDS);
 
@@ -142,7 +142,11 @@
 			<!-- Footer -->
 			<div class="flex justify-end gap-2 p-6 pt-4 border-t border-base-300">
 				<button
-					class="btn btn-sm {currentStatus === 'finished' ? 'btn-primary' : currentStatus === 'error' ? 'btn-error' : 'btn-ghost'}"
+					class="btn btn-sm {currentStatus === 'finished'
+						? 'btn-primary'
+						: currentStatus === 'error'
+							? 'btn-error'
+							: 'btn-ghost'}"
 					disabled={updating}
 					onclick={() => {
 						if (timerId) clearInterval(timerId);

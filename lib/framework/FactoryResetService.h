@@ -15,25 +15,32 @@
  *   the terms of the LGPL v3 license. See the LICENSE file for details.
  **/
 
-#include <WiFi.h>
+#include <Network.h>
 
-#include <PsychicHttp.h>
-#include <SecurityManager.h>
-#include <RestartService.h>
 #include <FS.h>
+#include <PsychicHttp.h>
+#include <RestartService.h>
+#include <SecurityManager.h>
 
-#define FS_CONFIG_DIRECTORY "/config"
+#define FS_CONFIG_DIRECTORY        "/config"
 #define FACTORY_RESET_SERVICE_PATH "/rest/factoryReset"
 
 class FactoryResetService
 {
-    FS *fs;
+FS *fs;
 
 public:
     FactoryResetService(PsychicHttpServer *server, FS *fs, SecurityManager *securityManager);
 
     void begin();
     void factoryReset();
+
+    static void setResetHandler(std::function<void()> handler)
+    {
+        resetHandler = handler;
+    }
+
+    static std::function<void()> resetHandler;
 
 private:
     PsychicHttpServer *_server;

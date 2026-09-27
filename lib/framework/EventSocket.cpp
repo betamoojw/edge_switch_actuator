@@ -2,11 +2,8 @@
 
 SemaphoreHandle_t clientSubscriptionsMutex = xSemaphoreCreateMutex();
 
-EventSocket::EventSocket(PsychicHttpServer *server,
-                         SecurityManager *securityManager,
-                         AuthenticationPredicate authenticationPredicate) : _server(server),
-                                                                            _securityManager(securityManager),
-                                                                            _authenticationPredicate(authenticationPredicate)
+EventSocket::EventSocket(PsychicHttpServer *server, SecurityManager *securityManager, AuthenticationPredicate authenticationPredicate)
+    : _server(server), _securityManager(securityManager), _authenticationPredicate(authenticationPredicate)
 {
 }
 
@@ -52,24 +49,27 @@ void EventSocket::onWSClose(PsychicWebSocketClient *client)
 
 esp_err_t EventSocket::onFrame(PsychicWebSocketRequest *request, httpd_ws_frame *frame)
 {
-    ESP_LOGV(SVK_TAG, "ws[%s][%u] opcode[%d]", request->client()->remoteIP().toString().c_str(),
-             request->client()->socket(), frame->type);
+    ESP_LOGV(SVK_TAG, "ws[%s][%u] opcode[%d]", request->client()->remoteIP().toString().c_str(), request->client()->socket(), frame->type);
 
+    if (frame->len > 8192)
+    {
+        return ESP_FAIL;
+    }
     JsonDocument doc;
 #if FT_ENABLED(EVENT_USE_JSON)
     if (frame->type == HTTPD_WS_TYPE_TEXT)
     {
-        ESP_LOGV(SVK_TAG, "ws[%s][%u] request: %s", request->client()->remoteIP().toString().c_str(),
-                 request->client()->socket(), (char *)frame->payload);
+        ESP_LOGV(SVK_TAG, "ws[%s][%u] request: %s", request->client()->remoteIP().toString().c_str(), request->client()->socket(),
+                 (char *) frame->payload);
 
-        DeserializationError error = deserializeJson(doc, (char *)frame->payload, frame->len);
+        DeserializationError error = deserializeJson(doc, (char *) frame->payload, frame->len);
 #else
     if (frame->type == HTTPD_WS_TYPE_BINARY)
     {
-        ESP_LOGV(SVK_TAG, "ws[%s][%u] request: %s", request->client()->remoteIP().toString().c_str(),
-                 request->client()->socket(), (char *)frame->payload);
+        ESP_LOGV(SVK_TAG, "ws[%s][%u] request: %s", request->client()->remoteIP().toString().c_str(), request->client()->socket(),
+                 (char *) frame->payload);
 
-        DeserializationError error = deserializeMsgPack(doc, (char *)frame->payload, frame->len);
+        DeserializationError error = deserializeMsgPack(doc, (char *) frame->payload, frame->len);
 #endif
 
         if (!error && doc.is<JsonObject>())
@@ -80,7 +80,11 @@ esp_err_t EventSocket::onFrame(PsychicWebSocketRequest *request, httpd_ws_frame 
                 // only subscribe to events that are registered
                 if (isEventValid(doc["data"].as<String>()))
                 {
-                    client_subscriptions[doc["data"]].push_back(request->client()->socket());
+                    xSemaphoreTake(clientSubscriptionsMutex, portMAX_DELAY);
+                    auto &members = client_subscriptions[doc["data"]];
+                    members.remove(request->client()->socket());
+                    members.push_back(request->client()->socket());
+                    xSemaphoreGive(clientSubscriptionsMutex);
                     handleSubscribeCallbacks(doc["data"], String(request->client()->socket()));
                 }
                 else
@@ -90,16 +94,22 @@ esp_err_t EventSocket::onFrame(PsychicWebSocketRequest *request, httpd_ws_frame 
             }
             else if (event == "unsubscribe")
             {
+                xSemaphoreTake(clientSubscriptionsMutex, portMAX_DELAY);
                 client_subscriptions[doc["data"]].remove(request->client()->socket());
+                xSemaphoreGive(clientSubscriptionsMutex);
             }
             else
             {
+                if (!isEventValid(event) || !doc["data"].is<JsonObject>())
+                {
+                    return ESP_FAIL;
+                }
                 JsonObject jsonObject = doc["data"].as<JsonObject>();
                 handleEventCallbacks(event, jsonObject, request->client()->socket());
             }
             return ESP_OK;
         }
-        ESP_LOGW(SVK_TAG, "Error[%d] parsing JSON: %s", error, (char *)frame->payload);
+        ESP_LOGW(SVK_TAG, "Error[%d] parsing JSON: %s", error, (char *) frame->payload);
     }
     return ESP_OK;
 }
@@ -149,7 +159,8 @@ void EventSocket::emitEvent(String event, JsonObject &jsonObject, const char *or
         auto *client = _socket.getClient(originSubscriptionId);
         if (client)
         {
-            ESP_LOGV(SVK_TAG, "Emitting event: %s to %s[%u], Message[%d]: %s", event, client->remoteIP().toString().c_str(), client->socket(), len, output);
+            ESP_LOGV(SVK_TAG, "Emitting event: %s to %s[%u], Message[%d]: %s", event, client->remoteIP().toString().c_str(),
+                     client->socket(), len, output);
 #if FT_ENABLED(EVENT_USE_JSON)
             client->sendMessage(HTTPD_WS_TYPE_TEXT, output, len);
 #else
@@ -160,17 +171,21 @@ void EventSocket::emitEvent(String event, JsonObject &jsonObject, const char *or
     else
     { // else send the message to all other clients
 
-        for (int subscription : client_subscriptions[event])
+        const auto recipients = client_subscriptions[event];
+        for (int subscription : recipients)
         {
             if (subscription == originSubscriptionId)
+            {
                 continue;
+            }
             auto *client = _socket.getClient(subscription);
             if (!client)
             {
                 subscriptions.remove(subscription);
                 continue;
             }
-            ESP_LOGV(SVK_TAG, "Emitting event: %s to %s[%u], Message[%d]: %s", event, client->remoteIP().toString().c_str(), client->socket(), len, output);
+            ESP_LOGV(SVK_TAG, "Emitting event: %s to %s[%u], Message[%d]: %s", event, client->remoteIP().toString().c_str(),
+                     client->socket(), len, output);
 #if FT_ENABLED(EVENT_USE_JSON)
             client->sendMessage(HTTPD_WS_TYPE_TEXT, output, len);
 #else
@@ -227,5 +242,5 @@ bool EventSocket::isEventValid(String event)
 
 unsigned int EventSocket::getConnectedClients()
 {
-    return (unsigned int)_socket.getClientList().size();
+    return (unsigned int) _socket.getClientList().size();
 }

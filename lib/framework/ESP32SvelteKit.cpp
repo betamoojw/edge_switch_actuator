@@ -13,61 +13,89 @@
  **/
 
 #include <ESP32SvelteKit.h>
+#include <NetworkSupport.h>
+#include <esp_partition.h>
 
-ESP32SvelteKit::ESP32SvelteKit(PsychicHttpServer *server, unsigned int numberEndpoints) : _server(server),
-                                                                                          _numberEndpoints(numberEndpoints),
-                                                                                          _featureService(server, &_socket),
-                                                                                          _securitySettingsService(server, &ESPFS),
-                                                                                          _wifiSettingsService(server, &ESPFS, &_securitySettingsService, &_socket),
-                                                                                          _wifiScanner(server, &_securitySettingsService),
-                                                                                          _wifiStatus(server, &_securitySettingsService),
-                                                                                          _apSettingsService(server, &ESPFS, &_securitySettingsService),
-                                                                                          _apStatus(server, &_securitySettingsService, &_apSettingsService),
+ESP32SvelteKit::ESP32SvelteKit(PsychicHttpServer *server, unsigned int numberEndpoints)
+    : _server(server), _numberEndpoints(numberEndpoints), _featureService(server, &_socket), _securitySettingsService(server, &ESPFS),
+      _wifiSettingsService(server, &ESPFS, &_securitySettingsService, &_socket), _wifiScanner(server, &_securitySettingsService),
+      _wifiStatus(server, &_securitySettingsService), _apSettingsService(server, &ESPFS, &_securitySettingsService),
+      _apStatus(server, &_securitySettingsService, &_apSettingsService),
 #if FT_ENABLED(FT_ETHERNET)
-                                                                                          _ethernetSettingsService(server, &ESPFS, &_securitySettingsService, &_socket),
-                                                                                          _ethernetStatus(server, &_securitySettingsService),
+      _ethernetSettingsService(server, &ESPFS, &_securitySettingsService, &_socket), _ethernetStatus(server, &_securitySettingsService),
 #endif
-                                                                                          _socket(server, &_securitySettingsService, AuthenticationPredicates::IS_AUTHENTICATED),
-                                                                                          _notificationService(&_socket),
+      _socket(server, &_securitySettingsService, AuthenticationPredicates::IS_AUTHENTICATED), _notificationService(&_socket),
 #if FT_ENABLED(FT_NTP)
-                                                                                          _ntpSettingsService(server, &ESPFS, &_securitySettingsService),
-                                                                                          _ntpStatus(server, &_securitySettingsService),
+      _ntpSettingsService(server, &ESPFS, &_securitySettingsService), _ntpStatus(server, &_securitySettingsService),
 #endif
 #if FT_ENABLED(FT_UPLOAD_FIRMWARE)
-                                                                                          _uploadFirmwareService(server, &_securitySettingsService, &_socket),
+      _uploadFirmwareService(server, &_securitySettingsService, &_socket),
 #endif
 #if FT_ENABLED(FT_DOWNLOAD_FIRMWARE)
-                                                                                          _downloadFirmwareService(server, &_securitySettingsService, &_socket),
+      _downloadFirmwareService(server, &_securitySettingsService, &_socket),
 #endif
 #if FT_ENABLED(FT_MQTT)
-                                                                                          _mqttSettingsService(server, &ESPFS, &_securitySettingsService),
-                                                                                          _mqttStatus(server, &_mqttSettingsService, &_securitySettingsService),
+      _mqttSettingsService(server, &ESPFS, &_securitySettingsService),
+      _mqttStatus(server, &_mqttSettingsService, &_securitySettingsService),
 #endif
 #if FT_ENABLED(FT_SECURITY)
-                                                                                          _authenticationService(server, &_securitySettingsService),
+      _authenticationService(server, &_securitySettingsService),
 #endif
 #if FT_ENABLED(FT_SLEEP)
-                                                                                          _sleepService(server, &_securitySettingsService),
+      _sleepService(server, &_securitySettingsService),
 #endif
 #if FT_ENABLED(FT_BATTERY)
-                                                                                          _batteryService(&_socket),
+      _batteryService(&_socket),
 #endif
 #if FT_ENABLED(FT_ANALYTICS)
-                                                                                          _analyticsService(&_socket),
+      _analyticsService(&_socket),
 #endif
-                                                                                          _restartService(server, &_securitySettingsService),
-                                                                                          _factoryResetService(server, &ESPFS, &_securitySettingsService),
+      _restartService(server, &_securitySettingsService), _factoryResetService(server, &ESPFS, &_securitySettingsService),
 #if FT_ENABLED(FT_COREDUMP)
-                                                                                          _coreDump(server, &_securitySettingsService),
+      _coreDump(server, &_securitySettingsService),
 #endif
-                                                                                          _systemStatus(server, &_securitySettingsService)
+      _systemStatus(server, &_securitySettingsService)
 {
 }
 
 void ESP32SvelteKit::begin()
 {
+    if (!Network.begin())
+    {
+        ESP_LOGE(SVK_TAG, "Network initialization failed");
+        return;
+    }
     ESP_LOGV(SVK_TAG, "Loading settings from files system");
-    ESPFS.begin(true);
+    // Never silently erase commissioned settings on a mount error.
+    if (!ESPFS.begin(false))
+    {
+        // Initialize only a completely erased factory partition. A corrupt
+        // commissioned partition must never be silently formatted.
+        auto partition = esp_partition_find_first(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_SPIFFS, "spiffs");
+        bool virgin = partition != nullptr;
+        uint8_t bytes[256];
+        for (size_t offset = 0; virgin && offset < partition->size; offset += sizeof(bytes))
+        {
+            if (esp_partition_read(partition, offset, bytes, sizeof(bytes)) != ESP_OK)
+            {
+                virgin = false;
+                break;
+            }
+            for (auto b : bytes)
+            {
+                if (b != 0xff)
+                {
+                    virgin = false;
+                    break;
+                }
+            }
+        }
+        if (!virgin || !ESPFS.format() || !ESPFS.begin(false))
+        {
+            ESP_LOGE(SVK_TAG, "Filesystem unavailable; preserving flash for recovery");
+            return;
+        }
+    }
 
 #if FT_ENABLED(FT_ETHERNET)
     _ethernetSettingsService.initEthernet();
@@ -113,14 +141,17 @@ void ESP32SvelteKit::begin()
     _server->serveStatic("/_app/", ESPFS, "/www/_app/");
     _server->serveStatic("/favicon.png", ESPFS, "/www/favicon.png");
     //  Serving all other get requests with "/www/index.htm"
-    _server->onNotFound([](PsychicRequest *request)
-                        {
-        if (request->method() == HTTP_GET) {
-            PsychicFileResponse response(request, ESPFS, "/www/index.html", "text/html");
-            return response.send();
-            // String url = "http://" + request->host() + "/index.html";
-            // request->redirect(url.c_str());
-        } });
+    _server->onNotFound(
+        [](PsychicRequest *request)
+        {
+            if (request->method() == HTTP_GET)
+            {
+                PsychicFileResponse response(request, ESPFS, "/www/index.html", "text/html");
+                return response.send();
+                // String url = "http://" + request->host() + "/index.html";
+                // request->redirect(url.c_str());
+            }
+        });
 #endif
 
     // Serve static resources from /config/ if set by platformio.ini
@@ -163,7 +194,6 @@ void ESP32SvelteKit::begin()
     _ethernetStatus.begin();
 #endif
 
-
 #if FT_ENABLED(FT_COREDUMP)
     _coreDump.begin();
 #endif
@@ -193,17 +223,19 @@ void ESP32SvelteKit::begin()
 
 #if FT_ENABLED(FT_SLEEP)
     _sleepService.begin();
-    _sleepService.attachOnSleepCallback([&]()
-                                        {   ESP_LOGI(SVK_TAG, "Attempting to stop server");
-                                            for (auto client : _server->getClientList())
-                                            {
-                                                client->close();
-                                            }
-                                            vTaskDelete(_loopTaskHandle);
-                                            ESP_LOGI(SVK_TAG, "Server stopped"); });
+    _sleepService.attachOnSleepCallback(
+        [&]()
+        {
+            ESP_LOGI(SVK_TAG, "Attempting to stop server");
+            for (auto client : _server->getClientList())
+            {
+                client->close();
+            }
+            vTaskDelete(_loopTaskHandle);
+            ESP_LOGI(SVK_TAG, "Server stopped");
+        });
 #if FT_ENABLED(FT_MQTT)
-    _sleepService.attachOnSleepCallback([&]()
-                                        { _mqttSettingsService.disconnect(); });
+    _sleepService.attachOnSleepCallback([&]() { _mqttSettingsService.disconnect(); });
 #endif
 #endif
 
@@ -217,14 +249,13 @@ void ESP32SvelteKit::begin()
 
     // Start the loop task
     ESP_LOGV(SVK_TAG, "Starting loop task");
-    xTaskCreatePinnedToCore(
-        this->_loopImpl,            // Function that should be called
-        "ESP32 SvelteKit Loop",     // Name of the task (for debugging)
-        4096,                       // Stack size (bytes)
-        this,                       // Pass reference to this class instance
-        (tskIDLE_PRIORITY + 2),     // task priority
-        &_loopTaskHandle,           // Task handle
-        ESP32SVELTEKIT_RUNNING_CORE // Pin to application core
+    xTaskCreatePinnedToCore(this->_loopImpl,            // Function that should be called
+                            "ESP32 SvelteKit Loop",     // Name of the task (for debugging)
+                            4096,                       // Stack size (bytes)
+                            this,                       // Pass reference to this class instance
+                            (tskIDLE_PRIORITY + 2),     // task priority
+                            &_loopTaskHandle,           // Task handle
+                            ESP32SVELTEKIT_RUNNING_CORE // Pin to application core
     );
 }
 
@@ -232,19 +263,17 @@ void ESP32SvelteKit::_loop()
 {
     TickType_t xLastWakeTime = xTaskGetTickCount();
 
-    bool wifi = false;
     bool ap = false;
     bool event = false;
     bool mqtt = false;
-#if FT_ENABLED(FT_ETHERNET)
-    bool eth = false;
-#endif
-    bool wifi_eth_combined = false;
 
     while (1)
     {
         _wifiSettingsService.loop(); // 30 seconds
-        _apSettingsService.loop();   // 10 seconds
+#if FT_ENABLED(FT_NTP)
+        _ntpSettingsService.loop();
+#endif
+        _apSettingsService.loop(); // 10 seconds
 #if FT_ENABLED(FT_MQTT)
         _mqttSettingsService.loop(); // 5 seconds
 #endif
@@ -253,13 +282,9 @@ void ESP32SvelteKit::_loop()
 #endif
 #if FT_ENABLED(FT_ETHERNET)
         _ethernetSettingsService.loop();
-        eth = _ethernetStatus.isConnected();
-        if (eth) { wifi_eth_combined = true; }
 #endif
 
-        // Query the connectivity status
-        wifi = _wifiStatus.isConnected();
-        if (wifi) { wifi_eth_combined = true; }
+        const bool networkOnline = NetworkSupport::online();
         ap = _apStatus.isActive();
         event = _socket.getConnectedClients() > 0;
 #if FT_ENABLED(FT_MQTT)
@@ -267,13 +292,13 @@ void ESP32SvelteKit::_loop()
 #endif
 
         // Update the system status
-        if (wifi_eth_combined && mqtt)
+        if (networkOnline && mqtt)
         {
-            _connectionStatus = ConnectionStatus::STA_MQTT;
+            _connectionStatus = ConnectionStatus::NETWORK_MQTT;
         }
-        else if (wifi_eth_combined)
+        else if (networkOnline)
         {
-            _connectionStatus = event ? ConnectionStatus::STA_CONNECTED : ConnectionStatus::STA;
+            _connectionStatus = event ? ConnectionStatus::NETWORK_CONNECTED : ConnectionStatus::NETWORK;
         }
         else if (ap)
         {

@@ -16,9 +16,8 @@
 
 #if FT_ENABLED(FT_ETHERNET)
 
-EthernetStatus::EthernetStatus(PsychicHttpServer *server,
-                               SecurityManager *securityManager) : _server(server),
-                                                                   _securityManager(securityManager)
+EthernetStatus::EthernetStatus(PsychicHttpServer *server, SecurityManager *securityManager)
+    : _server(server), _securityManager(securityManager)
 {
 }
 
@@ -31,13 +30,13 @@ void EthernetStatus::begin()
 
     ESP_LOGV(SVK_TAG, "Registered GET endpoint: %s", ETHERNET_STATUS_SERVICE_PATH);
 
-    // arduino also uses WiFi events for Ethernet
-    WiFi.onEvent(onConnected, WiFiEvent_t::ARDUINO_EVENT_ETH_CONNECTED);
-    WiFi.onEvent(onDisconnected, WiFiEvent_t::ARDUINO_EVENT_ETH_DISCONNECTED);
-    WiFi.onEvent(onGotIP, WiFiEvent_t::ARDUINO_EVENT_ETH_GOT_IP);
+    // All interface events are dispatched by Network.
+    Network.onEvent(onConnected, ARDUINO_EVENT_ETH_CONNECTED);
+    Network.onEvent(onDisconnected, ARDUINO_EVENT_ETH_DISCONNECTED);
+    Network.onEvent(onGotIP, ARDUINO_EVENT_ETH_GOT_IP);
 }
 
-void EthernetStatus::onConnected(WiFiEvent_t event, WiFiEventInfo_t info)
+void EthernetStatus::onConnected(arduino_event_id_t event, arduino_event_info_t info)
 {
     ESP_LOGI(SVK_TAG, "Ethernet Connected.");
 #ifdef SERIAL_INFO
@@ -45,7 +44,7 @@ void EthernetStatus::onConnected(WiFiEvent_t event, WiFiEventInfo_t info)
 #endif
 }
 
-void EthernetStatus::onDisconnected(WiFiEvent_t event, WiFiEventInfo_t info)
+void EthernetStatus::onDisconnected(arduino_event_id_t event, arduino_event_info_t info)
 {
     ESP_LOGI(SVK_TAG, "Ethernet Disconnected.");
 #ifdef SERIAL_INFO
@@ -53,7 +52,7 @@ void EthernetStatus::onDisconnected(WiFiEvent_t event, WiFiEventInfo_t info)
 #endif
 }
 
-void EthernetStatus::onGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
+void EthernetStatus::onGotIP(arduino_event_id_t event, arduino_event_info_t info)
 {
     ESP_LOGI(SVK_TAG, "Ethernet Got IP. localIP=%s, hostName=%s", ETH.localIP().toString().c_str(), ETH.getHostname());
 #ifdef SERIAL_INFO

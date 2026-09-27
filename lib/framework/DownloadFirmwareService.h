@@ -16,18 +16,18 @@
 
 #include <Arduino.h>
 
-#include <WiFi.h>
 #include <ArduinoJson.h>
 #include <EventSocket.h>
+#include <FirmwareUpdateEvents.h>
+#include <Network.h>
 #include <PsychicHttp.h>
 #include <SecurityManager.h>
-#include <FirmwareUpdateEvents.h>
 
-#include <WiFiClientSecure.h>
 #include <HTTPUpdate.h>
+#include <NetworkClientSecure.h>
 
 #define GITHUB_FIRMWARE_PATH "/rest/downloadUpdate"
-#define OTA_TASK_STACK_SIZE 9216
+#define OTA_TASK_STACK_SIZE  9216
 
 class DownloadFirmwareService
 {

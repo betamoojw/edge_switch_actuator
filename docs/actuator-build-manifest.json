@@ -1,0 +1,34 @@
+{
+  "generatedUtc": "2026-09-27T07:39:57.936501+00:00",
+  "baseCommit": "81827a2af9410b91741ece1a23cf6ee95877b757",
+  "workingTreeChangesIncluded": true,
+  "firmwareBuilds": {
+    "waveshare-relay-6ch": true,
+    "esp32-s3-devkitc-1": true,
+    "Kincony-B16M": true
+  },
+  "arduinoEsp32Core": "3.3.12",
+  "platformRelease": "55.03.312-1",
+  "platformioCore": "6.2.0",
+  "knxCommit": "980c047ad7fc5e27bf2fae95e48acde5d5e0b4fd",
+  "knxProductIdentity": "development only; manufacturer 0x00FA, application 600, version 1",
+  "hardwareTested": false,
+  "etsImportTested": false,
+  "artifacts": [
+    {
+      "path": "knx/Edge_S3_Relay_6CH.knxprod",
+      "bytes": 106507,
+      "sha256": "534cb02e54266fd17342fe33b6fb0eb1eebc169f44edd2510566c0dfccd45d0a"
+    },
+    {
+      "path": "build/release/ESP32-Sveltekit_waveshare-relay-6ch_0-6-0.bin",
+      "bytes": 1983776,
+      "sha256": "7828a3a73a108b2165bca31f518258ba24ca53fea13f5c95829d4f8d486c3cd1"
+    },
+    {
+      "path": "build/merged/ESP32-Sveltekit_waveshare-relay-6ch_0-6-0_webflash.bin",
+      "bytes": 2049312,
+      "sha256": "9ec1454414027a0875186350eb6c766a32ce402f5b22489d54ee92ce0dd98ec0"
+    }
+  ]
+}
