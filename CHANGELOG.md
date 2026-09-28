@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Opt-in Home Assistant MQTT discovery for the six-channel actuator: relay controls, diagnostics, button gestures and identify, with reconnect handling, retained discovery cleanup, localized settings and regression tests. See [setup and compatibility](docs/home-assistant.md).
 - Add originID to StateUpdateResult update [#110](https://github.com/theelims/ESP32-sveltekit/pull/110)
 - Add originID to StateUpdateResult update [#110](https://github.com/theelims/ESP32-sveltekit/pull/110)
 - Ethernet Support [#113](https://github.com/theelims/ESP32-sveltekit/pull/113)

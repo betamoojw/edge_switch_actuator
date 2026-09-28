@@ -1,4 +1,5 @@
 #include "device/Gesture.h"
+#include "device/HomeAssistantCommand.h"
 #include "protocols/ModbusPdu.h"
 #include <array>
 #include <assert.h>
@@ -211,6 +212,23 @@ static void gestureTests()
 
 int main()
 {
+    using actuator::homeAssistantCommand;
+    for (int channel = 1; channel <= 6; ++channel)
+    {
+        char topic[20];
+        snprintf(topic, sizeof(topic), "relay/%d/set", channel);
+        assert(homeAssistantCommand(topic, "ON", false) == (channel - 1) * 2 + 1);
+        assert(homeAssistantCommand(topic, "OFF", false) == (channel - 1) * 2);
+        assert(homeAssistantCommand(topic, "ON", true) == -1);
+    }
+    assert(homeAssistantCommand("identify/set", "PRESS", false) == 12);
+    assert(homeAssistantCommand("identify/set", "PRESS", true) == -1);
+    for (auto topic : {"", "relay/0/set", "relay/7/set", "relay/11/set", "relay/1/set/extra", "relay/1"})
+        assert(homeAssistantCommand(topic, "ON", false) == -1);
+    for (auto payload : {"", "on", "ON ", "TOGGLE", "1", "{\"state\":\"ON\"}"})
+        assert(homeAssistantCommand("relay/1/set", payload, false) == -1);
+    assert(homeAssistantCommand(nullptr, "ON", false) == -1);
+    assert(homeAssistantCommand("relay/1/set", nullptr, false) == -1);
     gestureTests();
     protocolTests();
     puts("PASS: gesture sequences, debounce, hold/reset, wraparound, Modbus functions, exceptions, "

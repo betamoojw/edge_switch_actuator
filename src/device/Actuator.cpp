@@ -1,4 +1,5 @@
 #include "Actuator.h"
+#include "HomeAssistant.h"
 #include "protocols/KnxAdapter.h"
 #include "protocols/Modbus.h"
 #include <NetworkSupport.h>
@@ -82,6 +83,10 @@ void Actuator::begin()
                 delete ptr;
             }
         });
+#if FT_ENABLED(FT_MQTT)
+    homeAssistant.reset(new HomeAssistant(*this, framework));
+    homeAssistant->begin();
+#endif
     xTaskCreatePinnedToCore([](void *p) { static_cast<Actuator *>(p)->loop(); }, "Actuator", 16384, this, 2, nullptr, 1);
 }
 
@@ -505,6 +510,9 @@ void Actuator::loop()
         {
             lastGesture = event;
             ++gestureCount;
+#if FT_ENABLED(FT_MQTT)
+            homeAssistant->event(event);
+#endif
             if (event == Gesture::Reset)
             {
                 reset();
@@ -562,6 +570,9 @@ void Actuator::loop()
             }
         }
         indicators(now);
+#if FT_ENABLED(FT_MQTT)
+        homeAssistant->loop(now);
+#endif
         if (uint32_t(now - lastPublish) >= 1000)
         {
             JsonDocument doc;

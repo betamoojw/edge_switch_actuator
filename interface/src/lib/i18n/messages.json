@@ -3398,5 +3398,21 @@
 		"Pobierz dokumentację (angielski)",
 		"下载参考文档（英文）",
 		"下載參考文件（英文）"
+	],
+	"Home Assistant discovery": [
+		"Home-Assistant-Erkennung",
+		"Detección de Home Assistant",
+		"Découverte Home Assistant",
+		"Wykrywanie Home Assistant",
+		"Home Assistant 自动发现",
+		"Home Assistant 自動探索"
+	],
+	"Use the same MQTT broker as Home Assistant. Discovery prefix: homeassistant.": [
+		"Verwenden Sie denselben MQTT-Broker wie Home Assistant. Erkennungspräfix: homeassistant.",
+		"Use el mismo servidor MQTT que Home Assistant. Prefijo de detección: homeassistant.",
+		"Utilisez le même serveur MQTT que Home Assistant. Préfixe de découverte : homeassistant.",
+		"Użyj tego samego brokera MQTT co Home Assistant. Prefiks wykrywania: homeassistant.",
+		"使用与 Home Assistant 相同的 MQTT 服务器。发现前缀：homeassistant。",
+		"使用與 Home Assistant 相同的 MQTT 伺服器。探索前綴：homeassistant。"
 	]
 }

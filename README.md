@@ -6,6 +6,8 @@ Built on ESP32-SvelteKit, originally forked from rjwats/esp8266-react. The frame
 
 See [frontend development and testing](docs/frontend-testing.md) for local simulation, and [KNX address entry](docs/knx-address-entry.md) for commissioning rules.
 
+The six-channel device supports opt-in [Home Assistant MQTT discovery](docs/home-assistant.md), with relay controls, button events, identify and diagnostics alongside the existing protocols.
+
 Use **System → UI** for seven interface languages and five themes, with automatic
 dark-mode support. See [UI preferences](docs/ui-preferences.md).
 

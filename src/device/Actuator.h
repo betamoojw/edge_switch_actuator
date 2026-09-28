@@ -12,6 +12,7 @@ namespace actuator
 {
 class Modbus;
 class KnxAdapter;
+class HomeAssistant;
 
 class Actuator
 {
@@ -49,6 +50,9 @@ public:
     DurableStore store;
     std::unique_ptr<Modbus> modbus;
     std::unique_ptr<KnxAdapter> knx;
+#if FT_ENABLED(FT_MQTT)
+    std::unique_ptr<HomeAssistant> homeAssistant;
+#endif
 
 private:
     ESP32SvelteKit &framework;

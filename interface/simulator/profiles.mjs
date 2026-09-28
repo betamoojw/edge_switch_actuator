@@ -107,6 +107,7 @@ export function defaults(profile = 'actuator') {
 			ethernetSettings: { hostname: 'esp32-simulator', static_ip_config: false },
 			mqttSettings: {
 				enabled: false,
+				...(profile === 'template' ? {} : { home_assistant_discovery: false }),
 				uri: 'mqtts://broker.hivemq.com:8883',
 				username: '',
 				password: '',

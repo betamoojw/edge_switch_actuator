@@ -223,6 +223,19 @@
 					</label>
 
 					<div class="hidden sm:block"></div>
+					{#if mqttSettings.home_assistant_discovery !== undefined}
+						<label class="label inline-flex cursor-pointer gap-4 text-base sm:col-span-2">
+							<input
+								type="checkbox"
+								class="checkbox checkbox-primary"
+								bind:checked={mqttSettings.home_assistant_discovery}
+							/>
+							{$t('Home Assistant discovery')}
+						</label>
+						<p class="text-sm opacity-75 sm:col-span-2">
+							{$t('Use the same MQTT broker as Home Assistant. Discovery prefix: homeassistant.')}
+						</p>
+					{/if}
 					<!-- URI -->
 					<div class="sm:col-span-2">
 						<label class="label" for="host">{$t('URI')}</label>

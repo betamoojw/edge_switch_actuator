@@ -561,10 +561,26 @@ test('ETH-01 hostname discard and save', async ({ page, request }) => {
 	await expect(page.getByLabel('Host Name (mDNS)', { exact: true })).toHaveValue('ethernet-test');
 });
 
+test('MQTT-02 actuator Home Assistant discovery opt-in persists', async ({ page, request }) => {
+	await control(request, 'reset', { profile: 'actuator' });
+	await login(page, 'admin', '/connections/mqtt');
+	await expand(page, 'Change MQTT Settings');
+	const discovery = page.getByLabel('Home Assistant discovery', { exact: true });
+	await expect(discovery).not.toBeChecked();
+	await discovery.check();
+	await submitSettings(page, 'mqttSettings');
+	await page.reload();
+	await expand(page, 'Change MQTT Settings');
+	await expect(discovery).toBeChecked();
+	await discovery.uncheck();
+	await submitSettings(page, 'mqttSettings');
+});
+
 test('MQTT-01 template connection and discovery settings', async ({ page, request }) => {
 	await control(request, 'reset', { profile: 'template' });
 	await login(page, 'admin', '/connections/mqtt');
 	await expand(page, 'Change MQTT Settings');
+	await expect(page.getByLabel('Home Assistant discovery', { exact: true })).toHaveCount(0);
 	await page.getByLabel('Enable MQTT', { exact: true }).check();
 	await page.getByLabel('URI', { exact: true }).fill('mqtt://broker.example.com:1883');
 	await submitSettings(page, 'mqttSettings');

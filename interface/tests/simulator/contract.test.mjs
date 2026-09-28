@@ -47,6 +47,28 @@ function save(d, update = {}) {
 	return d.execute('device/config', { ...structuredClone(d.config), ...update }, admin(d));
 }
 
+test('Home Assistant opt-in is administrator-only and older MQTT payloads stay disabled', async (t) => {
+	const sim = await setup(t);
+	const token = await sim.login();
+	const original = await (await sim.request('mqttSettings', undefined, token)).json();
+	assert.equal(original.home_assistant_discovery, false);
+	const updated = { ...original, enabled: true, home_assistant_discovery: true };
+	assert.equal((await sim.request('mqttSettings', updated)).status, 401);
+	const saved = await sim.request('mqttSettings', updated, token);
+	assert.equal(saved.status, 200);
+	assert.equal((await saved.json()).home_assistant_discovery, true);
+	assert.equal(
+		(await (await sim.request('mqttSettings', undefined, token)).json()).home_assistant_discovery,
+		true
+	);
+	delete updated.home_assistant_discovery;
+	assert.equal(
+		(await (await sim.request('mqttSettings', updated, token)).json()).home_assistant_discovery,
+		false
+	);
+	assert.equal(defaults('template').settings.mqttSettings.home_assistant_discovery, undefined);
+});
+
 test('target validation does not silently select a hardware host', () => {
 	assert.deepEqual(deviceTarget('192.0.2.1:8080'), {
 		http: 'http://192.0.2.1:8080',

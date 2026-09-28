@@ -77,6 +77,7 @@ class MqttSettings
 public:
     // host and port - if enabled
     bool enabled;
+    bool homeAssistantDiscovery = false;
     String uri;
 
     // username and password
@@ -96,6 +97,9 @@ public:
     static void read(MqttSettings &settings, JsonObject &root)
     {
         root["enabled"] = settings.enabled;
+#ifdef ACTUATOR_BOARD
+        root["home_assistant_discovery"] = settings.homeAssistantDiscovery;
+#endif
         root["uri"] = settings.uri;
         root["username"] = settings.username;
         root["password"] = settings.password;
@@ -108,6 +112,7 @@ public:
     static StateUpdateResult update(JsonObject &root, MqttSettings &settings, const String &originId)
     {
         settings.enabled = root["enabled"] | FACTORY_MQTT_ENABLED;
+        settings.homeAssistantDiscovery = root["home_assistant_discovery"] | false;
         settings.uri = root["uri"] | FACTORY_MQTT_URI;
         settings.username = root["username"] | SettingValue::format(FACTORY_MQTT_USERNAME);
         settings.password = root["password"] | FACTORY_MQTT_PASSWORD;

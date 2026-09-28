@@ -142,6 +142,7 @@ export type MQTTStatus = {
 
 export type MQTTSettings = {
 	enabled: boolean;
+	home_assistant_discovery?: boolean;
 	uri: string;
 	username: string;
 	password: string;
@@ -150,7 +151,6 @@ export type MQTTSettings = {
 	clean_session: boolean;
 	message_interval_ms: number;
 };
-
 
 export type Ethernet = {
 	connected: boolean;
