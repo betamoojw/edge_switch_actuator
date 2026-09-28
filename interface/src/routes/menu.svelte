@@ -162,7 +162,7 @@
 		onclick={() => setActiveMenuItem('')}
 	>
 		<img src={logo} alt="Logo" class="max-h-12 max-w-12 h-auto w-auto object-contain" />
-		<h1 class="px-4 text-2xl font-bold">{page.data.appName}</h1>
+		<span class="px-4 text-2xl font-bold">{page.data.appName}</span>
 	</a>
 	<ul class="menu w-full rounded-box menu-vertical flex-nowrap overflow-y-auto">
 		{#each menuItems as menuItem, i (menuItem.title)}

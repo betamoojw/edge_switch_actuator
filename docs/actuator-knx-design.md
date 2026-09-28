@@ -1,6 +1,7 @@
 # KNXnet/IP and ETS product design
 
 Implementation follow-up: [implemented behavior, build steps and qualification status](actuator-implementation.md).
+Web commissioning: [individual/group address placeholders and validation](knx-address-entry.md).
 Status: proposed six-channel product contract. No KNX firmware or ETS-importable `.knxprod` was generated or validated in this review. The product file is a required release deliverable, not satisfied by renaming XML to `.knxprod`.
 
 ## Reference conclusions

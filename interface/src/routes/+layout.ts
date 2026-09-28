@@ -9,9 +9,9 @@ export const load = (async ({ fetch }) => {
 	const item = await result.json();
 	return {
 		features: item,
-		title: 'ESP32-SvelteKit',
-		github: 'theelims/ESP32-sveltekit',
-		copyright: '2025 theelims',
-		appName: 'ESP32 SvelteKit'
+		title: 'Edge Switching Actuator',
+		github: 'betamoojw/edge_switch_actuator/tree/dev',
+		copyright: '2026 MTech',
+		appName: 'IoT Platform'
 	};
 }) satisfies LayoutLoad;

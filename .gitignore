@@ -21,3 +21,7 @@ ssl_certs/cacert.pem
 /scripts/__pycache__
 .DS_Store
 *.bak
+/interface/.sim-state/
+/interface/playwright-report/
+/interface/test-results/
+/interface/.env.local

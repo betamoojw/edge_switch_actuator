@@ -1,0 +1,49 @@
+name: Frontend functional tests
+on:
+  pull_request:
+    paths: ['interface/**', 'src/**', 'lib/framework/**', 'features.ini', 'factory_settings.ini', 'platformio.ini', '.github/workflows/frontend-tests.yml']
+  push:
+    branches: [dev, main]
+    paths: ['interface/**', 'src/**', 'lib/framework/**', 'features.ini', 'factory_settings.ini', 'platformio.ini', '.github/workflows/frontend-tests.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: frontend-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit, mobile]
+    defaults:
+      run:
+        working-directory: interface
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: interface/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - run: npm run test:bundle
+      - run: npm run test:sim
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: npm run test:e2e -- --project=${{ matrix.browser }} | tee e2e.log
+      - if: matrix.browser == 'chromium'
+        run: npm run test:e2e:built | tee built-e2e.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-${{ matrix.browser }}
+          path: |
+            interface/playwright-report/
+            interface/test-results/
+            interface/*e2e.log
+          retention-days: 14

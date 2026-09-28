@@ -1,4 +1,4 @@
-site_name: ESP32 SvelteKit
+site_name: Switching Actuator
 
 nav:
   - Home: index.md
@@ -16,6 +16,8 @@ nav:
   - "Front End":
       - sveltekit.md
       - structure.md
+      - KNX address entry: knx-address-entry.md
+      - Development and testing: frontend-testing.md
       - stores.md
       - components.md
   - "Back End":
@@ -24,7 +26,7 @@ nav:
 
 site_author: elims
 site_description: >-
-  A simple, secure and extensible framework for IoT projects on ESP32 platforms with responsive Sveltekit front-end built with TailwindCSS and DaisyUI.
+  ESP32-S3 Switching Actuator: six relay outputs, Protocol Interface configuration, and a responsive device management interface.
 
 # Repository
 repo_name: theelims/ESP32-sveltekit

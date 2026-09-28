@@ -7,7 +7,7 @@ Status: proposed implementation contract, 2026-09-26. Preserves the `dev` ESP32 
 
 The actuator has six independent outputs, configurable light/sound indication and local gestures. A single `protocolMode` enum is `off`, `modbus_rtu`, `modbus_tcp` or `knx_ip`; never use independent enable booleans that allow conflicting stacks. The management dashboard stays available in every mode. RTU is a server/slave and TCP is a server; client/master, gateway and KNX TP operation are outside this first product.
 
-Default on first boot: all relays OFF, indicators enabled, button gestures enabled, fieldbus OFF, provisioning AP available. GPIO assignments are fixed. User commissioning selects the bus mode. MQTT remains a framework capability but application relay subscriptions default OFF; if enabled later, they pass through the same permission and ownership rules.
+Default on first boot: all relays OFF, indicators enabled, button gestures enabled, protocol interface OFF, provisioning AP available. GPIO assignments are fixed. User commissioning selects the bus mode. MQTT remains a framework capability but application relay subscriptions default OFF; if enabled later, they pass through the same permission and ownership rules.
 
 ## Shared control architecture
 
@@ -44,7 +44,7 @@ One application task owns outputs and button timing (initial 5 ms scheduling tar
 
 Retain the framework networking task on its current core. Do not assume the framework loop cadence meets RTU framing or KNX service requirements. Measure latency and stack/heap margins under OTA, Wi-Fi reconnect and web traffic. Target command application below 50 ms under normal load and report overruns; this is an acceptance target, not a measured guarantee.
 
-Every command carries origin, authenticated principal or fieldbus policy, request ID, expected config revision where relevant, and mode generation. Reject stale commands from a previous protocol generation. Order normal commands by queue acceptance; disabled channels and channel locks override ordinary commands. Factory reset/output shutdown takes precedence. Publish only applied state and explicit rejected-command results. Never call a commanded state a measured contact state.
+Every command carries origin, authenticated principal or protocol interface policy, request ID, expected config revision where relevant, and mode generation. Reject stale commands from a previous protocol generation. Order normal commands by queue acceptance; disabled channels and channel locks override ordinary commands. Factory reset/output shutdown takes precedence. Publish only applied state and explicit rejected-command results. Never call a commanded state a measured contact state.
 
 ## Configuration and persistence
 
@@ -87,7 +87,7 @@ Default single: no action; double: temporary device identification; triple: togg
 
 Holding continuously for 10 seconds invokes factory reset exactly once. At 5 seconds show the armed indication; releasing before 10 seconds cancels. A hold cancels any pending click sequence. Suppress button actions at boot until the first release, so a stuck/boot-held button does not erase configuration. The dashboard can configure click actions and debounce/gap within safe bounds, but shows the reserved reset gesture as read-only. This resolves configurable button disable versus the mandatory physical recovery function explicitly.
 
-Reset sequence: reject new commands; drive all outputs OFF; stop fieldbus; mark reset pending durably; erase resettable framework/application settings, Wi-Fi credentials, user accounts/tokens and KNX commissioning/table storage; restore provisioned factory identity/unique setup credential; reboot to AP commissioning. Resume interrupted reset at next boot. Preserve factory serial, calibration and firmware. Do not erase unrelated NVS namespaces or a secure identity partition. An administrative web reset uses this same coordinator with confirmation; the hardware hold is its own physical authorization.
+Reset sequence: reject new commands; drive all outputs OFF; stop protocol interface; mark reset pending durably; erase resettable framework/application settings, Wi-Fi credentials, user accounts/tokens and KNX commissioning/table storage; restore provisioned factory identity/unique setup credential; reboot to AP commissioning. Resume interrupted reset at next boot. Preserve factory serial, calibration and firmware. Do not erase unrelated NVS namespaces or a secure identity partition. An administrative web reset uses this same coordinator with confirmation; the hardware hold is its own physical authorization.
 
 ## Dashboard and permissions
 
@@ -99,7 +99,7 @@ Keep existing styling and framework pages. New categories:
 | Outputs `/hardware/relays` | Individual control, enable and per-channel configuration |
 | Indicators `/hardware/indicators` | RGB/buzzer enable, patterns, priority reason, bounded tests |
 | Local input `/hardware/button` | Press/gesture state, bindings, reserved hold explanation |
-| Fieldbus `/protocols` | Exclusive mode selector, transition progress and failures |
+| Protocol Interface `/protocols` | Exclusive mode selector, transition progress and failures |
 | Modbus `/protocols/modbus` | RTU/TCP-specific settings, register explorer, counters, RS485 enable |
 | KNX `/protocols/knx` | Programming toggle, individual address, parameters, group associations, ownership/revision |
 | Administration | Existing users/network/OTA plus audit, reset and config export |
@@ -114,7 +114,7 @@ Keep existing styling and framework pages. New categories:
 | `knx.program`, commissioning/ownership | No | No | Yes | Yes |
 | User grants, security, OTA, reset | No | No | No | Yes |
 
-Migration: existing admin becomes administrator; existing non-admin becomes viewer. Store explicit grants and channel masks server-side. The UI hides/disables controls from effective capabilities, but every API operation checks again. Keep new events read-only initially, using authorized REST mutations. Revalidate subscriptions and close invalid sessions on user changes; never send secrets through status/events/export. Native fieldbus packets have no web-user identity: configure separate protocol channel masks, write enables and an installer-opened configuration window. A Modbus register must not act as a password bypass.
+Migration: existing admin becomes administrator; existing non-admin becomes viewer. Store explicit grants and channel masks server-side. The UI hides/disables controls from effective capabilities, but every API operation checks again. Keep new events read-only initially, using authorized REST mutations. Revalidate subscriptions and close invalid sessions on user changes; never send secrets through status/events/export. Native protocol interface packets have no web-user identity: configure separate protocol channel masks, write enables and an installer-opened configuration window. A Modbus register must not act as a password bypass.
 
 Suggested API contract (new endpoints):
 
@@ -134,9 +134,9 @@ Use 400 malformed payload, 401 unauthenticated, 403 unauthorized, 409 revision/m
 2. Set transition status and increment command generation; reject bus writes. Finish/cancel pending actions deterministically. Hold relay outputs through a deliberate mode change by default, or apply site-configured OFF policy.
 3. Stop old stack, timers, UART processing or TCP sockets/multicast membership; confirm resources released. Clear programming mode and stale callbacks/queues.
 4. Start only the target adapter; TCP/KNX can remain `waiting_network` until STA IP is available. A waiting adapter is not `running`, and another bus is not silently activated.
-5. On successful initialization select the new durable generation and publish effective mode. On failure fully stop candidate, restore old settings and adapter; if rollback also fails, enter fieldbus OFF with a visible fault. At no point run two stacks.
+5. On successful initialization select the new durable generation and publish effective mode. On failure fully stop candidate, restore old settings and adapter; if rollback also fails, enter protocol interface OFF with a visible fault. At no point run two stacks.
 
-Mode changes, UART changes and disabled RS485 are web-authorized operations, not raw fieldbus writes. Preserve independent RTU/TCP/KNX profiles when inactive. On network loss retain selected mode; reconnect/rejoin through the same supervisor without automatically changing protocol families.
+Mode changes, UART changes and disabled RS485 are web-authorized operations, not raw protocol interface writes. Preserve independent RTU/TCP/KNX profiles when inactive. On network loss retain selected mode; reconnect/rejoin through the same supervisor without automatically changing protocol families.
 
 ## Production implementation and acceptance
 
@@ -150,7 +150,7 @@ Mode changes, UART changes and disabled RS485 are web-authorized operations, not
 
 Test at least 100 repeated transitions among OFF/RTU/TCP/KNX with packet capture proving no overlap; 24-hour mixed-load soak; reconnect while outputs are active; OTA under bus traffic; failed filesystem writes; invalid KNX download and reset during commissioning. Log measured heap high-water, task stack margins, latency and flash/OTA-slot headroom. These are planned acceptance tests, not tests performed by this review.
 
-Use unique setup credentials, revoke sessions on password/role changes, disable debug/config-file exposure and deep sleep in release, verify OTA signatures and TLS certificates, and validate that the production transport actually protects management credentials. Keep unsecured fieldbus traffic on the commissioned automation network; port 502 alone does not provide user authentication. Do not claim KNX IP Secure, certified KNX interoperability or safety-rated relay behavior without separate implementation and qualification.
+Use unique setup credentials, revoke sessions on password/role changes, disable debug/config-file exposure and deep sleep in release, verify OTA signatures and TLS certificates, and validate that the production transport actually protects management credentials. Keep unsecured protocol interface traffic on the commissioned automation network; port 502 alone does not provide user authentication. Do not claim KNX IP Secure, certified KNX interoperability or safety-rated relay behavior without separate implementation and qualification.
 
 Open release inputs: fitted board revision/memory, load qualification, product manufacturer/application identifiers, KNX stack and generator commits, ETS target version, and selected Modbus library after function-coverage testing. These do not prevent this design but prevent calling an untested binary a finished production product.
 

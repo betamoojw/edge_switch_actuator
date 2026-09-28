@@ -4,6 +4,7 @@
 	import { user } from '$lib/stores/user';
 	import { notifications } from '$lib/components/toasts/notifications';
 
+	import { individualAddressError, groupAddressError } from '$lib/device/knx-address';
 	import type { Config, Status, Knx } from '$lib/device/types';
 
 	let config = $state<Config>();
@@ -14,6 +15,14 @@
 	let offline = $state('');
 	let dirty = $state(false);
 	let takeover = $state(false);
+	let groupInputs = $state<Record<number, string>>({});
+	const addressError = $derived(knx ? individualAddressError(knx.address) : '');
+	const groupErrors = $derived(
+		Object.fromEntries(
+			Object.entries(groupInputs).map(([key, value]) => [key, groupAddressError(value)])
+		)
+	);
+	const invalidKnx = $derived(!!addressError || Object.values(groupErrors).some(Boolean));
 	let windowPeer = $state('rtu');
 	let resetConfirm = $state('');
 	let testColor = $state('#ffffff');
@@ -34,7 +43,7 @@
 		'KNX programming toggle'
 	];
 	const modes = [
-		['off', 'Fieldbus off'],
+		['off', 'Protocol Interface Off'],
 		['modbus_rtu', 'Modbus RTU'],
 		['modbus_tcp', 'Modbus TCP'],
 		['knx_ip', 'KNXnet/IP']
@@ -76,6 +85,9 @@
 	async function loadKnx() {
 		try {
 			knx = await api('knx/config');
+			groupInputs = Object.fromEntries(
+				knx!.objects.map((obj) => [obj.number, obj.groups.join(', ')])
+			);
 			takeover = false;
 		} catch (e) {
 			notifications.error(String(e), 5000);
@@ -124,7 +136,12 @@
 	<div class="flex flex-wrap items-center justify-between gap-3">
 		<div>
 			<h1 class="text-3xl font-bold">Switching Actuator</h1>
-			<p class="opacity-70">ESP32-S3 · Six independent relay outputs</p>
+			<p class="opacity-70">
+				Welcome to Switching Actuator · ESP32-S3 · Six independent relay outputs
+			</p>
+			<p class="text-sm opacity-70">
+				Control relay outputs, configure the protocol interface, and monitor device status.
+			</p>
 		</div>
 		{#if status}<div class="flex flex-wrap gap-2">
 				<span class:badge-success={status.networkOnline} class="badge"
@@ -155,7 +172,8 @@
 	{#if config && status}
 		{#if dirty}<div class="alert alert-info">
 				<span
-					>Unsaved settings. Apply saves the complete profile and restarts the selected fieldbus.</span
+					>Unsaved settings. Apply saves the complete profile and restarts the selected protocol
+					interface.</span
 				><button class="btn btn-sm" disabled={busy} onclick={loadConfig}>Discard</button><button
 					class="btn btn-primary btn-sm"
 					disabled={busy || !!offline || !status.capabilities.configure}
@@ -434,7 +452,7 @@
 		{:else if section === 'Modbus'}
 			<div class="card bg-base-200">
 				<div class="card-body">
-					<h2 class="card-title">Fieldbus selection</h2>
+					<h2 class="card-title">Protocol Interface selection</h2>
 					<p>Only one of RTU, TCP and KNX can operate at a time.</p>
 					<label class="fieldset"
 						>Protocol<select
@@ -518,7 +536,7 @@
 						</fieldset>
 					</div>
 					<fieldset disabled={!status.capabilities.configure} class="space-y-3">
-						<legend class="font-bold">Fieldbus access</legend><label class="fieldset"
+						<legend class="font-bold">Protocol Interface access</legend><label class="fieldset"
 							>Relay write mask (0–63)<input
 								class="input"
 								type="number"
@@ -577,8 +595,8 @@
 						>{status.programming ? 'Exit' : 'Enter'} programming mode</button
 					>
 					<p>
-						Select KNXnet/IP in Fieldbus selection, then Apply. Hardware triple-click and this
-						control share programming state.
+						Select KNXnet/IP in Protocol Interface selection, then Apply. Hardware triple-click and
+						this control share programming state.
 					</p>
 					{#if knx}<div class="alert alert-warning">
 							Development product identity. ETS interoperability and hardware qualification are
@@ -597,13 +615,25 @@
 								>Individual address<input
 									class="input"
 									bind:value={knx.address}
-									placeholder="1.1.10"
+									placeholder="15.15.255 (Factory Default)"
+									aria-invalid={!!addressError}
+									aria-describedby="knx-address-help knx-address-error"
 								/></label
 							>
+							<p id="knx-address-help" class="text-sm">
+								Area.line.device: 0–15.0–15.1–255. Factory default: <strong>15.15.255</strong>.
+							</p>
+							<p id="knx-address-error" class="text-error text-sm" aria-live="polite">
+								{addressError}
+							</p>
 							<label class="label"
 								><input class="checkbox" type="checkbox" bind:checked={takeover} /> Take over for web
 								editing (a later ETS download can replace these changes)</label
 							>
+							<p id="knx-group-help" class="text-sm">
+								Main/middle/sub: 0–31/0–7/0–255; 0/0/0 is reserved. Leave blank for no association.
+								Up to 8 unique addresses per object; sending address first.
+							</p>
 							<div class="overflow-x-auto">
 								<table class="table">
 									<thead
@@ -620,13 +650,19 @@
 												><td
 													><input
 														class="input w-full min-w-64"
-														value={obj.groups.join(', ')}
-														onchange={(e) =>
-															(obj.groups = e.currentTarget.value
-																.split(',')
-																.map((v) => v.trim())
-																.filter(Boolean))}
-													/></td
+														placeholder="1/0/1, 1/0/2"
+														aria-label={`Group addresses for object ${obj.number}`}
+														aria-invalid={!!groupErrors[obj.number]}
+														aria-describedby={`knx-group-help knx-group-error-${obj.number}`}
+														bind:value={groupInputs[obj.number]}
+													/>
+													<p
+														id={`knx-group-error-${obj.number}`}
+														class="text-error text-sm"
+														aria-live="polite"
+													>
+														{groupErrors[obj.number]}
+													</p></td
 												></tr
 											>{/each}</tbody
 									>
@@ -664,9 +700,16 @@
 							</div>
 							<button
 								class="btn btn-primary"
-								disabled={busy || !!offline}
+								disabled={busy || !!offline || invalidKnx}
 								onclick={async () => {
-									if (await perform('knx/config', { ...knx, takeover })) await loadKnx();
+									if (!knx || invalidKnx) return;
+									const objects = knx.objects.map((obj) => ({
+										...obj,
+										groups: groupInputs[obj.number].trim()
+											? groupInputs[obj.number].split(',').map((v) => v.trim())
+											: []
+									}));
+									if (await perform('knx/config', { ...knx, objects, takeover })) await loadKnx();
 								}}>Apply KNX commissioning</button
 							>
 						</fieldset>

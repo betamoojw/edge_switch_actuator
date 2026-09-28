@@ -1,15 +1,10 @@
-# ESP32 SvelteKit - Create Amazing IoT Projects
+# Switching Actuator
 
-<div style="flex">
-<img src="/docs/media/Screenshot_light.png" style="height:320px"> 
-<img src="/docs/media/Screenshot_mobile.png" style="height:320px"> 
-</div>
+ESP32-S3 switching actuator with six relay outputs and a browser interface for output control, Modbus RTU/TCP or KNXnet/IP configuration, network settings, and device maintenance. Opening the web interface starts at `/device` (Switching Actuator). The Protocol Interface settings select one active protocol at a time.
 
-A simple and extensible framework for ESP32 based IoT projects with a feature-rich, beautiful, and responsive front-end build with [Sveltekit](https://kit.svelte.dev/), [TailwindCSS](https://tailwindcss.com/) and [DaisyUI](https://daisyui.com/). This is a project template to get you started in no time backed by a powerful back end service, an amazing front end served from the ESP32 and an easy to use build chain to get everything going.
+Built on ESP32-SvelteKit, originally forked from rjwats/esp8266-react. The framework features below depend on the selected firmware profile; the light demo is retained only for explicit template development.
 
-It was forked from the fabulous [rjwats/esp8266-react](https://github.com/rjwats/esp8266-react) project, from where it inherited the mighty back end services.
-
-> **Tip**: This template repository is not meant to be used stand alone. If you're just looking for a WiFi manager there are plenty of options available. This is a starting point when you need a rich web UI.
+See [frontend development and testing](docs/frontend-testing.md) for local simulation, and [KNX address entry](docs/knx-address-entry.md) for commissioning rules.
 
 ## Features
 

@@ -10,14 +10,14 @@ The `waveshare-relay-6ch` PlatformIO environment adds the actuator to ESP32-Svel
 
 One FreeRTOS owner task serializes relay operations, button gestures, status indications, protocol processing and queued HTTP mutations. UART receive callbacks only enqueue bounded frames. Relays start LOW before framework initialization. Relay state means commanded GPIO state, not measured contact feedback.
 
-The `/device` dashboard groups Outputs, Indicators, Button, Modbus, KNX and Maintenance. Server-enforced roles are viewer, operator, installer and administrator, with per-user channel masks. Viewer can inspect status, operator can issue authorized channel commands, installer can configure hardware/protocols, and administrator can manage accounts and reset. Installer-only settings and fieldbus write masks are independent of operator channel permissions.
+The `/device` dashboard groups Outputs, Indicators, Button, Modbus, KNX and Maintenance. Server-enforced roles are viewer, operator, installer and administrator, with per-user channel masks. Viewer can inspect status, operator can issue authorized channel commands, installer can configure hardware/protocols, and administrator can manage accounts and reset. Installer-only settings and protocol interface write masks are independent of operator channel permissions.
 
 - Six individual outputs: ON/OFF, pulse, startup state, enable, network-loss policy and channel names.
 - RGB: enable, brightness and timed dashboard color tests; AP blue, AP with client cyan, active uplink green, disconnected amber, fault flashing red, KNX programming red and identification white. Factory-reset warning has highest priority. Patterns are fixed in firmware.
 - Passive buzzer: enable, test, acknowledgement, bounded frequency/duration/duty controls from the dashboard and Modbus, two connection chirps and rate-limited fault/disconnection indication.
 - BOOT: debounced single/double/triple clicks, configurable action and channel. Four or more clicks are ignored. Holding arms reset at five seconds and resets at ten seconds; release cancels. Application-click disable does not disable physical recovery. BOOT held at startup is ignored until released (the ROM boot function remains hardware controlled).
 - RS485: fixed TX17/RX18, automatic board direction control, 9600–115200 baud and 8E1/8O1/8N2/8N1. RTU requires RS485 enabled; conflicting settings are rejected.
-- Exclusive fieldbus selection: off, Modbus RTU, Modbus TCP, or KNXnet/IP. The previous stack stops before the replacement starts. IP protocols wait for an active IPv4 uplink and rebind after address or interface changes.
+- Exclusive protocol interface selection: off, Modbus RTU, Modbus TCP, or KNXnet/IP. The previous stack stops before the replacement starts. IP protocols wait for an active IPv4 uplink and rebind after address or interface changes.
 
 ## API and persistence
 
@@ -61,6 +61,6 @@ Validation on this machine: native tests and three product-contract tests passed
 
 ## Required qualification before release
 
-No board was flashed or bench-tested in this task. Confirm fitted flash size against the 8 MB partition choice, relay startup/strapping behavior, RS485 automatic turnaround and parity/timing, buzzer/RGB operation, power-loss persistence and OTA/reset behavior. Exercise both fieldbus transports with real masters, ETS import/full/partial download, multicast behavior on the target WLAN, group reads/status and concurrent web/ETS ownership changes. The `.knxprod` is not a certification claim.
+No board was flashed or bench-tested in this task. Confirm fitted flash size against the 8 MB partition choice, relay startup/strapping behavior, RS485 automatic turnaround and parity/timing, buzzer/RGB operation, power-loss persistence and OTA/reset behavior. Exercise both protocol interface transports with real masters, ETS import/full/partial download, multicast behavior on the target WLAN, group reads/status and concurrent web/ETS ownership changes. The `.knxprod` is not a certification claim.
 
 Management currently inherits HTTP from the framework; deploy only on a controlled management network until the intended transport/security architecture is qualified. Exhaustive HTTP permission tests, physical interruption tests and device-in-loop KNX tests remain release work. The design's proposed granular resource-grant model, configurable indicator patterns, factory fixture automation and signed production identity lifecycle are not implemented here.

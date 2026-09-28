@@ -6,7 +6,7 @@ The actual code for the front end is located under [interface/src/](https://gith
 | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | [routes/](https://github.com/theelims/ESP32-sveltekit/tree/main/interface/src/routes/)                        | Root of the routing system                                     |
 | [routes/connections/](https://github.com/theelims/ESP32-sveltekit/blob/main/interface/src/routes/connections) | Setting and status pages for MQTT, NTP, etc.                   |
-| [routes/demo/](https://github.com/theelims/ESP32-sveltekit/blob/main/interface/src/routes/demo/)              | The lightstate demo                                            |
+| [routes/demo/](https://github.com/theelims/ESP32-sveltekit/blob/main/interface/src/routes/demo/)              | Optional template light demo (not startup)                                            |
 | [routes/system/](https://github.com/theelims/ESP32-sveltekit/blob/main/interface/src/routes/system/)          | Status page for ESP32 and OTA settings                         |
 | [routes/user/](https://github.com/theelims/ESP32-sveltekit/blob/main/interface/src/routes/user/)              | Edit and add users and change passwords                        |
 | [routes/wifi/](https://github.com/theelims/ESP32-sveltekit/blob/main/interface/src/routes/wifi/)              | Status and settings for WiFi station and AP                    |
@@ -19,13 +19,15 @@ The actual code for the front end is located under [interface/src/](https://gith
 
 The back end provides a JSON which features of the back end are enabled by the [feature selection](buildprocess.md#selecting-features). It is fetched with the page load and made available in the `pages`-store and can be accessed on any site with `page.data.features`. It is used to hide any disabled setting element.
 
-## Delete `demo/` Project
+## Optional template demo
 
-The light state demo project is included by default to demonstrate the use of the backend and front end. It demonstrates the use of the MQTT-API, websocket API and REST API to switch on the build in LED of the board. [routes/connections/mqtt/MQTTConfig.svelte](https://github.com/theelims/ESP32-sveltekit/blob/main/interface/src/routes/connections/mqtt/MQTTConfig.svelte) is also part of the 'demo/' Project. You can reuse this to set your own MQTT topics, or delete it. Do not forget to adjust `+page.svelte` as well. Use it as an example how to create your own custom API and access it from the front end. It can be deleted safely after it has been [removed from the menu](#adapt-the-menu) as well.
+The light state demo is retained for the template firmware profile to demonstrate the use of the backend and front end. It demonstrates the use of the MQTT-API, websocket API and REST API to switch on the build in LED of the board. [routes/connections/mqtt/MQTTConfig.svelte](https://github.com/theelims/ESP32-sveltekit/blob/main/interface/src/routes/connections/mqtt/MQTTConfig.svelte) is also part of the 'demo/' Project. You can reuse this to set your own MQTT topics, or delete it. The actuator startup route does not use the demo. Use it as an example how to create your own custom API and access it from the front end. It can be deleted safely after it has been [removed from the menu](#adapt-the-menu) as well.
 
-## Create your root `+page.svelte`
+## Startup page and product identity
 
-The root page of the front end is located under [routes/+page.svelte](https://github.com/theelims/ESP32-sveltekit/tree/main/interface/src/routes/+page.svelte). This should be the central place of your app and can be accessed at any time by pressing the logo and app name in the side menu. Just override it to suit your needs.
+The root route `/` opens `/device`, the Switching Actuator dashboard, after authentication when required. The main menu logo also returns here. `routes/+layout.ts` supplies the shared Switching Actuator name and title. The device page contains the product welcome, six output controls, and Protocol Interface settings.
+
+KNX address validation lives in `lib/device/knx-address.ts`; see [KNX address entry](knx-address-entry.md).
 
 ## Customize the Main Menu
 
@@ -45,10 +47,10 @@ The menu consists of an array of menu items. These are defined as follows:
 
 ```ts
 {
-    title: 'Demo App',
+    title: 'Switching Actuator',
     icon: Control,
-    href: '/demo',
-    feature: page.data.features.project,
+    href: '/device',
+    feature: true,
 },
 ```
 
@@ -59,7 +61,7 @@ import type { PageLoad } from "./$types";
 
 export const load = (async ({ fetch }) => {
   return {
-    title: "Demo App",
+    title: "Switching Actuator",
   };
 }) satisfies PageLoad;
 ```
