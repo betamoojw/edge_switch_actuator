@@ -1,4 +1,5 @@
 <script>
+	import { t } from '$lib/i18n';
 	import { flip } from 'svelte/animate';
 	import { fly } from 'svelte/transition';
 	import { notifications } from '$lib/components/toasts/notifications';
@@ -34,7 +35,7 @@
 			out:fly={{ x: 100, duration: 400 }}
 		>
 			<SvelteComponent class="h-6 w-6 shrink-0" />
-			<span>{@html notification.message}</span>
+			<span>{$t(notification.message, notification.params)}</span>
 		</div>
 	{/each}
 </div>

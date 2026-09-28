@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	let show = $state(false);
 	let type = $derived(show ? 'text' : 'password');
 
@@ -23,7 +24,7 @@
 			class="text-base-content/50 h-6 {show ? 'block' : 'hidden'}"
 			onclick={() => (show = false)}
 			role="button"
-			aria-label="Hide password"
+			aria-label={$t('Hide password')}
 			tabindex="0"
 			width="40"
 			height="40"
@@ -48,7 +49,7 @@
 			class="text-base-content/50 h-6 {show ? 'hidden' : 'block'}"
 			onclick={() => (show = true)}
 			role="button"
-			aria-label="Show password"
+			aria-label={$t('Show password')}
 			tabindex="0"
 			width="40"
 			height="40"

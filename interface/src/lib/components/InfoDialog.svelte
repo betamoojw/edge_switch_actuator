@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { modals, type ModalProps } from 'svelte-modals';
 	import { focusTrap } from 'svelte-focus-trap';
 	import { fly } from 'svelte/transition';
@@ -33,15 +34,15 @@
 		<div
 			class="rounded-box bg-base-100 shadow-secondary/30 pointer-events-auto flex min-w-fit max-w-md flex-col justify-between p-4 shadow-lg"
 		>
-			<h2 class="text-base-content text-start text-2xl font-bold">{title}</h2>
+			<h2 class="text-base-content text-start text-2xl font-bold">{$t(title)}</h2>
 			<div class="divider my-2"></div>
-			<p class="text-base-content mb-1 text-start">{@html message}</p>
+			<p class="text-base-content mb-1 text-start">{$t(message)}</p>
 			<div class="divider my-2"></div>
 			<div class="flex justify-end gap-2">
 				<button
 					class="btn btn-warning text-warning-content inline-flex items-center"
 					onclick={onDismiss}
-					><dismiss.icon class="mr-2 h-5 w-5" /><span>{dismiss.label}</span></button
+					><dismiss.icon class="mr-2 h-5 w-5" /><span>{$t(dismiss.label)}</span></button
 				>
 			</div>
 		</div>

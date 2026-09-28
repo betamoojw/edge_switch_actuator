@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import logo from '$lib/assets/logo.png';
 	import InputPassword from '$lib/components/InputPassword.svelte';
 	import { user } from '$lib/stores/user';
@@ -33,7 +34,7 @@
 				token = await response.json();
 				user.init(token.access_token);
 				let username = $user.username;
-				notifications.success('User ' + username + ' signed in', 5000);
+				notifications.success('User {name} signed in', 5000, { name: username });
 				signIn();
 			} else {
 				username = '';
@@ -60,16 +61,16 @@
 	>
 		<figure class="bg-base-200 p-4">
 			<div class="image-container">
-				<img src={logo} alt="Logo" class="responsive-image" />
+				<img src={logo} alt={$t('Logo')} class="responsive-image" />
 			</div>
 		</figure>
 		<div class="card-body w-80">
-			<h2 class="card-title text-2xl">Login</h2>
+			<h2 class="card-title text-2xl">{$t('Login')}</h2>
 			<form class="fieldset w-full max-w-xs">
-				<label class="label" for="user">Username</label>
+				<label class="label" for="user">{$t('Username')}</label>
 				<input type="text" class="input w-full max-w-xs" id="user" bind:value={username} />
 
-				<label class="label" for="pwd">Password </label>
+				<label class="label" for="pwd">{$t('Password')} </label>
 				<InputPassword id="pwd" bind:value={password} />
 
 				<div class="card-actions mt-4 justify-end">
@@ -77,7 +78,7 @@
 						class="btn btn-primary inline-flex items-center"
 						onclick={() => {
 							signInUser({ username: username, password: password });
-						}}><Login class="mr-2 h-5 w-5" /><span>Login</span></button
+						}}><Login class="mr-2 h-5 w-5" /><span>{$t('Login')}</span></button
 					>
 				</div>
 			</form>
@@ -93,7 +94,7 @@
 		align-items: center;
 		justify-content: center;
 	}
-	
+
 	.responsive-image {
 		max-width: 100%;
 		max-height: 100%;
@@ -101,7 +102,7 @@
 		height: auto;
 		object-fit: contain;
 	}
-	
+
 	.failure {
 		animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 		transform: translate3d(0, 0, 0);

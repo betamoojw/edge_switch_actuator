@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { user } from '$lib/stores/user';
@@ -6,8 +7,8 @@
 	import CoreDump from '~icons/tabler/bug';
 	import Info from '~icons/tabler/info-circle';
 
-	let coreDumpBlob: Blob | null = null;
-	let errorMessage: string | null = null;
+	let coreDumpBlob = $state<Blob | null>(null);
+	let errorMessage = $state<string | null>(null);
 
 	onMount(async () => {
 		try {
@@ -51,23 +52,24 @@
 			<CoreDump class="lex-shrink-0 mr-2 h-6 w-6 self-end rounded-full" />
 		{/snippet}
 		{#snippet title()}
-			<span>Core Dump</span>
+			<span>{$t('Core Dump')}</span>
 		{/snippet}
 		<div class="alert alert-info shadow-lg">
 			<Info class="h-6 w-6 shrink-0" />
 			<span
-				>This page displays the last core dump of the device. The core dump is a snapshot of the
-				memory when the device crashed. This information is useful for debugging.</span
+				>{$t(
+					'This page displays the last core dump of the device. The core dump is a snapshot of the memory when the device crashed. This information is useful for debugging.'
+				)}</span
 			>
 		</div>
 		{#if coreDumpBlob}
-			<button class="btn btn-primary mt-4" on:click={downloadCoreDump}>
-				Download Core Dump (coredump.bin)
+			<button class="btn btn-primary mt-4" onclick={downloadCoreDump}>
+				{$t('Download Core Dump (coredump.bin)')}
 			</button>
 		{:else if errorMessage}
-			<p class="text-error mt-4">{errorMessage}</p>
+			<p class="text-error mt-4">{$t(errorMessage)}</p>
 		{:else}
-			<p class="mt-4">Loading core dump...</p>
+			<p class="mt-4">{$t('Loading core dump...')}</p>
 		{/if}
 	</SettingsCard>
 </div>

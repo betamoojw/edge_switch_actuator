@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { onMount, onDestroy } from 'svelte';
 	import { modals, type ModalProps } from 'svelte-modals';
 	import { fly } from 'svelte/transition';
@@ -70,14 +71,14 @@
 		<div
 			class="rounded-box bg-base-100 shadow-secondary/30 pointer-events-auto flex min-w-fit max-w-md flex-col justify-between p-4 shadow-lg md:w-md"
 		>
-			<h2 class="text-base-content text-start text-2xl font-bold">{title}</h2>
+			<h2 class="text-base-content text-start text-2xl font-bold">{$t(title)}</h2>
 			<div class="divider my-2"></div>
 			<form
 				class="fieldset text-base-content mb-1 w-full"
 				onsubmit={preventDefault(handleSave)}
 				novalidate
 			>
-				<label class="label" for="username">Username</label>
+				<label class="label" for="username">{$t('Username')}</label>
 				<input
 					type="text"
 					min="3"
@@ -89,22 +90,24 @@
 				/>
 				<label for="username" class="label"
 					><span class="text-error {errorUsername ? '' : 'hidden'}"
-						>Username must be between 3 and 32 characters long</span
+						>{$t('Username must be between 3 and 32 characters long')}</span
 					></label
 				>
-				<label class="label" for="pwd">Password (blank keeps current) </label>
+				<label class="label" for="pwd">{$t('Password (blank keeps current)')} </label>
 				<InputPassword bind:value={user.password} id="pwd" />
 				<label class="label my-auto cursor-pointer justify-start gap-4 mt-4">
 					<input type="checkbox" bind:checked={user.admin} class="checkbox checkbox-primary" />
-					<span class="">Is Admin?</span>
+					<span class="">{$t('Is Admin?')}</span>
 				</label>
-				<label class="label" for="role">Actuator role</label>
+				<label class="label" for="role">{$t('Actuator role')}</label>
 				<select id="role" class="select" bind:value={user.role} disabled={user.admin}>
-					<option value="viewer">Viewer</option><option value="operator">Operator</option><option
-						value="installer">Installer</option
-					>
+					<option value="viewer">{$t('Viewer')}</option><option value="operator"
+						>{$t('Operator')}</option
+					><option value="installer">{$t('Installer')}</option>
 				</select>
-				<label class="label" for="channels">Allowed relay bit mask (1–63; 0 denies all)</label>
+				<label class="label" for="channels"
+					>{$t('Allowed relay bit mask (1–63; 0 denies all)')}</label
+				>
 				<input
 					id="channels"
 					class="input"
@@ -122,11 +125,11 @@
 						}}
 						type="button"
 					>
-						<Cancel class="mr-2 h-5 w-5" /><span>Cancel</span></button
+						<Cancel class="mr-2 h-5 w-5" /><span>{$t('Cancel')}</span></button
 					>
 					<button
 						class="btn btn-primary text-primary-content inline-flex items-center"
-						type="submit"><Save class="mr-2 h-5 w-5" /><span>Save</span></button
+						type="submit"><Save class="mr-2 h-5 w-5" /><span>{$t('Save')}</span></button
 					>
 				</div>
 			</form>

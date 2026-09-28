@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { preventDefault } from '$lib/events';
 	import { slide } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
@@ -108,7 +109,7 @@
 		<MQTT class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
 	{/snippet}
 	{#snippet title()}
-		<span>MQTT Broker Settings</span>
+		<span>{$t('MQTT Broker Settings')}</span>
 	{/snippet}
 	<div class="w-full">
 		{#await getBrokerSettings()}
@@ -125,13 +126,14 @@
 					<div class="alert alert-info my-2 shadow-lg">
 						<Info class="h-6 w-6 shrink-0 stroke-current" />
 						<span
-							>The LED is controllable via MQTT with the demo project designed to work with Home
-							Assistant's auto discovery feature.</span
+							>{$t(
+								"The LED is controllable via MQTT with the demo project designed to work with Home Assistant's auto discovery feature."
+							)}</span
 						>
 					</div>
 					<div class="grid w-full grid-cols-1 content-center gap-x-4 gap-y-2 px-4">
 						<div>
-							<label class="label" for="uid">Unique ID</label>
+							<label class="label" for="uid">{$t('Unique ID')}</label>
 							<input
 								type="text"
 								class="input w-full invalid:border-error invalid:border-2 {formErrors.uid
@@ -145,12 +147,12 @@
 							/>
 							<label class="label" for="uid">
 								<span class="text-error {formErrors.uid ? '' : 'hidden'}"
-									>Unique ID must be between 3 and 32 characters long</span
+									>{$t('Unique ID must be between 3 and 32 characters long')}</span
 								>
 							</label>
 						</div>
 						<div>
-							<label class="label" for="name">Name</label>
+							<label class="label" for="name">{$t('Name')}</label>
 							<input
 								type="text"
 								class="input w-full invalid:border-error invalid:border-2 {formErrors.name
@@ -164,12 +166,12 @@
 							/>
 							<label class="label" for="name">
 								<span class="text-error {formErrors.name ? '' : 'hidden'}"
-									>Name must be between 3 and 32 characters long</span
+									>{$t('Name must be between 3 and 32 characters long')}</span
 								>
 							</label>
 						</div>
 						<div>
-							<label class="label" for="path">MQTT Path</label>
+							<label class="label" for="path">{$t('MQTT Path')}</label>
 							<input
 								type="text"
 								class="input w-full invalid:border-error invalid:border-2 {formErrors.path
@@ -183,12 +185,12 @@
 							/>
 							<label class="label" for="path">
 								<span class="text-error {formErrors.path ? '' : 'hidden'}"
-									>MQTT path is limited to 64 characters</span
+									>{$t('MQTT path is limited to 64 characters')}</span
 								>
 							</label>
 						</div>
 						<div>
-							<label class="label" for="status_topic">MQTT Status Topic</label>
+							<label class="label" for="status_topic">{$t('MQTT Status Topic')}</label>
 							<input
 								type="text"
 								class="input w-full invalid:border-error invalid:border-2 {formErrors.status_topic
@@ -202,14 +204,14 @@
 							/>
 							<label class="label" for="status_topic">
 								<span class="text-error {formErrors.status_topic ? '' : 'hidden'}"
-									>MQTT status topic is limited to 64 characters</span
+									>{$t('MQTT status topic is limited to 64 characters')}</span
 								>
 							</label>
 						</div>
 					</div>
 					<div class="divider mb-2 mt-0"></div>
 					<div class="mx-4 flex flex-wrap justify-end gap-2">
-						<button class="btn btn-primary" type="submit">Apply Settings</button>
+						<button class="btn btn-primary" type="submit">{$t('Apply Settings')}</button>
 					</div>
 				</form>
 			{/if}

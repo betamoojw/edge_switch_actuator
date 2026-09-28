@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 
@@ -14,6 +15,6 @@
 			<div class="text-base-content text-5xl font-semibold">{page.error?.message}</div>
 		</div>
 		<div class="divider"></div>
-		<p class="text-xl">Oops! Something has gone wrong.</p>
+		<p class="text-xl">{$t('Oops! Something has gone wrong.')}</p>
 	</div>
 </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t, locale, duration } from '$lib/i18n';
 	import { onDestroy, onMount } from 'svelte';
 	import { modals } from 'svelte-modals';
 	import { user } from '$lib/stores/user';
@@ -126,33 +127,6 @@
 			}
 		});
 	}
-
-	function convertSeconds(seconds: number) {
-		// Calculate the number of seconds, minutes, hours, and days
-		let minutes = Math.floor(seconds / 60);
-		let hours = Math.floor(minutes / 60);
-		let days = Math.floor(hours / 24);
-
-		// Calculate the remaining hours, minutes, and seconds
-		hours = hours % 24;
-		minutes = minutes % 60;
-		seconds = seconds % 60;
-
-		// Create the formatted string
-		let result = '';
-		if (days > 0) {
-			result += days + ' day' + (days > 1 ? 's' : '') + ' ';
-		}
-		if (hours > 0) {
-			result += hours + ' hour' + (hours > 1 ? 's' : '') + ' ';
-		}
-		if (minutes > 0) {
-			result += minutes + ' minute' + (minutes > 1 ? 's' : '') + ' ';
-		}
-		result += seconds + ' second' + (seconds > 1 ? 's' : '');
-
-		return result;
-	}
 </script>
 
 <SettingsCard collapsible={false}>
@@ -160,7 +134,7 @@
 		<Health class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
 	{/snippet}
 	{#snippet title()}
-		<span>System Status</span>
+		<span>{$t('System Status')}</span>
 	{/snippet}
 
 	<div class="w-full overflow-x-auto">
@@ -177,9 +151,9 @@
 							<Stopwatch class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Uptime</div>
+							<div class="font-bold">{$t('Uptime')}</div>
 							<div class="text-sm opacity-75">
-								{convertSeconds(systemInformation.uptime)}
+								{duration($locale, systemInformation.uptime)}
 							</div>
 						</div>
 					</div>
@@ -189,20 +163,21 @@
 							<Heap class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Memory</div>
+							<div class="font-bold">{$t('Memory')}</div>
 							<div class="text-sm opacity-75">
 								{(
 									((systemInformation.total_heap - systemInformation.free_heap) /
 										systemInformation.total_heap) *
 									100
-								).toFixed(1)} % of {Math.round(systemInformation.total_heap / 1000).toLocaleString(
-									'en-US'
-								)} KB
+								).toFixed(1)}
+								{$t('% of')}
+								{Math.round(systemInformation.total_heap / 1000).toLocaleString($locale)}
+								{$t('KB')}
 								<span
-									>({Math.round(systemInformation.free_heap / 1000).toLocaleString('en-US')} KB free,
-									Max alloc {Math.round(systemInformation.max_alloc_heap / 1000).toLocaleString(
-										'en-US'
-									)} KB)</span
+									>({Math.round(systemInformation.free_heap / 1000).toLocaleString($locale)}
+									{$t('KB free, Max alloc')}
+									{Math.round(systemInformation.max_alloc_heap / 1000).toLocaleString($locale)}
+									{$t('KB)')}</span
 								>
 							</div>
 						</div>
@@ -214,12 +189,15 @@
 								<Pyramid class="text-primary-content h-auto w-full scale-75" />
 							</div>
 							<div>
-								<div class="font-bold">PSRAM</div>
+								<div class="font-bold">{$t('PSRAM')}</div>
 								<div class="text-sm opacity-75">
 									{((systemInformation.used_psram / systemInformation.psram_size) * 100).toFixed(1)}
-									% of {Math.round(systemInformation.psram_size / 1000).toLocaleString('en-US')} KB
+									{$t('% of')}
+									{Math.round(systemInformation.psram_size / 1000).toLocaleString($locale)}
+									{$t('KB')}
 									<span
-										>({Math.round(systemInformation.free_psram / 1000).toLocaleString('en-US')} KB free)</span
+										>({Math.round(systemInformation.free_psram / 1000).toLocaleString($locale)}
+										{$t('KB free)')}</span
 									>
 								</div>
 							</div>
@@ -231,18 +209,20 @@
 							<Folder class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">File System</div>
+							<div class="font-bold">{$t('File System')}</div>
 							<div class="flex flex-wrap justify-start gap-1 text-sm opacity-75">
 								<span
-									>{((systemInformation.fs_used / systemInformation.fs_total) * 100).toFixed(1)} % of
-									{Math.round(systemInformation.fs_total / 1000).toLocaleString('en-US')} KB</span
+									>{((systemInformation.fs_used / systemInformation.fs_total) * 100).toFixed(1)}
+									{$t('% of')}
+									{Math.round(systemInformation.fs_total / 1000).toLocaleString($locale)}
+									{$t('KB')}</span
 								>
 
 								<span
 									>({Math.round(
 										(systemInformation.fs_total - systemInformation.fs_used) / 1000
-									).toLocaleString('en-US')}
-									KB free)</span
+									).toLocaleString($locale)}
+									{$t('KB free)')}</span
 								>
 							</div>
 						</div>
@@ -253,7 +233,7 @@
 							<Temperature class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Core Temperature</div>
+							<div class="font-bold">{$t('Core Temperature')}</div>
 							<div class="text-sm opacity-75">
 								{systemInformation.core_temp == 53.33
 									? 'NaN'
@@ -267,7 +247,7 @@
 							<Power class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Reset Reason</div>
+							<div class="font-bold">{$t('Reset Reason')}</div>
 							<div class="text-sm opacity-75">
 								{systemInformation.cpu_reset_reason}
 							</div>
@@ -279,20 +259,23 @@
 							<Sketch class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Sketch</div>
+							<div class="font-bold">{$t('Sketch')}</div>
 							<div class="flex flex-wrap justify-start gap-1 text-sm opacity-75">
 								<span>
 									{(
 										(systemInformation.sketch_size / systemInformation.free_sketch_space) *
 										100
-									).toFixed(1)} % of
-									{Math.round(systemInformation.free_sketch_space / 1000).toLocaleString('en-US')} KB
+									).toFixed(1)}
+									{$t('% of')}
+									{Math.round(systemInformation.free_sketch_space / 1000).toLocaleString($locale)}
+									{$t('KB')}
 								</span>
 
 								<span>
 									({Math.round(
 										(systemInformation.free_sketch_space - systemInformation.sketch_size) / 1000
-									).toLocaleString('en-US')} KB free)
+									).toLocaleString($locale)}
+									{$t('KB free)')}
 								</span>
 							</div>
 						</div>
@@ -303,7 +286,7 @@
 							<CPP class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Firmware Version</div>
+							<div class="font-bold">{$t('Firmware Version')}</div>
 							<div class="text-sm opacity-75">
 								{systemInformation.firmware_version}
 							</div>
@@ -315,9 +298,11 @@
 							<CPU class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Chip</div>
+							<div class="font-bold">{$t('Chip')}</div>
 							<div class="text-sm opacity-75">
-								{systemInformation.cpu_type} Rev {systemInformation.cpu_rev}
+								{systemInformation.cpu_type}
+								{$t('Rev')}
+								{systemInformation.cpu_rev}
 							</div>
 						</div>
 					</div>
@@ -327,9 +312,12 @@
 							<SDK class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">SDK Version</div>
+							<div class="font-bold">{$t('SDK Version')}</div>
 							<div class="text-sm opacity-75">
-								ESP-IDF {systemInformation.sdk_version} / Arduino {systemInformation.arduino_version}
+								{$t('ESP-IDF')}
+								{systemInformation.sdk_version}
+								{$t('/ Arduino')}
+								{systemInformation.arduino_version}
 							</div>
 						</div>
 					</div>
@@ -339,11 +327,11 @@
 							<Speed class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">CPU Frequency</div>
+							<div class="font-bold">{$t('CPU Frequency')}</div>
 							<div class="text-sm opacity-75">
-								{systemInformation.cpu_freq_mhz} MHz {systemInformation.cpu_cores == 2
-									? 'Dual Core'
-									: 'Single Core'}
+								{systemInformation.cpu_freq_mhz}
+								{$t('MHz')}
+								{systemInformation.cpu_cores == 2 ? $t('Dual Core') : $t('Single Core')}
 							</div>
 						</div>
 					</div>
@@ -353,11 +341,12 @@
 							<Flash class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Flash Chip</div>
+							<div class="font-bold">{$t('Flash Chip')}</div>
 							<div class="text-sm opacity-75">
-								{Math.round(systemInformation.flash_chip_size / 1000).toLocaleString('en-US')} KB / {(
-									systemInformation.flash_chip_speed / 1000000
-								).toLocaleString('en-US')} MHz
+								{Math.round(systemInformation.flash_chip_size / 1000).toLocaleString($locale)}
+								{$t('KB /')}
+								{(systemInformation.flash_chip_speed / 1000000).toLocaleString($locale)}
+								{$t('MHz')}
 							</div>
 						</div>
 					</div>
@@ -369,15 +358,15 @@
 	<div class="mt-4 flex flex-wrap justify-end gap-2">
 		{#if page.data.features.sleep}
 			<button class="btn btn-primary inline-flex items-center" onclick={confirmSleep}
-				><Sleep class="mr-2 h-5 w-5" /><span>Sleep</span></button
+				><Sleep class="mr-2 h-5 w-5" /><span>{$t('Sleep')}</span></button
 			>
 		{/if}
 		{#if !page.data.features.security || $user.admin}
 			<button class="btn btn-primary inline-flex items-center" onclick={confirmRestart}
-				><Power class="mr-2 h-5 w-5" /><span>Restart</span></button
+				><Power class="mr-2 h-5 w-5" /><span>{$t('Restart')}</span></button
 			>
 			<button class="btn btn-secondary inline-flex items-center" onclick={confirmReset}
-				><FactoryReset class="mr-2 h-5 w-5" /><span>Factory Reset</span></button
+				><FactoryReset class="mr-2 h-5 w-5" /><span>{$t('Factory Reset')}</span></button
 			>
 		{/if}
 	</div>

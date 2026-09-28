@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import logo from '$lib/assets/logo.png';
 	import Github from '~icons/tabler/brand-github';
 	import Discord from '~icons/tabler/brand-discord';
 	import Users from '~icons/tabler/users';
 	import Settings from '~icons/tabler/settings';
+	import Palette from '~icons/tabler/palette';
 	import Health from '~icons/tabler/stethoscope';
 	import Update from '~icons/tabler/refresh-alert';
 	import WiFi from '~icons/tabler/wifi';
@@ -107,6 +109,7 @@
 			icon: Settings,
 			feature: true,
 			submenu: [
+				{ title: 'UI', icon: Palette, href: '/system/ui', feature: true },
 				{
 					title: 'System Status',
 					icon: Health,
@@ -161,7 +164,7 @@
 		class="rounded-box mb-4 flex items-center hover:scale-[1.02] active:scale-[0.98]"
 		onclick={() => setActiveMenuItem('')}
 	>
-		<img src={logo} alt="Logo" class="max-h-12 max-w-12 h-auto w-auto object-contain" />
+		<img src={logo} alt={$t('Logo')} class="max-h-12 max-w-12 h-auto w-auto object-contain" />
 		<span class="px-4 text-2xl font-bold">{page.data.appName}</span>
 	</a>
 	<ul class="menu w-full rounded-box menu-vertical flex-nowrap overflow-y-auto">
@@ -172,7 +175,7 @@
 						<details open={menuItem.submenu.some((subItem) => subItem.active)}>
 							<summary class="text-lg font-bold">
 								<menuItem.icon class="h-6 w-6" />
-								{menuItem.title}
+								{$t(menuItem.title)}
 							</summary>
 							<ul>
 								{#each menuItem.submenu as subMenuItem}
@@ -184,7 +187,7 @@
 												class="text-ml font-bold"
 												onclick={() => {
 													setActiveMenuItem(subMenuItem.title);
-												}}><subMenuItem.icon class="h-5 w-5" />{subMenuItem.title}</a
+												}}><subMenuItem.icon class="h-5 w-5" />{$t(subMenuItem.title)}</a
 											>
 										</li>
 									{/if}
@@ -198,7 +201,7 @@
 							class="text-lg font-bold"
 							onclick={() => {
 								setActiveMenuItem(menuItem.title);
-							}}><menuItem.icon class="h-6 w-6" />{menuItem.title}</a
+							}}><menuItem.icon class="h-6 w-6" />{$t(menuItem.title)}</a
 						>
 					{/if}
 				</li>

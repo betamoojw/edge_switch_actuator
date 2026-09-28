@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import type { LayoutData } from './$types';
 	import { onDestroy, onMount } from 'svelte';
+	import { initializePreferences } from '$lib/stores/preferences';
 	import { user } from '$lib/stores/user';
 	import { telemetry } from '$lib/stores/telemetry';
 	import { analytics } from '$lib/stores/analytics';
@@ -28,6 +30,7 @@
 	}
 
 	let { data, children }: Props = $props();
+	onMount(initializePreferences);
 
 	onMount(async () => {
 		if ($user.bearer_token !== '') {
@@ -143,7 +146,7 @@
 </script>
 
 <svelte:head>
-	<title>{page.data.title}</title>
+	<title>{$t(page.data.title)}</title>
 </svelte:head>
 
 {#if page.data.features.security && $user.bearer_token === ''}
@@ -179,7 +182,7 @@
 			onclick={() => close()}
 			role="button"
 			tabindex="0"
-			aria-label="Close modal"
+			aria-label={$t('Close modal')}
 		></div>
 	{/snippet}
 </Modals>

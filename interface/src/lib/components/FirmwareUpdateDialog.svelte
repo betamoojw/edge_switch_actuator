@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t, locale, duration } from '$lib/i18n';
 	import { modals, onBeforeClose, type ModalProps } from 'svelte-modals';
 	import { focusTrap } from 'svelte-focus-trap';
 	import { fly } from 'svelte/transition';
@@ -87,7 +88,7 @@
 		>
 			<!-- Header -->
 			<div class="flex items-center justify-between p-6 pb-4">
-				<h2 class="text-base-content text-xl font-bold">{title}</h2>
+				<h2 class="text-base-content text-xl font-bold">{$t(title)}</h2>
 			</div>
 
 			<!-- Progress Content -->
@@ -128,13 +129,14 @@
 						? 'text-error'
 						: 'text-base-content/70'}"
 				>
-					{displayMessage}
+					{$t(displayMessage)}
 				</p>
 
 				{#if currentStatus === 'finished'}
 					<p class="text-sm text-base-content/50 text-center">
-						Page will reload automatically in {countdown}
-						{countdown === 1 ? 'second' : 'seconds'}...
+						{$t('Page will reload automatically in {duration}.', {
+							duration: duration($locale, countdown)
+						})}
 					</p>
 				{/if}
 			</div>
@@ -160,10 +162,10 @@
 				>
 					{#if currentStatus === 'finished'}
 						<Refresh class="h-4 w-4" />
-						Refresh Now
+						{$t('Refresh Now')}
 					{:else}
 						<Cancel class="h-4 w-4" />
-						Cancel
+						{$t('Cancel')}
 					{/if}
 				</button>
 			</div>

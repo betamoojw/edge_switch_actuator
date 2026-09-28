@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import WiFi from '~icons/tabler/wifi';
 	import WiFi0 from '~icons/tabler/wifi-0';
 	import WiFi1 from '~icons/tabler/wifi-1';
@@ -17,7 +18,8 @@
 	<div class="tooltip tooltip-left" data-tip={ssid}>
 		{#if showDBm}
 			<span class="indicator-item indicator-start badge badge-accent badge-outline badge-xs">
-				{rssi_dbm} dBm
+				{rssi_dbm}
+				{$t('dBm')}
 			</span>
 		{/if}
 		{#if rssi_dbm >= -55}

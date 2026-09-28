@@ -1,5 +1,123 @@
 import { test, expect, type Page, type APIRequestContext } from '@playwright/test';
 
+test('UI-01 all languages apply across navigation, reload and login', async ({ page }) => {
+	await login(page, 'admin', '/system/ui');
+	const languages = [
+		['de', 'Benutzeroberfläche', 'Schaltaktor', 'Anmelden'],
+		['es', 'Interfaz de usuario', 'Actuador de conmutación', 'Iniciar sesión'],
+		['fr', 'Interface utilisateur', 'Actionneur de commutation', 'Connexion'],
+		['pl', 'Interfejs użytkownika', 'Aktor przełączający', 'Zaloguj się'],
+		['zh-CN', '用户界面', '开关执行器', '登录'],
+		['zh-TW', '使用者介面', '開關致動器', '登入'],
+		['en', 'User interface', 'Switching Actuator', 'Login']
+	];
+	for (const [language, heading, actuator] of languages) {
+		await page.locator('#ui-language').selectOption(language);
+		await expect(page.locator('html')).toHaveAttribute('lang', language);
+		await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible();
+		expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+			true
+		);
+		await page.goto('/device');
+		await expect(page.getByRole('heading', { name: actuator, exact: true })).toBeVisible();
+		await expect(page).toHaveTitle(actuator);
+		await page.goto('/system/ui');
+		await expect(page.locator('#ui-language')).toHaveValue(language);
+	}
+	await page.locator('#ui-language').selectOption('de');
+	await page.evaluate(() => {
+		for (const key of Object.keys(localStorage))
+			if (key !== 'actuator.ui') localStorage.removeItem(key);
+	});
+	await page.reload();
+	await expect(page.getByRole('heading', { name: 'Anmelden', exact: true })).toBeVisible();
+});
+
+test('UI-02 all themes persist and automatic follows system preference', async ({ page }) => {
+	await page.emulateMedia({ colorScheme: 'light' });
+	await login(page, 'admin', '/system/ui');
+	const background = () =>
+		page
+			.locator('html')
+			.evaluate((el) => getComputedStyle(el).getPropertyValue('--color-base-100'));
+	const light = await background();
+	await page.emulateMedia({ colorScheme: 'dark' });
+	await expect.poll(background).not.toBe(light);
+	const dark = await background();
+	for (const selected of ['light', 'dark', 'nord', 'dim', 'retro']) {
+		await page.locator('#ui-theme').selectOption(selected);
+		await expect(page.locator('html')).toHaveAttribute('data-theme', selected);
+		await page.reload();
+		await expect(page.locator('#ui-theme')).toHaveValue(selected);
+		await expect(page.locator('html')).toHaveAttribute('data-theme', selected);
+	}
+	await page.locator('#ui-theme').selectOption('light');
+	await expect.poll(background).toBe(light);
+	await page.locator('#ui-theme').selectOption('system');
+	await expect(page.locator('html')).not.toHaveAttribute('data-theme');
+	await expect.poll(background).toBe(dark);
+});
+
+test('UI-03 invalid and blocked storage do not prevent startup', async ({ page }) => {
+	await page.addInitScript(() => localStorage.setItem('actuator.ui', '{broken'));
+	await login(page, 'admin', '/system/ui');
+	await expect(page.locator('#ui-language')).toHaveValue('en');
+	await expect(page.locator('#ui-theme')).toHaveValue('system');
+	await page.addInitScript(() => {
+		const originalGet = Storage.prototype.getItem;
+		const originalSet = Storage.prototype.setItem;
+		Storage.prototype.getItem = function (key) {
+			if (key === 'actuator.ui') throw new Error('blocked');
+			return originalGet.call(this, key);
+		};
+		Storage.prototype.setItem = function (key, value) {
+			if (key === 'actuator.ui') throw new Error('blocked');
+			return originalSet.call(this, key, value);
+		};
+	});
+	await page.reload();
+	await page.locator('#ui-language').selectOption('pl');
+	await expect(page.getByRole('heading', { name: 'Interfejs użytkownika' })).toBeVisible();
+	await page.locator('#ui-theme').selectOption('dim');
+	await expect(page.locator('html')).toHaveAttribute('data-theme', 'dim');
+});
+
+test('UI-04 translated KNX controls retain protocol values and validate addresses', async ({
+	page,
+	request
+}) => {
+	await login(page, 'admin', '/system/ui');
+	await page.locator('#ui-language').selectOption('de');
+	await page.goto('/device');
+	await page.getByRole('tab', { name: 'Protokoll', exact: true }).click();
+	await page.getByRole('combobox', { name: 'Protokoll', exact: true }).selectOption('knx_ip');
+	await page.getByRole('button', { name: 'Einstellungen übernehmen', exact: true }).click();
+	await page.getByRole('tab', { name: 'KNX', exact: true }).click();
+	await page.getByLabel('Physikalische Adresse', { exact: true }).fill('1.1.0');
+	await expect(
+		page.getByText('Bereich und Linie: 0–15; Teilnehmer: 1–255 (0 für Koppler reserviert).')
+	).toBeVisible();
+	await expect(page.getByRole('button', { name: 'KNX-Inbetriebnahme übernehmen' })).toBeDisabled();
+	expect((await state(request)).config.mode).toBe('knx_ip');
+});
+
+test('UI-05 System submenu and cross-tab preferences', async ({ page, context }, testInfo) => {
+	await login(page);
+	const menuToggle = page.locator('label[for="main-menu"]').first();
+	if (await menuToggle.isVisible()) await menuToggle.click();
+	await page.locator('summary').filter({ hasText: 'System' }).click();
+	await page.getByRole('link', { name: 'UI', exact: true }).click();
+	await expect(page).toHaveURL(/\/system\/ui$/);
+	const second = await context.newPage();
+	await second.goto('/system/ui');
+	await page.locator('#ui-language').selectOption('fr');
+	await page.locator('#ui-theme').selectOption('nord');
+	await expect(second.locator('#ui-language')).toHaveValue('fr');
+	await expect(second.locator('html')).toHaveAttribute('data-theme', 'nord');
+	await page.screenshot({ path: testInfo.outputPath('ui-french-nord.png'), fullPage: true });
+	await second.close();
+});
+
 test('HOME-01 root opens Switching Actuator', async ({ page }) => {
 	await login(page, 'admin', '/');
 	await expect(page).toHaveURL(/\/device$/);
@@ -14,7 +132,7 @@ test('HOME-01 root opens Switching Actuator', async ({ page }) => {
 
 test('KNX-04 validates addresses before saving', async ({ page, request }) => {
 	await login(page);
-	await page.getByRole('tab', { name: 'Modbus', exact: true }).click();
+	await page.getByRole('tab', { name: 'Protocol', exact: true }).click();
 	await expect(page.getByRole('heading', { name: 'Protocol Interface selection' })).toBeVisible();
 	await page.getByRole('combobox', { name: 'Protocol', exact: true }).selectOption('knx_ip');
 	await apply(page);
@@ -214,7 +332,7 @@ test('BUS-01/MB-01/02 protocol selection, RTU fields, window and network wait', 
 	request
 }) => {
 	await login(page);
-	await page.getByRole('tab', { name: 'Modbus', exact: true }).click();
+	await page.getByRole('tab', { name: 'Protocol', exact: true }).click();
 	await page.getByRole('combobox', { name: 'Protocol', exact: true }).selectOption('modbus_rtu');
 	await page.getByLabel('Unit address', { exact: true }).fill('12');
 	await page.getByRole('combobox', { name: 'Baud', exact: true }).selectOption('3');
@@ -232,7 +350,7 @@ test('BUS-01/MB-01/02 protocol selection, RTU fields, window and network wait', 
 
 test('KNX-01/02/03 commission, program, block and polling', async ({ page, request }) => {
 	await login(page);
-	await page.getByRole('tab', { name: 'Modbus', exact: true }).click();
+	await page.getByRole('tab', { name: 'Protocol', exact: true }).click();
 	await page.getByRole('combobox', { name: 'Protocol', exact: true }).selectOption('knx_ip');
 	await apply(page);
 	await page.getByRole('tab', { name: 'KNX', exact: true }).click();
@@ -538,4 +656,76 @@ test('CORE-01 coredump download is available after async response', async ({ pag
 	await expect(
 		page.getByRole('button', { name: 'Download Core Dump (coredump.bin)' })
 	).toBeVisible();
+});
+
+test('DEVICE-UI responsive sections retain readable controls across languages and themes', async ({
+	page
+}, testInfo) => {
+	await login(page, 'admin', '/system/ui');
+	for (const [language, theme] of [
+		['en', 'light'],
+		['de', 'dim']
+	]) {
+		await page.locator('#ui-language').selectOption(language);
+		await page.locator('#ui-theme').selectOption(theme);
+		await page.goto('/device');
+		await expect(page.locator('.device-page .card').first()).toBeVisible();
+		for (let i = 0; i < 6; i++) {
+			await page.getByRole('tab').nth(i).click();
+			await expect(page.locator('.device-page .card').first()).toBeVisible();
+			if (i === 0) await page.locator('.device-page summary').first().click();
+			if (i === 4) await expect(page.locator('table')).toBeVisible();
+			expect(
+				await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+				`${language} section ${i}`
+			).toBe(true);
+			await page.screenshot({
+				path: testInfo.outputPath(`device-${language}-${i}.png`),
+				fullPage: true
+			});
+		}
+		await page.goto('/system/ui');
+	}
+});
+
+test('MODBUS-MAP reference follows selection and distinguishes RTU diagnostics', async ({
+	page
+}, testInfo) => {
+	await login(page);
+	await page.getByRole('tab', { name: 'Protocol', exact: true }).click();
+	const map = page.getByRole('region', { name: 'Modbus function map' });
+	const protocol = page.getByRole('combobox', { name: 'Protocol', exact: true });
+	await expect(map).toBeHidden();
+	await protocol.selectOption('modbus_rtu');
+	await expect(map).toBeVisible();
+	await expect(
+		map.getByText('Diagnostics: return query data (RTU only)', { exact: true })
+	).toBeVisible();
+	await expect(map.getByRole('rowheader', { name: '0x0023', exact: true }).first()).toBeVisible();
+	await expect(
+		map.getByText('Read status only through DI 0x0023; this coil address is reserved/unmapped', {
+			exact: true
+		})
+	).toBeVisible();
+	for (const section of ['Discrete inputs', 'Holding registers', 'Input registers']) {
+		await map.locator('summary').filter({ hasText: section }).click();
+	}
+	await expect(map.locator('table')).toHaveCount(4);
+	await expect(
+		map.getByText('Write 0xA55A, read returns 0; no action for 0', { exact: true })
+	).toBeVisible();
+	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+	await page.screenshot({ path: testInfo.outputPath('modbus-map.png'), fullPage: true });
+	const download = page.waitForEvent('download');
+	await map.getByRole('link', { name: 'Download reference (English)' }).click();
+	expect((await download).suggestedFilename()).toBe('actuator-modbus-map.md');
+	await protocol.selectOption('modbus_tcp');
+	await expect(map).toBeVisible();
+	await expect(
+		map.getByText('Diagnostics: return query data (RTU only)', { exact: true })
+	).toBeHidden();
+	await protocol.selectOption('knx_ip');
+	await expect(map).toBeHidden();
+	await protocol.selectOption('off');
+	await expect(map).toBeHidden();
 });

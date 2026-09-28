@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { preventDefault } from '$lib/events';
 	import { onMount, onDestroy } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -139,7 +140,7 @@
 		<MQTT class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
 	{/snippet}
 	{#snippet title()}
-		<span>MQTT</span>
+		<span>{$t('MQTT')}</span>
 	{/snippet}
 	<div class="w-full">
 		{#await getMQTTStatus()}
@@ -163,12 +164,12 @@
 							/>
 						</div>
 						<div>
-							<div class="font-bold">Status</div>
+							<div class="font-bold">{$t('Status')}</div>
 							<div class="text-sm opacity-75">
 								{#if mqttStatus.connected}
-									Connected
+									{$t('Connected')}
 								{:else if !mqttStatus.enabled}
-									MQTT Disabled
+									{$t('MQTT Disabled')}
 								{:else}
 									{mqttStatus.last_error}
 								{/if}
@@ -181,7 +182,7 @@
 							<Client class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Client ID</div>
+							<div class="font-bold">{$t('Client ID')}</div>
 							<div class="text-sm opacity-75">
 								{mqttStatus.client_id}
 							</div>
@@ -201,7 +202,7 @@
 			closed={() => {}}
 		>
 			{#snippet title()}
-				<span>Change MQTT Settings</span>
+				<span>{$t('Change MQTT Settings')}</span>
 			{/snippet}
 
 			<form
@@ -218,13 +219,13 @@
 							bind:checked={mqttSettings.enabled}
 							class="checkbox checkbox-primary"
 						/>
-						Enable MQTT
+						{$t('Enable MQTT')}
 					</label>
 
 					<div class="hidden sm:block"></div>
 					<!-- URI -->
 					<div class="sm:col-span-2">
-						<label class="label" for="host">URI</label>
+						<label class="label" for="host">{$t('URI')}</label>
 						<input
 							type="text"
 							class="input w-full invalid:border-error invalid:border-2 {formErrors.host
@@ -237,22 +238,24 @@
 							required
 						/>
 						<label class="label" for="host">
-							<span class=" text-error {formErrors.host ? '' : 'hidden'}">Must be a valid URI</span>
+							<span class=" text-error {formErrors.host ? '' : 'hidden'}"
+								>{$t('Must be a valid URI')}</span
+							>
 						</label>
 					</div>
 					<!-- Username -->
 					<div>
-						<label class="label" for="user">Username </label>
+						<label class="label" for="user">{$t('Username')} </label>
 						<input type="text" class="input w-full" bind:value={mqttSettings.username} id="user" />
 					</div>
 					<!-- Password -->
 					<div>
-						<label class="label" for="pwd">Password </label>
+						<label class="label" for="pwd">{$t('Password')} </label>
 						<InputPassword bind:value={mqttSettings.password} id="pwd" />
 					</div>
 					<!-- Client ID -->
 					<div>
-						<label class="label" for="clientid">Client ID </label>
+						<label class="label" for="clientid">{$t('Client ID')} </label>
 						<input
 							type="text"
 							class="input w-full"
@@ -262,7 +265,7 @@
 					</div>
 					<!-- Keep Alive -->
 					<div>
-						<label class="label" for="keepalive">Keep Alive </label>
+						<label class="label" for="keepalive">{$t('Keep Alive')} </label>
 						<label
 							for="keepalive"
 							class="input w-full invalid:border-error invalid:border-2 {formErrors.keep_alive
@@ -278,17 +281,17 @@
 								id="keepalive"
 								required
 							/>
-							<span class="label">Seconds</span>
+							<span class="label">{$t('Seconds')}</span>
 						</label>
 						<label for="keepalive" class=""
 							><span class=" text-error {formErrors.keep_alive ? '' : 'hidden'}"
-								>Must be between 1 and 600 seconds</span
+								>{$t('Must be between 1 and 600 seconds')}</span
 							></label
 						>
 					</div>
 					<!-- Rate Limit -->
 					<div>
-						<label class="label" for="ratelimit">Publish Message Interval</label>
+						<label class="label" for="ratelimit">{$t('Publish Message Interval')}</label>
 						<label
 							for="ratelimit"
 							class="input w-full invalid:border-error invalid:border-2 {formErrors.rate_limit
@@ -304,11 +307,11 @@
 								id="ratelimit"
 								required
 							/>
-							<span class="label">Milliseconds</span>
+							<span class="label">{$t('Milliseconds')}</span>
 						</label>
 						<label for="ratelimit" class=""
 							><span class=" text-error {formErrors.rate_limit ? '' : 'hidden'}"
-								>Must be between 0 and 1000 milliseconds</span
+								>{$t('Must be between 0 and 1000 milliseconds')}</span
 							></label
 						>
 					</div>
@@ -320,12 +323,12 @@
 							type="checkbox"
 							bind:checked={mqttSettings.clean_session}
 							class="checkbox checkbox-primary"
-						/>Clean Session?
+						/>{$t('Clean Session?')}
 					</label>
 				</div>
 				<div class="divider mb-2 mt-0"></div>
 				<div class="flex flex-wrap justify-end gap-2">
-					<button class="btn btn-primary" type="submit">Apply Settings</button>
+					<button class="btn btn-primary" type="submit">{$t('Apply Settings')}</button>
 				</div>
 			</form>
 		</Collapsible>

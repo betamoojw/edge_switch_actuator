@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { preventDefault } from '$lib/events';
 	import { onMount, onDestroy } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -186,7 +187,7 @@
 		<AP class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
 	{/snippet}
 	{#snippet title()}
-		<span>Access Point</span>
+		<span>{$t('Access Point')}</span>
 	{/snippet}
 	<div class="w-full">
 		{#await getAPStatus()}
@@ -206,9 +207,9 @@
 							/>
 						</div>
 						<div>
-							<div class="font-bold">Status</div>
+							<div class="font-bold">{$t('Status')}</div>
 							<div class="text-sm opacity-75">
-								{apStatusDescription[apStatus.status].description}
+								{$t(apStatusDescription[apStatus.status].description)}
 							</div>
 						</div>
 					</div>
@@ -218,7 +219,7 @@
 							<Home class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">IP Address</div>
+							<div class="font-bold">{$t('IP Address')}</div>
 							<div class="text-sm opacity-75">
 								{apStatus.ip_address}
 							</div>
@@ -230,7 +231,7 @@
 							<MAC class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">MAC Address</div>
+							<div class="font-bold">{$t('MAC Address')}</div>
 							<div class="text-sm opacity-75">
 								{apStatus.mac_address}
 							</div>
@@ -242,7 +243,7 @@
 							<Devices class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">AP Clients</div>
+							<div class="font-bold">{$t('AP Clients')}</div>
 							<div class="text-sm opacity-75">
 								{apStatus.station_num}
 							</div>
@@ -258,7 +259,7 @@
 			<div
 				class="min-h-16 flex w-full items-center justify-between space-x-3 p-4 text-xl font-medium"
 			>
-				Change AP Settings
+				{$t('Change AP Settings')}
 			</div>
 			{#await getAPSettings()}
 				<Spinner />
@@ -275,17 +276,17 @@
 							bind:this={formField}
 						>
 							<div>
-								<label class="label" for="apmode">Provide Access Point ... </label>
+								<label class="label" for="apmode">{$t('Provide Access Point ...')} </label>
 								<select class="select w-full" id="apmode" bind:value={apSettings.provision_mode}>
 									{#each provisionMode as mode}
 										<option value={mode.id}>
-											{mode.text}
+											{$t(mode.text)}
 										</option>
 									{/each}
 								</select>
 							</div>
 							<div>
-								<label class="label" for="ssid">SSID</label>
+								<label class="label" for="ssid">{$t('SSID')}</label>
 								<input
 									type="text"
 									class="input w-full invalid:border-error invalid:border-2 {formErrors.ssid
@@ -299,17 +300,17 @@
 								/>
 								<label class="label" for="ssid">
 									<span class="text-error {formErrors.ssid ? '' : 'hidden'}"
-										>SSID must be between 2 and 32 characters long</span
+										>{$t('SSID must be between 2 and 32 characters long')}</span
 									>
 								</label>
 							</div>
 
 							<div>
-								<label class="label" for="pwd">Password</label>
+								<label class="label" for="pwd">{$t('Password')}</label>
 								<InputPassword bind:value={apSettings.password} id="pwd" />
 							</div>
 							<div>
-								<label class="label" for="channel">Preferred Channel</label>
+								<label class="label" for="channel">{$t('Preferred Channel')}</label>
 								<input
 									type="number"
 									min="1"
@@ -323,13 +324,13 @@
 								/>
 								<label class="label" for="channel">
 									<span class="text-error {formErrors.channel ? '' : 'hidden'}"
-										>Must be channel 1 to 13</span
+										>{$t('Must be channel 1 to 13')}</span
 									>
 								</label>
 							</div>
 
 							<div>
-								<label class="label" for="clients">Max Clients</label>
+								<label class="label" for="clients">{$t('Max Clients')}</label>
 								<input
 									type="number"
 									min="1"
@@ -343,13 +344,13 @@
 								/>
 								<label class="label" for="clients">
 									<span class="text-error {formErrors.max_clients ? '' : 'hidden'}"
-										>Maximum 8 clients allowed</span
+										>{$t('Maximum 8 clients allowed')}</span
 									>
 								</label>
 							</div>
 
 							<div>
-								<label class="label" for="localIP">Local IP</label>
+								<label class="label" for="localIP">{$t('Local IP')}</label>
 								<input
 									type="text"
 									class="input w-full {formErrors.local_ip ? 'border-error border-2' : ''}"
@@ -362,13 +363,13 @@
 								/>
 								<label class="label" for="localIP">
 									<span class="text-error {formErrors.local_ip ? '' : 'hidden'}"
-										>Must be a valid IPv4 address</span
+										>{$t('Must be a valid IPv4 address')}</span
 									>
 								</label>
 							</div>
 
 							<div>
-								<label class="label" for="gateway">Gateway IP</label>
+								<label class="label" for="gateway">{$t('Gateway IP')}</label>
 								<input
 									type="text"
 									class="input w-full {formErrors.gateway_ip ? 'border-error border-2' : ''}"
@@ -381,12 +382,12 @@
 								/>
 								<label class="label" for="gateway">
 									<span class="text-error {formErrors.gateway_ip ? '' : 'hidden'}"
-										>Must be a valid IPv4 address</span
+										>{$t('Must be a valid IPv4 address')}</span
 									>
 								</label>
 							</div>
 							<div>
-								<label class="label" for="subnet">Subnet Mask</label>
+								<label class="label" for="subnet">{$t('Subnet Mask')}</label>
 								<input
 									type="text"
 									class="input w-full {formErrors.subnet_mask ? 'border-error border-2' : ''}"
@@ -399,7 +400,7 @@
 								/>
 								<label class="label" for="subnet">
 									<span class="text-error {formErrors.subnet_mask ? '' : 'hidden'}"
-										>Must be a valid IPv4 address</span
+										>{$t('Must be a valid IPv4 address')}</span
 									>
 								</label>
 							</div>
@@ -410,11 +411,11 @@
 									bind:checked={apSettings.ssid_hidden}
 									class="checkbox checkbox-primary"
 								/>
-								<span class="">Hide SSID</span>
+								<span class="">{$t('Hide SSID')}</span>
 							</label>
 
 							<div class="place-self-end">
-								<button class="btn btn-primary" type="submit">Apply Settings</button>
+								<button class="btn btn-primary" type="submit">{$t('Apply Settings')}</button>
 							</div>
 						</form>
 					</div>

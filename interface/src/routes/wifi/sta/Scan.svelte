@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { modals, type ModalProps } from 'svelte-modals';
 	import { focusTrap } from 'svelte-focus-trap';
 	import { fly } from 'svelte/transition';
@@ -100,12 +101,12 @@
 		<div
 			class="bg-base-100 shadow-secondary/30 rounded-box pointer-events-auto flex max-h-full min-w-fit max-w-md flex-col justify-between p-4 shadow-lg"
 		>
-			<h2 class="text-base-content text-start text-2xl font-bold">Scan Networks</h2>
+			<h2 class="text-base-content text-start text-2xl font-bold">{$t('Scan Networks')}</h2>
 			<div class="divider my-2"></div>
 			<div class="overflow-y-auto">
 				{#if scanActive}<div class="bg-base-100 flex flex-col items-center justify-center p-6">
 						<AP class="text-secondary h-32 w-32 shrink animate-ping stroke-2" />
-						<p class="mt-8 text-2xl">Scanning ...</p>
+						<p class="mt-8 text-2xl">{$t('Scanning ...')}</p>
 					</div>
 				{:else}
 					<ul class="menu w-full">
@@ -126,7 +127,9 @@
 									<div>
 										<div class="font-bold">{network.ssid}</div>
 										<div class="text-sm opacity-75">
-											Security: {encryptionType[network.encryption_type]}, Channel: {network.channel}
+											{$t('Security:')}
+											{$t(encryptionType[network.encryption_type])}{$t(', Channel:')}
+											{network.channel}
 										</div>
 									</div>
 									<div class="grow"></div>
@@ -146,7 +149,8 @@
 				<button
 					class="btn btn-primary inline-flex flex-none items-center"
 					disabled={scanActive}
-					onclick={scanNetworks}><Reload class="mr-2 h-5 w-5" /><span>Scan again</span></button
+					onclick={scanNetworks}
+					><Reload class="mr-2 h-5 w-5" /><span>{$t('Scan again')}</span></button
 				>
 
 				<div class="grow"></div>
@@ -154,7 +158,7 @@
 					class="btn btn-warning text-warning-content inline-flex flex-none items-center"
 					onclick={() => {
 						modals.close();
-					}}><Cancel class="mr-2 h-5 w-5" /><span>Cancel</span></button
+					}}><Cancel class="mr-2 h-5 w-5" /><span>{$t('Cancel')}</span></button
 				>
 			</div>
 		</div>

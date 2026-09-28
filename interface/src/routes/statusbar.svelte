@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { page } from '$app/state';
 	import { telemetry } from '$lib/stores/telemetry';
 	import { modals } from 'svelte-modals';
@@ -45,7 +46,7 @@
 		<label for="main-menu" class="btn btn-ghost btn-circle btn-sm drawer-button lg:hidden"
 			><Hamburger class="h-6 w-auto" /></label
 		>
-		<span class="inline-block px-2 text-xl font-bold lg:text-2xl">{page.data.title}</span>
+		<span class="inline-block px-2 text-xl font-bold lg:text-2xl">{$t(page.data.title)}</span>
 	</div>
 	<div class="indicator flex-none">
 		<UpdateIndicator />

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { onDestroy, onMount } from 'svelte';
 	import { socket } from '$lib/stores/socket';
 	import { modals } from 'svelte-modals';
@@ -149,8 +150,11 @@
 	onMount(() => {
 		socket.on<WifiReconnectEvent>('reconnect', (data) => {
 			notifications.warning(
-				`Reconnecting shortly as new WiFi settings will be applied in ${Math.round(data.delay_ms / 1000)} seconds.`,
-				5000
+				'Reconnecting shortly as new WiFi settings will be applied in {seconds} seconds.',
+				5000,
+				{
+					seconds: Math.round(data.delay_ms / 1000)
+				}
 			);
 		});
 	});
@@ -220,7 +224,10 @@
 	function confirmDelete(index: number) {
 		modals.open(ConfirmDialog, {
 			title: 'Delete Network?',
-			message: `Are you sure you want to delete network \'${wifiSettings.wifi_networks[index].ssid}\'?`,
+			message: "Are you sure you want to delete network '{name}'?",
+			messageParams: {
+				name: wifiSettings.wifi_networks[index].ssid
+			},
 			labels: {
 				cancel: { label: 'Cancel', icon: Cancel },
 				confirm: { label: 'Delete', icon: Delete }
@@ -264,7 +271,7 @@
 		<Router class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
 	{/snippet}
 	{#snippet title()}
-		<span>WiFi Connection</span>
+		<span>{$t('WiFi Connection')}</span>
 	{/snippet}
 	{#await getWifiData()}
 		<Spinner />
@@ -287,9 +294,9 @@
 						/>
 					</div>
 					<div>
-						<div class="font-bold">Status</div>
+						<div class="font-bold">{$t('Status')}</div>
 						<div class="text-sm opacity-75">
-							{wifiStatus.status === 3 ? 'Connected' : 'Inactive'}
+							{wifiStatus.status === 3 ? $t('Connected') : $t('Inactive')}
 						</div>
 					</div>
 				</div>
@@ -299,7 +306,7 @@
 							<SSID class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">SSID</div>
+							<div class="font-bold">{$t('SSID')}</div>
 							<div class="text-sm opacity-75">
 								{wifiStatus.ssid}
 							</div>
@@ -311,7 +318,7 @@
 							<Home class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">IP Address</div>
+							<div class="font-bold">{$t('IP Address')}</div>
 							<div class="text-sm opacity-75">
 								{wifiStatus.local_ip}
 							</div>
@@ -323,9 +330,10 @@
 							<WiFi class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">RSSI</div>
+							<div class="font-bold">{$t('RSSI')}</div>
 							<div class="text-sm opacity-75">
-								{wifiStatus.rssi} dBm
+								{wifiStatus.rssi}
+								{$t('dBm')}
 							</div>
 						</div>
 						<div class="grow"></div>
@@ -356,7 +364,7 @@
 							<MAC class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">MAC Address</div>
+							<div class="font-bold">{$t('MAC Address')}</div>
 							<div class="text-sm opacity-75">
 								{wifiStatus.mac_address}
 							</div>
@@ -368,7 +376,7 @@
 							<Channel class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Channel</div>
+							<div class="font-bold">{$t('Channel')}</div>
 							<div class="text-sm opacity-75">
 								{wifiStatus.channel}
 							</div>
@@ -380,7 +388,7 @@
 							<Gateway class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Gateway IP</div>
+							<div class="font-bold">{$t('Gateway IP')}</div>
 							<div class="text-sm opacity-75">
 								{wifiStatus.gateway_ip}
 							</div>
@@ -392,7 +400,7 @@
 							<Subnet class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Subnet Mask</div>
+							<div class="font-bold">{$t('Subnet Mask')}</div>
 							<div class="text-sm opacity-75">
 								{wifiStatus.subnet_mask}
 							</div>
@@ -404,7 +412,7 @@
 							<DNS class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">DNS</div>
+							<div class="font-bold">{$t('DNS')}</div>
 							<div class="text-sm opacity-75">
 								{wifiStatus.dns_ip_1}
 							</div>
@@ -420,12 +428,12 @@
 					<Settings class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
 				{/snippet}
 				{#snippet title()}
-					<span>Settings & Networks</span>
+					<span>{$t('Settings & Networks')}</span>
 				{/snippet}
 				<div class="fieldset">
 					<div class="grid w-full grid-cols-1 content-center gap-4 sm:grid-cols-2">
 						<div>
-							<label class="label" for="hostname">Host Name (mDNS)</label>
+							<label class="label" for="hostname">{$t('Host Name (mDNS)')}</label>
 							<input
 								type="text"
 								min="3"
@@ -441,7 +449,7 @@
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="hostname" class="label">
 										<span class="text-error">
-											Host name must be between 3 and 32 characters long.
+											{$t('Host name must be between 3 and 32 characters long.')}
 										</span>
 									</label>
 								</div>
@@ -449,11 +457,11 @@
 						</div>
 
 						<div>
-							<label class="label" for="apmode">WiFi Connection Mode</label>
+							<label class="label" for="apmode">{$t('WiFi Connection Mode')}</label>
 							<select class="select w-full" id="apmode" bind:value={wifiSettings.connection_mode}>
 								{#each connectionMode as mode}
 									<option value={mode.id}>
-										{mode.text}
+										{$t(mode.text)}
 									</option>
 								{/each}
 							</select>
@@ -487,8 +495,8 @@
 				<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 					{#if wifiSettings.wifi_networks.length === 0}
 						<div class="text-center text-base-content/50 mt-2">
-							No WiFi networks configured yet.<br />
-							Scan for available networks or add one manually.
+							{$t('No WiFi networks configured yet.')}<br />
+							{$t('Scan for available networks or add one manually.')}
 						</div>
 					{:else}
 						<DraggableList
@@ -511,13 +519,13 @@
 											<div
 												class="badge badge-sm badge-secondary opacity-75 flex-shrink-0 hidden sm:block"
 											>
-												Static
+												{$t('Static')}
 											</div>
 										{:else}
 											<div
 												class="badge badge-sm badge-outline badge-secondary opacity-75 flex-shrink-0 hidden sm:block"
 											>
-												DHCP
+												{$t('DHCP')}
 											</div>
 										{/if}
 									</div>
@@ -554,7 +562,9 @@
 					<div class="w-full" transition:slide|local={{ duration: 300, easing: cubicOut }}>
 						<div role="alert" class="alert bg-base-300 mt-2">
 							<Info class="h-6 w-6" />
-							<div>Arrange the networks according to their priority (most important first).</div>
+							<div>
+								{$t('Arrange the networks according to their priority (most important first).')}
+							</div>
 						</div>
 					</div>
 				{/if}
@@ -569,7 +579,7 @@
 						onclick={applyWifiSettings}
 					>
 						<Save class="mr-2 h-5 w-5" />
-						<span>Apply Settings</span>
+						<span>{$t('Apply Settings')}</span>
 					</button>
 				</div>
 			</Collapsible>

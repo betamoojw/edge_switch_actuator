@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t, locale } from '$lib/i18n';
 	import { user } from '$lib/stores/user';
 	import { page } from '$app/state';
 	import { modals } from 'svelte-modals';
@@ -101,15 +102,15 @@
 		<Github class="lex-shrink-0 mr-2 h-6 w-6 self-end rounded-full" />
 	{/snippet}
 	{#snippet title()}
-		<span>Github Firmware Manager</span>
+		<span>{$t('Github Firmware Manager')}</span>
 	{/snippet}
 	{#await getGithubAPI()}
 		<Spinner />
 	{:then githubReleases}
 		<div class="alert alert-info">
 			<div>
-				<span class="font-bold">Current Firmware Version:</span>
-				v{page.data.features.firmware_version}
+				<span class="font-bold">{$t('Current Firmware Version:')}</span>
+				{$t('v')}{page.data.features.firmware_version}
 			</div>
 		</div>
 		<div class="relative w-full overflow-visible">
@@ -117,10 +118,10 @@
 				<table class="table w-full table-auto">
 					<thead>
 						<tr class="font-bold">
-							<th align="left">Release</th>
-							<th align="center" class="hidden sm:block">Release Date</th>
-							<th align="center">Exp.</th>
-							<th align="center">Install</th>
+							<th align="left">{$t('Release')}</th>
+							<th align="center" class="hidden sm:block">{$t('Release Date')}</th>
+							<th align="center">{$t('Exp.')}</th>
+							<th align="center">{$t('Install')}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -140,7 +141,7 @@
 								>
 								<td align="center" class="hidden min-h-full align-middle sm:block">
 									<div class="my-2">
-										{new Intl.DateTimeFormat('en-GB', {
+										{new Intl.DateTimeFormat($locale, {
 											dateStyle: 'medium'
 										}).format(new Date(release.published_at))}
 									</div>
@@ -171,7 +172,11 @@
 	{:catch error}
 		<div class="alert alert-error shadow-lg">
 			<Error class="h-6 w-6 shrink-0" />
-			<span>Please connect to a network with internet access to perform a firmware update.</span>
+			<span
+				>{$t(
+					'Please connect to a network with internet access to perform a firmware update.'
+				)}</span
+			>
 		</div>
 	{/await}
 </SettingsCard>

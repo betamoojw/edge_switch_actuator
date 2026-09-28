@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t, locale, duration } from '$lib/i18n';
 	import { preventDefault } from '$lib/events';
 	import { onMount, onDestroy } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -118,33 +119,6 @@
 			//alert('Form Valid');
 		}
 	}
-
-	function convertSeconds(seconds: number) {
-		// Calculate the number of seconds, minutes, hours, and days
-		let minutes = Math.floor(seconds / 60);
-		let hours = Math.floor(minutes / 60);
-		let days = Math.floor(hours / 24);
-
-		// Calculate the remaining hours, minutes, and seconds
-		hours = hours % 24;
-		minutes = minutes % 60;
-		seconds = seconds % 60;
-
-		// Create the formatted string
-		let result = '';
-		if (days > 0) {
-			result += days + ' day' + (days > 1 ? 's' : '') + ' ';
-		}
-		if (hours > 0) {
-			result += hours + ' hour' + (hours > 1 ? 's' : '') + ' ';
-		}
-		if (minutes > 0) {
-			result += minutes + ' minute' + (minutes > 1 ? 's' : '') + ' ';
-		}
-		result += seconds + ' second' + (seconds > 1 ? 's' : '');
-
-		return result;
-	}
 </script>
 
 <SettingsCard collapsible={false}>
@@ -152,7 +126,7 @@
 		<Clock class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
 	{/snippet}
 	{#snippet title()}
-		<span>Network Time</span>
+		<span>{$t('Network Time')}</span>
 	{/snippet}
 	<div class="w-full">
 		{#await getNTPStatus()}
@@ -176,9 +150,9 @@
 							/>
 						</div>
 						<div>
-							<div class="font-bold">Status</div>
+							<div class="font-bold">{$t('Status')}</div>
 							<div class="text-sm opacity-75">
-								{ntpStatus.status === 1 ? 'Active' : 'Inactive'}
+								{ntpStatus.status === 1 ? $t('Active') : $t('Inactive')}
 							</div>
 						</div>
 					</div>
@@ -188,7 +162,7 @@
 							<Server class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">NTP Server</div>
+							<div class="font-bold">{$t('NTP Server')}</div>
 							<div class="text-sm opacity-75">
 								{ntpStatus.server}
 							</div>
@@ -200,9 +174,9 @@
 							<Clock class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Local Time</div>
+							<div class="font-bold">{$t('Local Time')}</div>
 							<div class="text-sm opacity-75">
-								{new Intl.DateTimeFormat('en-GB', {
+								{new Intl.DateTimeFormat($locale, {
 									dateStyle: 'long',
 									timeStyle: 'long'
 								}).format(new Date(ntpStatus.local_time))}
@@ -215,9 +189,9 @@
 							<UTC class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">UTC Time</div>
+							<div class="font-bold">{$t('UTC Time')}</div>
 							<div class="text-sm opacity-75">
-								{new Intl.DateTimeFormat('en-GB', {
+								{new Intl.DateTimeFormat($locale, {
 									dateStyle: 'long',
 									timeStyle: 'long',
 									timeZone: 'UTC'
@@ -231,9 +205,9 @@
 							<Stopwatch class="text-primary-content h-auto w-full scale-75" />
 						</div>
 						<div>
-							<div class="font-bold">Uptime</div>
+							<div class="font-bold">{$t('Uptime')}</div>
 							<div class="text-sm opacity-75">
-								{convertSeconds(ntpStatus.uptime)}
+								{duration($locale, ntpStatus.uptime)}
 							</div>
 						</div>
 					</div>
@@ -251,7 +225,7 @@
 			closed={() => {}}
 		>
 			{#snippet title()}
-				<span>Change NTP Settings</span>
+				<span>{$t('Change NTP Settings')}</span>
 			{/snippet}
 			<form
 				class="fieldset"
@@ -264,10 +238,10 @@
 						type="checkbox"
 						bind:checked={ntpSettings.enabled}
 						class="checkbox checkbox-primary"
-					/>Enable NTP
+					/>{$t('Enable NTP')}
 				</label>
 
-				<label class="label" for="server">Server</label>
+				<label class="label" for="server">{$t('Server')}</label>
 				<input
 					type="text"
 					min="3"
@@ -280,10 +254,10 @@
 					required
 				/>
 				{#if formErrors.server}
-					<p class="text-error text-sm">Please enter a valid NTP server.</p>
+					<p class="text-error text-sm">{$t('Please enter a valid NTP server.')}</p>
 				{/if}
 
-				<label class="label" for="tz">Pick Time Zone</label>
+				<label class="label" for="tz">{$t('Pick Time Zone')}</label>
 				<select class="select w-full" bind:value={ntpSettings.tz_label} id="tz">
 					{#each Object.entries(TIME_ZONES) as [tz_label, tz_format]}
 						<option value={tz_label}>{tz_label}</option>
@@ -291,7 +265,7 @@
 				</select>
 
 				<div class="mt-4 place-self-end">
-					<button class="btn btn-primary" type="submit">Apply Settings</button>
+					<button class="btn btn-primary" type="submit">{$t('Apply Settings')}</button>
 				</div>
 			</form>
 		</Collapsible>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { modals } from 'svelte-modals';
 	import type { ModalComponent } from 'svelte-modals';
 	import { user } from '$lib/stores/user';
@@ -25,12 +26,12 @@
 	// Clear file input when BIN upload finishes (success or error)
 	$effect(() => {
 		const status = $telemetry.ota_status.status;
-		
+
 		if ((status === 'finished' || status === 'error') && fileInput) {
 			fileInput.value = '';
 			files = undefined;
 		}
-		
+
 		// Clear MD5 status when firmware update succeeds
 		if (status === 'finished') {
 			md5StatusMessage = '';
@@ -76,7 +77,9 @@
 						errorMsg = 'Insufficient storage space';
 						break;
 					default:
-						errorMsg = `MD5 upload failed with error code ${response.status}`;
+						errorMsg = $t('MD5 upload failed with error code {status}', {
+							status: response.status
+						});
 				}
 				md5StatusMessage = errorMsg;
 				md5StatusType = 'error';
@@ -131,7 +134,7 @@
 				},
 				body: formData
 			});
-			
+
 			if (!response.ok) {
 				// All upload errors (including file size) are handled via WebSocket EVENT_OTA_UPDATE
 				// The backend's handleError() method emits detailed error information
@@ -145,9 +148,9 @@
 			// (Vite dev proxy may send RST after HTTP 503, causing catch after successful error handling)
 			if ($telemetry.ota_status.status !== 'error') {
 				console.error('Error:', error);
-				telemetry.setOTAStatus({ 
-					status: 'error', 
-					progress: 0, 
+				telemetry.setOTAStatus({
+					status: 'error',
+					progress: 0,
 					error: 'Network error during firmware upload'
 				});
 			}
@@ -158,7 +161,7 @@
 
 		// Clear file validation error when selecting a new file
 		fileValidationError = '';
-		
+
 		// Clear MD5 error status, but keep success status
 		if (md5StatusType === 'error') {
 			md5StatusMessage = '';
@@ -178,7 +181,10 @@
 			confirmBinUpload();
 		} else {
 			// Invalid file type
-			fileValidationError = `Invalid file type "${fileExtension}". Please upload a .bin or .md5 file.`;
+			fileValidationError = $t(
+				'Invalid file type "{extension}". Please upload a .bin or .md5 file.',
+				{ extension: fileExtension }
+			);
 
 			// Clear the invalid file selection
 			if (fileInput) {
@@ -214,13 +220,14 @@
 		<OTA class="flex-shrink-0 mr-2 h-6 w-6 self-end rounded-full" />
 	{/snippet}
 	{#snippet title()}
-		<span>Upload Firmware</span>
+		<span>{$t('Upload Firmware')}</span>
 	{/snippet}
 	<div class="alert alert-warning shadow-lg">
 		<Warning class="h-6 w-6 shrink-0" />
 		<span
-			>Uploading a new firmware (.bin) file will replace the existing firmware. You may upload a
-			(.md5) file first to verify the uploaded firmware.</span
+			>{$t(
+				'Uploading a new firmware (.bin) file will replace the existing firmware. You may upload a (.md5) file first to verify the uploaded firmware.'
+			)}</span
 		>
 	</div>
 
@@ -235,9 +242,9 @@
 				<AlertCircle class="h-6 w-6 shrink-0" />
 			{/if}
 			<div class="flex flex-col">
-				<span class="font-semibold">{md5StatusMessage}</span>
+				<span class="font-semibold">{$t(md5StatusMessage)}</span>
 				{#if md5StatusType === 'success'}
-					<span>Upload a .bin file to flash the firmware</span>
+					<span>{$t('Upload a .bin file to flash the firmware')}</span>
 				{/if}
 			</div>
 		</div>

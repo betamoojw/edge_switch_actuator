@@ -1,9 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width" />
+		<script>
+			// Apply the saved appearance before the first paint. Automatic is handled by CSS.
+			try {
+				const preference = JSON.parse(localStorage.getItem('actuator.ui') || '{}');
+				if (['light', 'dark', 'nord', 'dim', 'retro'].includes(preference?.theme))
+					document.documentElement.dataset.theme = preference.theme;
+				if (['en', 'de', 'es', 'fr', 'pl', 'zh-CN', 'zh-TW'].includes(preference?.language))
+					document.documentElement.lang = preference.language;
+			} catch {
+				/* Storage may be unavailable or contain invalid data. */
+			}
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

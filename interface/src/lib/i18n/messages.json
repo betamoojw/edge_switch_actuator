@@ -1,0 +1,3402 @@
+{
+	"UI": [
+		"UI",
+		"IU",
+		"IU",
+		"Interfejs",
+		"界面",
+		"介面"
+	],
+	"User interface": [
+		"Benutzeroberfläche",
+		"Interfaz de usuario",
+		"Interface utilisateur",
+		"Interfejs użytkownika",
+		"用户界面",
+		"使用者介面"
+	],
+	"Language": [
+		"Sprache",
+		"Idioma",
+		"Langue",
+		"Język",
+		"语言",
+		"語言"
+	],
+	"Theme": [
+		"Design",
+		"Tema",
+		"Thème",
+		"Motyw",
+		"主题",
+		"佈景主題"
+	],
+	"Automatic (system)": [
+		"Automatisch (System)",
+		"Automático (sistema)",
+		"Automatique (système)",
+		"Automatyczny (system)",
+		"自动（跟随系统）",
+		"自動（跟隨系統）"
+	],
+	"Light": [
+		"Hell",
+		"Claro",
+		"Clair",
+		"Jasny",
+		"浅色",
+		"淺色"
+	],
+	"Dark": [
+		"Dunkel",
+		"Oscuro",
+		"Sombre",
+		"Ciemny",
+		"深色",
+		"深色"
+	],
+	"Nord": [
+		"Nord",
+		"Nord",
+		"Nord",
+		"Nord",
+		"北欧",
+		"北歐"
+	],
+	"Dim": [
+		"Gedimmt",
+		"Atenuado",
+		"Tamisé",
+		"Przyciemniony",
+		"柔暗",
+		"柔暗"
+	],
+	"Sepia": [
+		"Sepia",
+		"Sepia",
+		"Sépia",
+		"Sepia",
+		"暖褐",
+		"暖褐"
+	],
+	"Theme preview": [
+		"Designvorschau",
+		"Vista previa del tema",
+		"Aperçu du thème",
+		"Podgląd motywu",
+		"主题预览",
+		"佈景主題預覽"
+	],
+	"Changes apply immediately and are saved in this browser for this device.": [
+		"Änderungen gelten sofort und werden für dieses Gerät in diesem Browser gespeichert.",
+		"Los cambios se aplican de inmediato y se guardan en este navegador para este dispositivo.",
+		"Les modifications sont immédiates et enregistrées dans ce navigateur pour cet appareil.",
+		"Zmiany są stosowane od razu i zapisywane w tej przeglądarce dla tego urządzenia.",
+		"更改立即生效，并保存在此浏览器中，仅适用于此设备。",
+		"變更立即生效，並儲存在此瀏覽器中，僅適用於此裝置。"
+	],
+	"Automatic uses Light by default and Dark when your system prefers dark mode.": [
+		"Automatisch verwendet standardmäßig Hell und bei dunkler Systemeinstellung Dunkel.",
+		"Automático utiliza Claro por defecto y Oscuro cuando el sistema prefiere el modo oscuro.",
+		"Le mode automatique utilise Clair par défaut et Sombre selon les préférences du système.",
+		"Tryb automatyczny używa jasnego motywu, a ciemnego zgodnie z ustawieniami systemu.",
+		"自动模式默认使用浅色主题；系统偏好深色模式时使用深色主题。",
+		"自動模式預設使用淺色主題；系統偏好深色模式時使用深色主題。"
+	],
+	"Switching Actuator": [
+		"Schaltaktor",
+		"Actuador de conmutación",
+		"Actionneur de commutation",
+		"Aktor przełączający",
+		"开关执行器",
+		"開關致動器"
+	],
+	"Connections": [
+		"Verbindungen",
+		"Conexiones",
+		"Connexions",
+		"Połączenia",
+		"连接",
+		"連線"
+	],
+	"System": [
+		"System",
+		"Sistema",
+		"Système",
+		"System",
+		"系统",
+		"系統"
+	],
+	"Users": [
+		"Benutzer",
+		"Usuarios",
+		"Utilisateurs",
+		"Użytkownicy",
+		"用户",
+		"使用者"
+	],
+	"WiFi Station": [
+		"WLAN-Station",
+		"Estación Wi-Fi",
+		"Station Wi-Fi",
+		"Stacja Wi-Fi",
+		"Wi-Fi 客户端",
+		"Wi-Fi 用戶端"
+	],
+	"Access Point": [
+		"Zugangspunkt",
+		"Punto de acceso",
+		"Point d’accès",
+		"Punkt dostępowy",
+		"无线接入点",
+		"無線基地台"
+	],
+	"System Status": [
+		"Systemstatus",
+		"Estado del sistema",
+		"État du système",
+		"Stan systemu",
+		"系统状态",
+		"系統狀態"
+	],
+	"System Metrics": [
+		"Systemmesswerte",
+		"Métricas del sistema",
+		"Mesures du système",
+		"Parametry systemu",
+		"系统指标",
+		"系統指標"
+	],
+	"Core Dump": [
+		"Speicherabbild",
+		"Volcado de memoria",
+		"Image mémoire",
+		"Zrzut pamięci",
+		"内存转储",
+		"記憶體傾印"
+	],
+	"Firmware Update": [
+		"Firmware-Update",
+		"Actualización de firmware",
+		"Mise à jour du micrologiciel",
+		"Aktualizacja oprogramowania układowego",
+		"固件更新",
+		"韌體更新"
+	],
+	"Outputs": [
+		"Ausgänge",
+		"Salidas",
+		"Sorties",
+		"Wyjścia",
+		"输出",
+		"輸出"
+	],
+	"Indicators": [
+		"Anzeigen",
+		"Indicadores",
+		"Voyants",
+		"Sygnalizacja",
+		"指示器",
+		"指示器"
+	],
+	"Button": [
+		"Taster",
+		"Pulsador",
+		"Bouton-poussoir",
+		"Przycisk",
+		"按键",
+		"按鍵"
+	],
+	"Maintenance": [
+		"Wartung",
+		"Mantenimiento",
+		"Maintenance",
+		"Konserwacja",
+		"维护",
+		"維護"
+	],
+	"Status": [
+		"Status",
+		"Estado",
+		"État",
+		"Stan",
+		"状态",
+		"狀態"
+	],
+	"Settings": [
+		"Einstellungen",
+		"Ajustes",
+		"Paramètres",
+		"Ustawienia",
+		"设置",
+		"設定"
+	],
+	"Name": [
+		"Name",
+		"Nombre",
+		"Nom",
+		"Nazwa",
+		"名称",
+		"名稱"
+	],
+	"Username": [
+		"Benutzername",
+		"Nombre de usuario",
+		"Nom d’utilisateur",
+		"Nazwa użytkownika",
+		"用户名",
+		"使用者名稱"
+	],
+	"Password": [
+		"Passwort",
+		"Contraseña",
+		"Mot de passe",
+		"Hasło",
+		"密码",
+		"密碼"
+	],
+	"Login": [
+		"Anmelden",
+		"Iniciar sesión",
+		"Connexion",
+		"Zaloguj się",
+		"登录",
+		"登入"
+	],
+	"Save": [
+		"Speichern",
+		"Guardar",
+		"Enregistrer",
+		"Zapisz",
+		"保存",
+		"儲存"
+	],
+	"Cancel": [
+		"Abbrechen",
+		"Cancelar",
+		"Annuler",
+		"Anuluj",
+		"取消",
+		"取消"
+	],
+	"Abort": [
+		"Abbrechen",
+		"Cancelar",
+		"Annuler",
+		"Anuluj",
+		"中止",
+		"中止"
+	],
+	"Discard": [
+		"Verwerfen",
+		"Descartar",
+		"Abandonner",
+		"Odrzuć",
+		"放弃更改",
+		"捨棄變更"
+	],
+	"Discard Changes": [
+		"Änderungen verwerfen",
+		"Descartar cambios",
+		"Abandonner les modifications",
+		"Odrzuć zmiany",
+		"放弃更改",
+		"捨棄變更"
+	],
+	"Apply Settings": [
+		"Einstellungen übernehmen",
+		"Aplicar ajustes",
+		"Appliquer les paramètres",
+		"Zastosuj ustawienia",
+		"应用设置",
+		"套用設定"
+	],
+	"Apply settings": [
+		"Einstellungen übernehmen",
+		"Aplicar ajustes",
+		"Appliquer les paramètres",
+		"Zastosuj ustawienia",
+		"应用设置",
+		"套用設定"
+	],
+	"Applied": [
+		"Übernommen",
+		"Aplicado",
+		"Appliqué",
+		"Zastosowano",
+		"已应用",
+		"已套用"
+	],
+	"Edit": [
+		"Bearbeiten",
+		"Editar",
+		"Modifier",
+		"Edytuj",
+		"编辑",
+		"編輯"
+	],
+	"Delete": [
+		"Löschen",
+		"Eliminar",
+		"Supprimer",
+		"Usuń",
+		"删除",
+		"刪除"
+	],
+	"Dismiss": [
+		"Schließen",
+		"Cerrar",
+		"Fermer",
+		"Zamknij",
+		"关闭",
+		"關閉"
+	],
+	"Close modal": [
+		"Dialog schließen",
+		"Cerrar diálogo",
+		"Fermer la boîte de dialogue",
+		"Zamknij okno dialogowe",
+		"关闭对话框",
+		"關閉對話框"
+	],
+	"Show password": [
+		"Passwort anzeigen",
+		"Mostrar contraseña",
+		"Afficher le mot de passe",
+		"Pokaż hasło",
+		"显示密码",
+		"顯示密碼"
+	],
+	"Hide password": [
+		"Passwort ausblenden",
+		"Ocultar contraseña",
+		"Masquer le mot de passe",
+		"Ukryj hasło",
+		"隐藏密码",
+		"隱藏密碼"
+	],
+	"Enabled": [
+		"Aktiviert",
+		"Habilitado",
+		"Activé",
+		"Włączone",
+		"已启用",
+		"已啟用"
+	],
+	"Disabled": [
+		"Deaktiviert",
+		"Deshabilitado",
+		"Désactivé",
+		"Wyłączone",
+		"已禁用",
+		"已停用"
+	],
+	"Active": [
+		"Aktiv",
+		"Activo",
+		"Actif",
+		"Aktywne",
+		"运行中",
+		"運作中"
+	],
+	"Inactive": [
+		"Inaktiv",
+		"Inactivo",
+		"Inactif",
+		"Nieaktywne",
+		"未运行",
+		"未運作"
+	],
+	"Connected": [
+		"Verbunden",
+		"Conectado",
+		"Connecté",
+		"Połączono",
+		"已连接",
+		"已連線"
+	],
+	"Disconnected": [
+		"Getrennt",
+		"Desconectado",
+		"Déconnecté",
+		"Rozłączono",
+		"已断开",
+		"已中斷"
+	],
+	"Connecting": [
+		"Verbindung wird hergestellt",
+		"Conectando",
+		"Connexion en cours",
+		"Łączenie",
+		"正在连接",
+		"正在連線"
+	],
+	"Warning": [
+		"Warnung",
+		"Advertencia",
+		"Avertissement",
+		"Ostrzeżenie",
+		"警告",
+		"警告"
+	],
+	"Fault": [
+		"Störung",
+		"Fallo",
+		"Défaut",
+		"Usterka",
+		"故障",
+		"故障"
+	],
+	"Unknown": [
+		"Unbekannt",
+		"Desconocido",
+		"Inconnu",
+		"Nieznany",
+		"未知",
+		"未知"
+	],
+	"Ready": [
+		"Bereit",
+		"Listo",
+		"Prêt",
+		"Gotowe",
+		"就绪",
+		"就緒"
+	],
+	"ON": [
+		"EIN",
+		"ACTIVADO",
+		"MARCHE",
+		"ZAŁ.",
+		"开",
+		"開"
+	],
+	"OFF": [
+		"AUS",
+		"DESACTIVADO",
+		"ARRÊT",
+		"WYŁ.",
+		"关",
+		"關"
+	],
+	"Turn ON": [
+		"Einschalten",
+		"Activar",
+		"Activer",
+		"Załącz",
+		"接通",
+		"接通"
+	],
+	"Turn OFF": [
+		"Ausschalten",
+		"Desactivar",
+		"Désactiver",
+		"Wyłącz",
+		"断开",
+		"斷開"
+	],
+	"Pulse": [
+		"Impuls",
+		"Impulso",
+		"Impulsion",
+		"Impuls",
+		"脉冲",
+		"脈衝"
+	],
+	"Clear block": [
+		"Sperre aufheben",
+		"Quitar bloqueo",
+		"Lever le blocage",
+		"Usuń blokadę",
+		"解除闭锁",
+		"解除閉鎖"
+	],
+	"Blocked · ": [
+		"Gesperrt · ",
+		"Bloqueado · ",
+		"Bloqué · ",
+		"Zablokowane · ",
+		"已闭锁 · ",
+		"已閉鎖 · "
+	],
+	"Startup": [
+		"Anlauf",
+		"Arranque",
+		"Démarrage",
+		"Rozruch",
+		"启动",
+		"啟動"
+	],
+	"Channel settings": [
+		"Kanaleinstellungen",
+		"Ajustes del canal",
+		"Paramètres du canal",
+		"Ustawienia kanału",
+		"通道设置",
+		"通道設定"
+	],
+	"Channel": [
+		"Kanal",
+		"Canal",
+		"Canal",
+		"Kanał",
+		"通道",
+		"通道"
+	],
+	"All enabled channels OFF": [
+		"Alle aktivierten Kanäle AUS",
+		"Desactivar todos los canales habilitados",
+		"Désactiver tous les canaux activés",
+		"Wyłącz wszystkie włączone kanały",
+		"断开所有已启用通道",
+		"斷開所有已啟用通道"
+	],
+	"Enabled (disabling drives OFF)": [
+		"Aktiviert (Deaktivieren schaltet AUS)",
+		"Habilitado (al deshabilitar se desactiva la salida)",
+		"Activé (la désactivation coupe la sortie)",
+		"Włączony (wyłączenie odłącza wyjście)",
+		"启用（禁用时断开输出）",
+		"啟用（停用時斷開輸出）"
+	],
+	"ON at startup": [
+		"EIN beim Anlauf",
+		"Activado al arrancar",
+		"Activé au démarrage",
+		"Załącz przy rozruchu",
+		"启动时接通",
+		"啟動時接通"
+	],
+	"Startup ON": [
+		"EIN beim Anlauf",
+		"Activado al arrancar",
+		"Activé au démarrage",
+		"Załącz przy rozruchu",
+		"启动时接通",
+		"啟動時接通"
+	],
+	"OFF on communications loss": [
+		"AUS bei Kommunikationsausfall",
+		"Desactivar al perder la comunicación",
+		"Désactiver en cas de perte de communication",
+		"Wyłącz przy utracie komunikacji",
+		"通信中断时断开",
+		"通訊中斷時斷開"
+	],
+	"OFF on loss": [
+		"AUS bei Ausfall",
+		"Desactivar al perder comunicación",
+		"Désactiver en cas de perte",
+		"Wyłącz przy utracie komunikacji",
+		"失联时断开",
+		"失聯時斷開"
+	],
+	"Pulse duration (ms)": [
+		"Impulsdauer (ms)",
+		"Duración del impulso (ms)",
+		"Durée d’impulsion (ms)",
+		"Czas impulsu (ms)",
+		"脉冲时长（ms）",
+		"脈衝時間（ms）"
+	],
+	"Pulse (ms)": [
+		"Impuls (ms)",
+		"Impulso (ms)",
+		"Impulsion (ms)",
+		"Impuls (ms)",
+		"脉冲（ms）",
+		"脈衝（ms）"
+	],
+	"Loss timeout (seconds)": [
+		"Ausfallzeitüberschreitung (Sekunden)",
+		"Tiempo de espera por pérdida (segundos)",
+		"Délai de perte de communication (secondes)",
+		"Limit czasu utraty komunikacji (sekundy)",
+		"失联超时（秒）",
+		"失聯逾時（秒）"
+	],
+	"Loss timeout (s)": [
+		"Ausfallzeitüberschreitung (s)",
+		"Tiempo de espera por pérdida (s)",
+		"Délai de perte de communication (s)",
+		"Limit czasu utraty komunikacji (s)",
+		"失联超时（s）",
+		"失聯逾時（s）"
+	],
+	"Welcome to Switching Actuator · ESP32-S3 · Six independent relay outputs": [
+		"Willkommen beim Schaltaktor · ESP32-S3 · Sechs unabhängige Relaisausgänge",
+		"Actuador de conmutación · ESP32-S3 · Seis salidas de relé independientes",
+		"Actionneur de commutation · ESP32-S3 · Six sorties relais indépendantes",
+		"Aktor przełączający · ESP32-S3 · Sześć niezależnych wyjść przekaźnikowych",
+		"欢迎使用开关执行器 · ESP32-S3 · 六路独立继电器输出",
+		"歡迎使用開關致動器 · ESP32-S3 · 六路獨立繼電器輸出"
+	],
+	"Control relay outputs, configure the protocol interface, and monitor device status.": [
+		"Relaisausgänge steuern, Protokollschnittstelle konfigurieren und Gerätestatus überwachen.",
+		"Controle las salidas de relé, configure la interfaz de protocolo y supervise el estado del dispositivo.",
+		"Commandez les sorties relais, configurez l’interface de protocole et surveillez l’état de l’appareil.",
+		"Steruj wyjściami przekaźnikowymi, konfiguruj interfejs protokołu i monitoruj stan urządzenia.",
+		"控制继电器输出、配置协议接口并监控设备状态。",
+		"控制繼電器輸出、設定協定介面並監控裝置狀態。"
+	],
+	"States show the commanded output. This board does not measure contact position.": [
+		"Die Zustände zeigen den Sollzustand der Ausgänge. Diese Platine erfasst keine Kontaktstellung.",
+		"Los estados muestran la salida ordenada. Esta placa no mide la posición de los contactos.",
+		"Les états indiquent la commande des sorties. Cette carte ne mesure pas la position des contacts.",
+		"Stany wskazują zadany stan wyjść. Ta płytka nie mierzy położenia styków.",
+		"显示的是输出指令状态。本板不检测触点的实际位置。",
+		"顯示的是輸出命令狀態。本板不偵測接點的實際位置。"
+	],
+	"Unsaved settings. Apply saves the complete profile and restarts the selected protocol interface.": [
+		"Ungespeicherte Einstellungen. Übernehmen speichert das gesamte Profil und startet die gewählte Protokollschnittstelle neu.",
+		"Hay ajustes sin guardar. Aplicar guarda el perfil completo y reinicia la interfaz de protocolo seleccionada.",
+		"Paramètres non enregistrés. Appliquer enregistre le profil complet et redémarre l’interface de protocole sélectionnée.",
+		"Niezapisane ustawienia. Zastosowanie zapisuje cały profil i uruchamia ponownie wybrany interfejs protokołu.",
+		"有未保存的设置。应用后将保存完整配置并重启所选协议接口。",
+		"有尚未儲存的設定。套用後將儲存完整設定並重新啟動所選協定介面。"
+	],
+	"Connection unavailable. Controls are disabled.": [
+		"Keine Verbindung. Die Bedienelemente sind deaktiviert.",
+		"Conexión no disponible. Los controles están deshabilitados.",
+		"Connexion indisponible. Les commandes sont désactivées.",
+		"Brak połączenia. Elementy sterowania są wyłączone.",
+		"连接不可用，控制功能已禁用。",
+		"連線無法使用，控制功能已停用。"
+	],
+	"Factory reset armed. Release BOOT before 10 seconds to cancel.": [
+		"Werksreset vorbereitet. BOOT vor Ablauf von 10 Sekunden loslassen, um abzubrechen.",
+		"Restablecimiento de fábrica preparado. Suelte BOOT antes de 10 segundos para cancelar.",
+		"Réinitialisation d’usine armée. Relâchez BOOT avant 10 secondes pour annuler.",
+		"Przygotowano reset fabryczny. Zwolnij BOOT przed upływem 10 sekund, aby anulować.",
+		"已触发恢复出厂设置。请在 10 秒内松开 BOOT 以取消。",
+		"已觸發恢復原廠設定。請在 10 秒內放開 BOOT 以取消。"
+	],
+	"RGB status indicator": [
+		"RGB-Statusanzeige",
+		"Indicador de estado RGB",
+		"Voyant d’état RVB",
+		"Wskaźnik stanu RGB",
+		"RGB 状态指示灯",
+		"RGB 狀態指示燈"
+	],
+	"Blue: AP · Amber: connecting · Green: network connected · Red: fault/programming": [
+		"Blau: AP · Gelb: Verbindungsaufbau · Grün: Netzwerk verbunden · Rot: Störung/Programmierung",
+		"Azul: AP · Ámbar: conectando · Verde: red conectada · Rojo: fallo/programación",
+		"Bleu : AP · Orange : connexion · Vert : réseau connecté · Rouge : défaut/programmation",
+		"Niebieski: AP · Bursztynowy: łączenie · Zielony: sieć połączona · Czerwony: usterka/programowanie",
+		"蓝色：接入点 · 黄色：连接中 · 绿色：网络已连接 · 红色：故障/编程",
+		"藍色：基地台 · 黃色：連線中 · 綠色：網路已連線 · 紅色：故障/程式設定"
+	],
+	"Current RGB:": [
+		"Aktueller RGB-Wert:",
+		"RGB actual:",
+		"RVB actuel :",
+		"Bieżące RGB:",
+		"当前 RGB：",
+		"目前 RGB："
+	],
+	"Brightness (%)": [
+		"Helligkeit (%)",
+		"Brillo (%)",
+		"Luminosité (%)",
+		"Jasność (%)",
+		"亮度（%）",
+		"亮度（%）"
+	],
+	"Test color": [
+		"Farbe testen",
+		"Probar color",
+		"Tester la couleur",
+		"Test koloru",
+		"测试颜色",
+		"測試顏色"
+	],
+	"Test duration (seconds)": [
+		"Testdauer (Sekunden)",
+		"Duración de prueba (segundos)",
+		"Durée du test (secondes)",
+		"Czas testu (sekundy)",
+		"测试时长（秒）",
+		"測試時間（秒）"
+	],
+	"Identify for 5 seconds": [
+		"5 Sekunden identifizieren",
+		"Identificar durante 5 segundos",
+		"Identifier pendant 5 secondes",
+		"Identyfikuj przez 5 sekund",
+		"识别设备 5 秒",
+		"識別裝置 5 秒"
+	],
+	"Buzzer": [
+		"Summer",
+		"Zumbador",
+		"Avertisseur sonore",
+		"Brzęczyk",
+		"蜂鸣器",
+		"蜂鳴器"
+	],
+	"Connection success and bounded fault tones. Current:": [
+		"Verbindungsmeldung und zeitbegrenzte Störungstöne. Aktuell:",
+		"Tonos de conexión correcta y de fallo con duración limitada. Actual:",
+		"Signaux de connexion et de défaut à durée limitée. Actuel :",
+		"Sygnały połączenia i ograniczone czasowo sygnały usterek. Obecnie:",
+		"连接成功提示音和限时故障提示音。当前：",
+		"連線成功提示音和限時故障提示音。目前："
+	],
+	"Frequency (Hz)": [
+		"Frequenz (Hz)",
+		"Frecuencia (Hz)",
+		"Fréquence (Hz)",
+		"Częstotliwość (Hz)",
+		"频率（Hz）",
+		"頻率（Hz）"
+	],
+	"Duration (ms)": [
+		"Dauer (ms)",
+		"Duración (ms)",
+		"Durée (ms)",
+		"Czas trwania (ms)",
+		"持续时间（ms）",
+		"持續時間（ms）"
+	],
+	"Duty (%)": [
+		"Tastgrad (%)",
+		"Ciclo de trabajo (%)",
+		"Rapport cyclique (%)",
+		"Wypełnienie (%)",
+		"占空比（%）",
+		"工作週期（%）"
+	],
+	"Test tone": [
+		"Ton testen",
+		"Probar tono",
+		"Tester le signal sonore",
+		"Test dźwięku",
+		"测试提示音",
+		"測試提示音"
+	],
+	"Silence current tone": [
+		"Aktuellen Ton stummschalten",
+		"Silenciar tono actual",
+		"Couper le signal sonore",
+		"Wycisz bieżący dźwięk",
+		"停止当前提示音",
+		"停止目前提示音"
+	],
+	"BOOT button": [
+		"BOOT-Taster",
+		"Pulsador BOOT",
+		"Bouton BOOT",
+		"Przycisk BOOT",
+		"BOOT 按键",
+		"BOOT 按鍵"
+	],
+	"Pressed": [
+		"Gedrückt",
+		"Pulsado",
+		"Enfoncé",
+		"Wciśnięty",
+		"已按下",
+		"已按下"
+	],
+	"Released": [
+		"Losgelassen",
+		"Suelto",
+		"Relâché",
+		"Zwolniony",
+		"已松开",
+		"已放開"
+	],
+	"Enable application click actions": [
+		"Klickaktionen aktivieren",
+		"Habilitar acciones por pulsación",
+		"Activer les actions par clic",
+		"Włącz akcje kliknięć aplikacji",
+		"启用应用按键动作",
+		"啟用應用按鍵動作"
+	],
+	"Single click": [
+		"Einfachklick",
+		"Una pulsación",
+		"Simple clic",
+		"Pojedyncze kliknięcie",
+		"单击",
+		"單擊"
+	],
+	"Double click": [
+		"Doppelklick",
+		"Doble pulsación",
+		"Double clic",
+		"Podwójne kliknięcie",
+		"双击",
+		"雙擊"
+	],
+	"Triple click": [
+		"Dreifachklick",
+		"Triple pulsación",
+		"Triple clic",
+		"Potrójne kliknięcie",
+		"三击",
+		"三擊"
+	],
+	"Target": [
+		"Ziel",
+		"Destino",
+		"Cible",
+		"Cel",
+		"目标",
+		"目標"
+	],
+	"Device": [
+		"Gerät",
+		"Dispositivo",
+		"Appareil",
+		"Urządzenie",
+		"设备",
+		"裝置"
+	],
+	"No action": [
+		"Keine Aktion",
+		"Sin acción",
+		"Aucune action",
+		"Brak akcji",
+		"无动作",
+		"無動作"
+	],
+	"Relay ON": [
+		"Relais EIN",
+		"Activar relé",
+		"Activer le relais",
+		"Załącz przekaźnik",
+		"继电器接通",
+		"繼電器接通"
+	],
+	"Relay OFF": [
+		"Relais AUS",
+		"Desactivar relé",
+		"Désactiver le relais",
+		"Wyłącz przekaźnik",
+		"继电器断开",
+		"繼電器斷開"
+	],
+	"Relay toggle": [
+		"Relais umschalten",
+		"Conmutar relé",
+		"Basculer le relais",
+		"Przełącz przekaźnik",
+		"继电器翻转",
+		"繼電器切換"
+	],
+	"Relay pulse": [
+		"Relaisimpuls",
+		"Impulso de relé",
+		"Impulsion du relais",
+		"Impuls przekaźnika",
+		"继电器脉冲",
+		"繼電器脈衝"
+	],
+	"All OFF": [
+		"Alle AUS",
+		"Desactivar todo",
+		"Tout désactiver",
+		"Wyłącz wszystko",
+		"全部断开",
+		"全部斷開"
+	],
+	"Identify": [
+		"Identifizieren",
+		"Identificar",
+		"Identifier",
+		"Identyfikuj",
+		"识别",
+		"識別"
+	],
+	"Acknowledge sound": [
+		"Ton quittieren",
+		"Confirmar aviso sonoro",
+		"Acquitter le signal sonore",
+		"Potwierdź sygnał dźwiękowy",
+		"确认提示音",
+		"確認提示音"
+	],
+	"KNX programming toggle": [
+		"KNX-Programmiermodus umschalten",
+		"Alternar programación KNX",
+		"Basculer le mode programmation KNX",
+		"Przełącz tryb programowania KNX",
+		"切换 KNX 编程模式",
+		"切換 KNX 程式設定模式"
+	],
+	"Holding BOOT for 10 seconds erases user settings and KNX commissioning. This recovery gesture remains active when click actions are disabled. Release before 10 seconds to cancel.": [
+		"BOOT 10 Sekunden gedrückt halten löscht Benutzereinstellungen und KNX-Inbetriebnahme. Diese Wiederherstellung bleibt auch bei deaktivierten Klickaktionen aktiv. Zum Abbrechen vor 10 Sekunden loslassen.",
+		"Mantener BOOT durante 10 segundos borra los ajustes y la puesta en servicio KNX. Esta recuperación sigue activa aunque se deshabiliten las acciones por pulsación. Suelte antes de 10 segundos para cancelar.",
+		"Maintenir BOOT pendant 10 secondes efface les paramètres utilisateur et la configuration KNX. Cette fonction reste active même si les actions par clic sont désactivées. Relâchez avant 10 secondes pour annuler.",
+		"Przytrzymanie BOOT przez 10 sekund usuwa ustawienia użytkownika i konfigurację uruchomieniową KNX. Odzyskiwanie działa także przy wyłączonych akcjach kliknięć. Zwolnij przed upływem 10 sekund, aby anulować.",
+		"按住 BOOT 10 秒会清除用户设置和 KNX 调试配置。即使禁用按键动作，此恢复功能仍然有效。请在 10 秒内松开以取消。",
+		"按住 BOOT 10 秒會清除使用者設定和 KNX 試運轉設定。即使停用按鍵動作，此復原功能仍然有效。請在 10 秒內放開以取消。"
+	],
+	"Protocol Interface selection": [
+		"Protokollschnittstelle auswählen",
+		"Selección de interfaz de protocolo",
+		"Sélection de l’interface de protocole",
+		"Wybór interfejsu protokołu",
+		"协议接口选择",
+		"協定介面選擇"
+	],
+	"Only one of RTU, TCP and KNX can operate at a time.": [
+		"RTU, TCP und KNX können nur einzeln betrieben werden.",
+		"Solo puede funcionar uno de los protocolos RTU, TCP o KNX a la vez.",
+		"Un seul protocole parmi RTU, TCP et KNX peut fonctionner à la fois.",
+		"Jednocześnie może działać tylko jeden protokół: RTU, TCP lub KNX.",
+		"RTU、TCP 和 KNX 同一时间只能启用一种。",
+		"RTU、TCP 和 KNX 同一時間只能啟用一種。"
+	],
+	"Protocol": [
+		"Protokoll",
+		"Protocolo",
+		"Protocole",
+		"Protokół",
+		"协议",
+		"協定"
+	],
+	"Protocol Interface Off": [
+		"Protokollschnittstelle AUS",
+		"Interfaz de protocolo desactivada",
+		"Interface de protocole désactivée",
+		"Interfejs protokołu wyłączony",
+		"关闭协议接口",
+		"關閉協定介面"
+	],
+	"RS485 enabled": [
+		"RS485 aktiviert",
+		"RS485 habilitado",
+		"RS485 activé",
+		"RS485 włączone",
+		"启用 RS485",
+		"啟用 RS485"
+	],
+	"Unit address": [
+		"Teilnehmeradresse",
+		"Dirección de unidad",
+		"Adresse de l’unité",
+		"Adres urządzenia",
+		"单元地址",
+		"單元位址"
+	],
+	"Baud": [
+		"Baudrate",
+		"Velocidad en baudios",
+		"Débit en bauds",
+		"Prędkość transmisji",
+		"波特率",
+		"鮑率"
+	],
+	"Serial format": [
+		"Serielles Format",
+		"Formato serie",
+		"Format série",
+		"Format transmisji szeregowej",
+		"串口格式",
+		"序列埠格式"
+	],
+	"8N1 (compatibility)": [
+		"8N1 (Kompatibilität)",
+		"8N1 (compatibilidad)",
+		"8N1 (compatibilité)",
+		"8N1 (zgodność)",
+		"8N1（兼容模式）",
+		"8N1（相容模式）"
+	],
+	"Enable RTU polling watchdog": [
+		"RTU-Abfrageüberwachung aktivieren",
+		"Habilitar vigilancia de sondeo RTU",
+		"Activer la surveillance d’interrogation RTU",
+		"Włącz nadzór odpytywania RTU",
+		"启用 RTU 轮询看门狗",
+		"啟用 RTU 輪詢看門狗"
+	],
+	"TCP port": [
+		"TCP-Port",
+		"Puerto TCP",
+		"Port TCP",
+		"Port TCP",
+		"TCP 端口",
+		"TCP 通訊埠"
+	],
+	"Allowed source IPv4 (empty allows uplink peers)": [
+		"Zulässige Quell-IPv4 (leer: Uplink-Teilnehmer zulassen)",
+		"IPv4 de origen permitida (vacío permite pares del enlace)",
+		"IPv4 source autorisée (vide : pairs de liaison autorisés)",
+		"Dozwolony źródłowy IPv4 (puste: zezwól w sieci nadrzędnej)",
+		"允许的源 IPv4（留空则允许上行网络对端）",
+		"允許的來源 IPv4（留空則允許上行網路對端）"
+	],
+	"Active IPv4 uplink only. Up to four clients. Idle timeout: 60 seconds.": [
+		"Nur aktive IPv4-Uplink-Verbindung. Bis zu vier Clients. Inaktivitätszeit: 60 Sekunden.",
+		"Solo enlace IPv4 activo. Hasta cuatro clientes. Tiempo de inactividad: 60 segundos.",
+		"Liaison IPv4 active uniquement. Jusqu’à quatre clients. Délai d’inactivité : 60 secondes.",
+		"Tylko aktywne połączenie nadrzędne IPv4. Do czterech klientów. Limit bezczynności: 60 sekund.",
+		"仅使用有效的 IPv4 上行连接。最多四个客户端。空闲超时：60 秒。",
+		"僅使用有效的 IPv4 上行連線。最多四個用戶端。閒置逾時：60 秒。"
+	],
+	"Protocol Interface access": [
+		"Zugriff auf Protokollschnittstelle",
+		"Acceso a la interfaz de protocolo",
+		"Accès à l’interface de protocole",
+		"Dostęp do interfejsu protokołu",
+		"协议接口访问权限",
+		"協定介面存取權限"
+	],
+	"Relay write mask (0–63)": [
+		"Relais-Schreibmaske (0–63)",
+		"Máscara de escritura de relés (0–63)",
+		"Masque d’écriture des relais (0–63)",
+		"Maska zapisu przekaźników (0–63)",
+		"继电器写入掩码（0–63）",
+		"繼電器寫入遮罩（0–63）"
+	],
+	"Allow manual indicators and diagnostic commands": [
+		"Manuelle Anzeigen und Diagnosebefehle zulassen",
+		"Permitir indicadores manuales y comandos de diagnóstico",
+		"Autoriser les voyants manuels et les commandes de diagnostic",
+		"Zezwól na ręczną sygnalizację i polecenia diagnostyczne",
+		"允许手动指示和诊断命令",
+		"允許手動指示和診斷命令"
+	],
+	"Requests": [
+		"Anfragen",
+		"Solicitudes",
+		"Requêtes",
+		"Żądania",
+		"请求数",
+		"請求數"
+	],
+	"Configuration window source (rtu or exact TCP IPv4)": [
+		"Quelle des Konfigurationsfensters (rtu oder genaue TCP-IPv4)",
+		"Origen de la ventana de configuración (rtu o IPv4 TCP exacta)",
+		"Source de la fenêtre de configuration (rtu ou IPv4 TCP exacte)",
+		"Źródło okna konfiguracji (rtu lub dokładny IPv4 TCP)",
+		"配置窗口来源（rtu 或准确的 TCP IPv4）",
+		"設定視窗來源（rtu 或精確的 TCP IPv4）"
+	],
+	"RTU cannot authenticate masters: every physical bus participant can use its configuration window.": [
+		"RTU kann Master nicht authentifizieren: Jeder physische Busteilnehmer kann das Konfigurationsfenster nutzen.",
+		"RTU no autentica a los maestros: cualquier participante físico del bus puede usar la ventana de configuración.",
+		"RTU ne peut pas authentifier les maîtres : chaque participant physique du bus peut utiliser la fenêtre de configuration.",
+		"RTU nie uwierzytelnia urządzeń nadrzędnych: każdy fizyczny uczestnik magistrali może użyć okna konfiguracji.",
+		"RTU 无法认证主站：物理总线上的所有参与设备都可使用其配置窗口。",
+		"RTU 無法驗證主站：實體匯流排上的所有參與裝置皆可使用其設定視窗。"
+	],
+	"Open 60-second configuration window": [
+		"Konfigurationsfenster für 60 Sekunden öffnen",
+		"Abrir ventana de configuración de 60 segundos",
+		"Ouvrir la fenêtre de configuration pendant 60 secondes",
+		"Otwórz okno konfiguracji na 60 sekund",
+		"开启 60 秒配置窗口",
+		"開啟 60 秒設定視窗"
+	],
+	"Window open": [
+		"Fenster offen",
+		"Ventana abierta",
+		"Fenêtre ouverte",
+		"Okno otwarte",
+		"窗口已开启",
+		"視窗已開啟"
+	],
+	"Window closed": [
+		"Fenster geschlossen",
+		"Ventana cerrada",
+		"Fenêtre fermée",
+		"Okno zamknięte",
+		"窗口已关闭",
+		"視窗已關閉"
+	],
+	"KNXnet/IP commissioning": [
+		"KNXnet/IP-Inbetriebnahme",
+		"Puesta en servicio KNXnet/IP",
+		"Mise en service KNXnet/IP",
+		"Uruchomienie KNXnet/IP",
+		"KNXnet/IP 调试",
+		"KNXnet/IP 試運轉"
+	],
+	"Application configured": [
+		"Applikation konfiguriert",
+		"Aplicación configurada",
+		"Application configurée",
+		"Aplikacja skonfigurowana",
+		"应用已配置",
+		"應用已設定"
+	],
+	"Application not configured": [
+		"Applikation nicht konfiguriert",
+		"Aplicación sin configurar",
+		"Application non configurée",
+		"Aplikacja nieskonfigurowana",
+		"应用未配置",
+		"應用未設定"
+	],
+	"Enter programming mode": [
+		"Programmiermodus aktivieren",
+		"Entrar en modo de programación",
+		"Activer le mode programmation",
+		"Włącz tryb programowania",
+		"进入编程模式",
+		"進入程式設定模式"
+	],
+	"Exit programming mode": [
+		"Programmiermodus beenden",
+		"Salir del modo de programación",
+		"Quitter le mode programmation",
+		"Wyłącz tryb programowania",
+		"退出编程模式",
+		"離開程式設定模式"
+	],
+	"Select KNXnet/IP in Protocol Interface selection, then Apply. Hardware triple-click and this control share programming state.": [
+		"KNXnet/IP als Protokollschnittstelle wählen und übernehmen. Dreifachklick am Gerät und diese Bedienung teilen denselben Programmierstatus.",
+		"Seleccione KNXnet/IP en la interfaz de protocolo y aplique. La triple pulsación física y este control comparten el estado de programación.",
+		"Sélectionnez KNXnet/IP comme interface de protocole, puis appliquez. Le triple clic matériel et cette commande partagent l’état de programmation.",
+		"Wybierz KNXnet/IP jako interfejs protokołu i zastosuj. Potrójne kliknięcie przycisku oraz ten element sterowania współdzielą stan programowania.",
+		"在协议接口选择中选择 KNXnet/IP，然后应用。硬件三击与此控件共用编程状态。",
+		"在協定介面選擇中選擇 KNXnet/IP，然後套用。硬體三擊與此控制項共用程式設定狀態。"
+	],
+	"Development product identity. ETS interoperability and hardware qualification are required before production release.": [
+		"Produktkennung für die Entwicklung. Vor Serienfreigabe sind ETS-Interoperabilität und Hardwarequalifizierung erforderlich.",
+		"Identidad de producto de desarrollo. Se requiere validar la interoperabilidad ETS y el hardware antes de la producción.",
+		"Identité de produit de développement. L’interopérabilité ETS et la qualification matérielle sont requises avant la mise en production.",
+		"Identyfikator produktu rozwojowego. Przed wydaniem produkcyjnym wymagana jest weryfikacja współpracy z ETS i kwalifikacja sprzętu.",
+		"当前为开发产品标识。正式发布前需完成 ETS 互操作性测试和硬件验证。",
+		"目前為開發產品識別。正式發布前需完成 ETS 互通性測試和硬體驗證。"
+	],
+	"Owner:": [
+		"Verantwortlich:",
+		"Propietario:",
+		"Propriétaire :",
+		"Właściciel:",
+		"配置所有者：",
+		"設定擁有者："
+	],
+	"ETS download busy": [
+		"ETS-Download läuft",
+		"Descarga ETS en curso",
+		"Téléchargement ETS en cours",
+		"Trwa pobieranie ETS",
+		"ETS 下载中",
+		"ETS 下載中"
+	],
+	"Individual address": [
+		"Physikalische Adresse",
+		"Dirección individual",
+		"Adresse individuelle",
+		"Adres indywidualny",
+		"物理地址",
+		"個別位址"
+	],
+	"15.15.255 (Factory Default)": [
+		"15.15.255 (Werkseinstellung)",
+		"15.15.255 (valor de fábrica)",
+		"15.15.255 (valeur d’usine)",
+		"15.15.255 (ustawienie fabryczne)",
+		"15.15.255（出厂默认值）",
+		"15.15.255（原廠預設值）"
+	],
+	"Area.line.device: 0–15.0–15.1–255. Factory default:": [
+		"Bereich.Linie.Teilnehmer: 0–15.0–15.1–255. Werkseinstellung:",
+		"Área.línea.dispositivo: 0–15.0–15.1–255. Valor de fábrica:",
+		"Zone.ligne.appareil : 0–15.0–15.1–255. Valeur d’usine :",
+		"Obszar.linia.urządzenie: 0–15.0–15.1–255. Wartość fabryczna:",
+		"区域.线路.设备：0–15.0–15.1–255。出厂默认值：",
+		"區域.線路.裝置：0–15.0–15.1–255。原廠預設值："
+	],
+	"Take over for web editing (a later ETS download can replace these changes)": [
+		"Für Webbearbeitung übernehmen (späterer ETS-Download kann Änderungen ersetzen)",
+		"Tomar control para editar por web (una descarga ETS posterior puede reemplazar los cambios)",
+		"Prendre la main pour l’édition web (un téléchargement ETS ultérieur peut remplacer ces modifications)",
+		"Przejmij do edycji przez WWW (późniejsze pobranie ETS może zastąpić zmiany)",
+		"接管以通过网页编辑（后续 ETS 下载可能覆盖这些更改）",
+		"接管以透過網頁編輯（後續 ETS 下載可能覆寫這些變更）"
+	],
+	"Main/middle/sub: 0–31/0–7/0–255; 0/0/0 is reserved. Leave blank for no association. Up to 8 unique addresses per object; sending address first.": [
+		"Haupt/Mittel/Unter: 0–31/0–7/0–255; 0/0/0 ist reserviert. Leer bedeutet keine Zuordnung. Maximal 8 eindeutige Adressen je Objekt; Sendeadresse zuerst.",
+		"Principal/intermedio/secundario: 0–31/0–7/0–255; 0/0/0 está reservada. Vacío significa sin asociación. Hasta 8 direcciones únicas por objeto; primero la de envío.",
+		"Principal/médian/secondaire : 0–31/0–7/0–255 ; 0/0/0 est réservée. Laissez vide pour aucune association. Jusqu’à 8 adresses uniques par objet, adresse d’émission en premier.",
+		"Główna/środkowa/podrzędna: 0–31/0–7/0–255; 0/0/0 jest zarezerwowany. Puste oznacza brak powiązania. Do 8 unikatowych adresów na obiekt; adres nadawczy jako pierwszy.",
+		"主组/中间组/子组：0–31/0–7/0–255；0/0/0 为保留地址。留空表示不关联。每个对象最多 8 个不重复地址；发送地址放在首位。",
+		"主群組/中間群組/子群組：0–31/0–7/0–255；0/0/0 為保留位址。留空表示不關聯。每個物件最多 8 個不重複位址；傳送位址放在首位。"
+	],
+	"Object": [
+		"Objekt",
+		"Objeto",
+		"Objet",
+		"Obiekt",
+		"对象",
+		"物件"
+	],
+	"Function": [
+		"Funktion",
+		"Función",
+		"Fonction",
+		"Funkcja",
+		"功能",
+		"功能"
+	],
+	"Group addresses (comma separated, sending address first)": [
+		"Gruppenadressen (kommagetrennt, Sendeadresse zuerst)",
+		"Direcciones de grupo (separadas por comas, envío primero)",
+		"Adresses de groupe (séparées par des virgules, émission en premier)",
+		"Adresy grupowe (oddzielone przecinkami, nadawczy pierwszy)",
+		"组地址（逗号分隔，发送地址在首位）",
+		"群組位址（逗號分隔，傳送位址在首位）"
+	],
+	"Group addresses for object {number}": [
+		"Gruppenadressen für Objekt {number}",
+		"Direcciones de grupo del objeto {number}",
+		"Adresses de groupe de l’objet {number}",
+		"Adresy grupowe obiektu {number}",
+		"对象 {number} 的组地址",
+		"物件 {number} 的群組位址"
+	],
+	"Application parameters": [
+		"Applikationsparameter",
+		"Parámetros de aplicación",
+		"Paramètres de l’application",
+		"Parametry aplikacji",
+		"应用参数",
+		"應用參數"
+	],
+	"Apply KNX commissioning": [
+		"KNX-Inbetriebnahme übernehmen",
+		"Aplicar puesta en servicio KNX",
+		"Appliquer la configuration KNX",
+		"Zastosuj konfigurację KNX",
+		"应用 KNX 调试配置",
+		"套用 KNX 試運轉設定"
+	],
+	"Reload KNX snapshot": [
+		"KNX-Daten neu laden",
+		"Recargar datos KNX",
+		"Recharger les données KNX",
+		"Wczytaj ponownie dane KNX",
+		"重新加载 KNX 数据",
+		"重新載入 KNX 資料"
+	],
+	"Switch": [
+		"Schalten",
+		"Conmutación",
+		"Commutation",
+		"Przełączanie",
+		"开关",
+		"開關"
+	],
+	"Block": [
+		"Sperren",
+		"Bloqueo",
+		"Blocage",
+		"Blokada",
+		"闭锁",
+		"閉鎖"
+	],
+	"Hardware categories": [
+		"Hardwarekategorien",
+		"Categorías de hardware",
+		"Catégories matérielles",
+		"Kategorie sprzętu",
+		"硬件分类",
+		"硬體分類"
+	],
+	"Recent activity": [
+		"Letzte Aktivitäten",
+		"Actividad reciente",
+		"Activité récente",
+		"Ostatnia aktywność",
+		"最近活动",
+		"最近活動"
+	],
+	"Type ERASE to factory reset": [
+		"Zum Werksreset ERASE eingeben",
+		"Escriba ERASE para restablecer de fábrica",
+		"Saisissez ERASE pour réinitialiser",
+		"Wpisz ERASE, aby przywrócić ustawienia fabryczne",
+		"输入 ERASE 以恢复出厂设置",
+		"輸入 ERASE 以恢復原廠設定"
+	],
+	"Erase configuration and restart": [
+		"Konfiguration löschen und neu starten",
+		"Borrar configuración y reiniciar",
+		"Effacer la configuration et redémarrer",
+		"Usuń konfigurację i uruchom ponownie",
+		"清除配置并重启",
+		"清除設定並重新啟動"
+	],
+	"Restart": [
+		"Neustart",
+		"Reiniciar",
+		"Redémarrer",
+		"Uruchom ponownie",
+		"重启",
+		"重新啟動"
+	],
+	"Reload": [
+		"Neu laden",
+		"Recargar",
+		"Recharger",
+		"Wczytaj ponownie",
+		"重新加载",
+		"重新載入"
+	],
+	"Factory Reset": [
+		"Werkseinstellungen",
+		"Restablecer de fábrica",
+		"Réinitialisation d’usine",
+		"Ustawienia fabryczne",
+		"恢复出厂设置",
+		"恢復原廠設定"
+	],
+	"Sleep": [
+		"Ruhezustand",
+		"Suspender",
+		"Veille",
+		"Uśpij",
+		"休眠",
+		"休眠"
+	],
+	"Switch Off": [
+		"Ausschalten",
+		"Apagar",
+		"Éteindre",
+		"Wyłącz",
+		"关机",
+		"關機"
+	],
+	"Network": [
+		"Netzwerk",
+		"Red",
+		"Réseau",
+		"Sieć",
+		"网络",
+		"網路"
+	],
+	"Provisioning AP": [
+		"Einrichtungs-Zugangspunkt",
+		"AP de configuración",
+		"Point d’accès de configuration",
+		"Punkt dostępowy konfiguracji",
+		"配网接入点",
+		"配網基地台"
+	],
+	"· Last gesture": [
+		"· Letzte Geste",
+		"· Último gesto",
+		"· Dernier geste",
+		"· Ostatni gest",
+		"· 上次手势",
+		"· 上次手勢"
+	],
+	"· Events": [
+		"· Ereignisse",
+		"· Eventos",
+		"· Événements",
+		"· Zdarzenia",
+		"· 事件数",
+		"· 事件數"
+	],
+	"· Frame errors": [
+		"· Rahmenfehler",
+		"· Errores de trama",
+		"· Erreurs de trame",
+		"· Błędy ramek",
+		"· 帧错误",
+		"· 訊框錯誤"
+	],
+	"· Rejected": [
+		"· Abgewiesen",
+		"· Rechazadas",
+		"· Rejetées",
+		"· Odrzucone",
+		"· 已拒绝",
+		"· 已拒絕"
+	],
+	"· TCP clients": [
+		"· TCP-Clients",
+		"· Clientes TCP",
+		"· Clients TCP",
+		"· Klienci TCP",
+		"· TCP 客户端",
+		"· TCP 用戶端"
+	],
+	"· Programming": [
+		"· Programmierung",
+		"· Programación",
+		"· Programmation",
+		"· Programowanie",
+		"· 编程",
+		"· 程式設定"
+	],
+	"· Revision": [
+		"· Revision",
+		"· Revisión",
+		"· Révision",
+		"· Wersja",
+		"· 修订版本",
+		"· 修訂版本"
+	],
+	"s · Configuration revision": [
+		"s · Konfigurationsrevision",
+		"s · Revisión de configuración",
+		"s · Révision de configuration",
+		"s · Wersja konfiguracji",
+		"秒 · 配置修订版本",
+		"秒 · 設定修訂版本"
+	],
+	"WiFi Connection": [
+		"WLAN-Verbindung",
+		"Conexión Wi-Fi",
+		"Connexion Wi-Fi",
+		"Połączenie Wi-Fi",
+		"Wi-Fi 连接",
+		"Wi-Fi 連線"
+	],
+	"WiFi Connection Mode": [
+		"WLAN-Verbindungsmodus",
+		"Modo de conexión Wi-Fi",
+		"Mode de connexion Wi-Fi",
+		"Tryb połączenia Wi-Fi",
+		"Wi-Fi 连接模式",
+		"Wi-Fi 連線模式"
+	],
+	"Ethernet Connection": [
+		"Ethernet-Verbindung",
+		"Conexión Ethernet",
+		"Connexion Ethernet",
+		"Połączenie Ethernet",
+		"以太网连接",
+		"乙太網路連線"
+	],
+	"Settings & Networks": [
+		"Einstellungen und Netzwerke",
+		"Ajustes y redes",
+		"Paramètres et réseaux",
+		"Ustawienia i sieci",
+		"设置与网络",
+		"設定與網路"
+	],
+	"Host Name (mDNS)": [
+		"Hostname (mDNS)",
+		"Nombre de host (mDNS)",
+		"Nom d’hôte (mDNS)",
+		"Nazwa hosta (mDNS)",
+		"主机名（mDNS）",
+		"主機名稱（mDNS）"
+	],
+	"Host name must be between 3 and 32 characters long.": [
+		"Der Hostname muss 3 bis 32 Zeichen lang sein.",
+		"El nombre de host debe tener entre 3 y 32 caracteres.",
+		"Le nom d’hôte doit comporter entre 3 et 32 caractères.",
+		"Nazwa hosta musi mieć od 3 do 32 znaków.",
+		"主机名长度必须为 3 至 32 个字符。",
+		"主機名稱長度必須為 3 至 32 個字元。"
+	],
+	"Arrange the networks according to their priority (most important first).": [
+		"Netzwerke nach Priorität ordnen (höchste Priorität zuerst).",
+		"Ordene las redes por prioridad (la más importante primero).",
+		"Classez les réseaux par priorité (le plus important en premier).",
+		"Uporządkuj sieci według priorytetu (najważniejsza jako pierwsza).",
+		"按优先级排列网络（最高优先级在前）。",
+		"依優先順序排列網路（最高優先順序在前）。"
+	],
+	"No WiFi networks configured yet.": [
+		"Noch keine WLAN-Netzwerke konfiguriert.",
+		"No hay redes Wi-Fi configuradas.",
+		"Aucun réseau Wi-Fi configuré.",
+		"Nie skonfigurowano jeszcze sieci Wi-Fi.",
+		"尚未配置 Wi-Fi 网络。",
+		"尚未設定 Wi-Fi 網路。"
+	],
+	"Scan for available networks or add one manually.": [
+		"Nach Netzwerken suchen oder eines manuell hinzufügen.",
+		"Busque redes disponibles o añada una manualmente.",
+		"Recherchez les réseaux disponibles ou ajoutez-en un manuellement.",
+		"Wyszukaj dostępne sieci lub dodaj sieć ręcznie.",
+		"扫描可用网络或手动添加网络。",
+		"掃描可用網路或手動新增網路。"
+	],
+	"Scan Networks": [
+		"Netzwerke suchen",
+		"Buscar redes",
+		"Rechercher des réseaux",
+		"Szukaj sieci",
+		"扫描网络",
+		"掃描網路"
+	],
+	"Scan again": [
+		"Erneut suchen",
+		"Buscar de nuevo",
+		"Relancer la recherche",
+		"Szukaj ponownie",
+		"重新扫描",
+		"重新掃描"
+	],
+	"Scanning ...": [
+		"Suche läuft ...",
+		"Buscando ...",
+		"Recherche en cours ...",
+		"Wyszukiwanie ...",
+		"正在扫描…",
+		"正在掃描…"
+	],
+	"Add network": [
+		"Netzwerk hinzufügen",
+		"Añadir red",
+		"Ajouter un réseau",
+		"Dodaj sieć",
+		"添加网络",
+		"新增網路"
+	],
+	"Edit network": [
+		"Netzwerk bearbeiten",
+		"Editar red",
+		"Modifier le réseau",
+		"Edytuj sieć",
+		"编辑网络",
+		"編輯網路"
+	],
+	"Delete Network?": [
+		"Netzwerk löschen?",
+		"¿Eliminar red?",
+		"Supprimer le réseau ?",
+		"Usunąć sieć?",
+		"删除网络？",
+		"刪除網路？"
+	],
+	"Reached Maximum Networks": [
+		"Maximale Netzwerkanzahl erreicht",
+		"Número máximo de redes alcanzado",
+		"Nombre maximal de réseaux atteint",
+		"Osiągnięto limit sieci",
+		"已达到网络数量上限",
+		"已達到網路數量上限"
+	],
+	"You have reached the maximum number of networks. Please delete one to add another.": [
+		"Die maximale Netzwerkanzahl ist erreicht. Vor dem Hinzufügen ein Netzwerk löschen.",
+		"Ha alcanzado el máximo de redes. Elimine una para añadir otra.",
+		"Le nombre maximal de réseaux est atteint. Supprimez-en un pour en ajouter un autre.",
+		"Osiągnięto maksymalną liczbę sieci. Usuń jedną, aby dodać kolejną.",
+		"已达到网络数量上限。请先删除一个网络，再添加新网络。",
+		"已達到網路數量上限。請先刪除一個網路，再新增網路。"
+	],
+	"IP Address": [
+		"IP-Adresse",
+		"Dirección IP",
+		"Adresse IP",
+		"Adres IP",
+		"IP 地址",
+		"IP 位址"
+	],
+	"MAC Address": [
+		"MAC-Adresse",
+		"Dirección MAC",
+		"Adresse MAC",
+		"Adres MAC",
+		"MAC 地址",
+		"MAC 位址"
+	],
+	"Local IP": [
+		"Lokale IP-Adresse",
+		"IP local",
+		"IP locale",
+		"Lokalny adres IP",
+		"本地 IP",
+		"本機 IP"
+	],
+	"Gateway IP": [
+		"Gateway-IP",
+		"IP de puerta de enlace",
+		"IP de la passerelle",
+		"Adres IP bramy",
+		"网关 IP",
+		"閘道 IP"
+	],
+	"Subnet Mask": [
+		"Subnetzmaske",
+		"Máscara de subred",
+		"Masque de sous-réseau",
+		"Maska podsieci",
+		"子网掩码",
+		"子網路遮罩"
+	],
+	"Local IP must be a valid IPv4 address.": [
+		"Die lokale IP muss eine gültige IPv4-Adresse sein.",
+		"La IP local debe ser una dirección IPv4 válida.",
+		"L’IP locale doit être une adresse IPv4 valide.",
+		"Lokalny adres IP musi być prawidłowym adresem IPv4.",
+		"本地 IP 必须是有效的 IPv4 地址。",
+		"本機 IP 必須是有效的 IPv4 位址。"
+	],
+	"Gateway IP must be a valid IPv4 address.": [
+		"Die Gateway-IP muss eine gültige IPv4-Adresse sein.",
+		"La IP de puerta de enlace debe ser una dirección IPv4 válida.",
+		"L’IP de la passerelle doit être une adresse IPv4 valide.",
+		"Adres IP bramy musi być prawidłowym adresem IPv4.",
+		"网关 IP 必须是有效的 IPv4 地址。",
+		"閘道 IP 必須是有效的 IPv4 位址。"
+	],
+	"Subnet Mask must be a valid IPv4 subnet mask.": [
+		"Die Subnetzmaske muss eine gültige IPv4-Subnetzmaske sein.",
+		"La máscara de subred debe ser una máscara IPv4 válida.",
+		"Le masque de sous-réseau doit être un masque IPv4 valide.",
+		"Maska podsieci musi być prawidłową maską IPv4.",
+		"子网掩码必须是有效的 IPv4 子网掩码。",
+		"子網路遮罩必須是有效的 IPv4 子網路遮罩。"
+	],
+	"DNS 1 must be a valid IPv4 address.": [
+		"DNS 1 muss eine gültige IPv4-Adresse sein.",
+		"DNS 1 debe ser una dirección IPv4 válida.",
+		"DNS 1 doit être une adresse IPv4 valide.",
+		"DNS 1 musi być prawidłowym adresem IPv4.",
+		"DNS 1 必须是有效的 IPv4 地址。",
+		"DNS 1 必須是有效的 IPv4 位址。"
+	],
+	"DNS 2 must be a valid IPv4 address.": [
+		"DNS 2 muss eine gültige IPv4-Adresse sein.",
+		"DNS 2 debe ser una dirección IPv4 válida.",
+		"DNS 2 doit être une adresse IPv4 valide.",
+		"DNS 2 musi być prawidłowym adresem IPv4.",
+		"DNS 2 必须是有效的 IPv4 地址。",
+		"DNS 2 必須是有效的 IPv4 位址。"
+	],
+	"Use static IP config": [
+		"Statische IP-Konfiguration verwenden",
+		"Usar configuración IP estática",
+		"Utiliser une IP statique",
+		"Użyj statycznej konfiguracji IP",
+		"使用静态 IP 配置",
+		"使用靜態 IP 設定"
+	],
+	"Static": [
+		"Statisch",
+		"Estática",
+		"Statique",
+		"Statyczny",
+		"静态",
+		"靜態"
+	],
+	"SSID must be between 2 and 32 characters long": [
+		"Die SSID muss 2 bis 32 Zeichen lang sein",
+		"El SSID debe tener entre 2 y 32 caracteres",
+		"Le SSID doit comporter entre 2 et 32 caractères",
+		"SSID musi mieć od 2 do 32 znaków",
+		"SSID 长度必须为 2 至 32 个字符",
+		"SSID 長度必須為 2 至 32 個字元"
+	],
+	"SSID must be between 3 and 32 characters long.": [
+		"Die SSID muss 3 bis 32 Zeichen lang sein.",
+		"El SSID debe tener entre 3 y 32 caracteres.",
+		"Le SSID doit comporter entre 3 et 32 caractères.",
+		"SSID musi mieć od 3 do 32 znaków.",
+		"SSID 长度必须为 3 至 32 个字符。",
+		"SSID 長度必須為 3 至 32 個字元。"
+	],
+	"Change AP Settings": [
+		"AP-Einstellungen ändern",
+		"Cambiar ajustes del AP",
+		"Modifier les paramètres du point d’accès",
+		"Zmień ustawienia punktu dostępowego",
+		"更改接入点设置",
+		"變更基地台設定"
+	],
+	"Provide Access Point ...": [
+		"Zugangspunkt bereitstellen ...",
+		"Habilitar punto de acceso ...",
+		"Activer le point d’accès ...",
+		"Udostępnij punkt dostępowy ...",
+		"提供无线接入点…",
+		"提供無線基地台…"
+	],
+	"AP Clients": [
+		"AP-Clients",
+		"Clientes del AP",
+		"Clients du point d’accès",
+		"Klienci punktu dostępowego",
+		"接入点客户端",
+		"基地台用戶端"
+	],
+	"Max Clients": [
+		"Maximale Clientanzahl",
+		"Máximo de clientes",
+		"Nombre maximal de clients",
+		"Maksymalna liczba klientów",
+		"最大客户端数",
+		"用戶端數量上限"
+	],
+	"Maximum 8 clients allowed": [
+		"Maximal 8 Clients zulässig",
+		"Se permiten hasta 8 clientes",
+		"8 clients au maximum",
+		"Dozwolonych maksymalnie 8 klientów",
+		"最多允许 8 个客户端",
+		"最多允許 8 個用戶端"
+	],
+	"Hide SSID": [
+		"SSID verbergen",
+		"Ocultar SSID",
+		"Masquer le SSID",
+		"Ukryj SSID",
+		"隐藏 SSID",
+		"隱藏 SSID"
+	],
+	"Preferred Channel": [
+		"Bevorzugter Kanal",
+		"Canal preferido",
+		"Canal préféré",
+		"Preferowany kanał",
+		"首选信道",
+		"偏好頻道"
+	],
+	"Must be channel 1 to 13": [
+		"Kanal muss zwischen 1 und 13 liegen",
+		"El canal debe estar entre 1 y 13",
+		"Le canal doit être compris entre 1 et 13",
+		"Kanał musi mieścić się w zakresie 1–13",
+		"信道必须为 1 至 13",
+		"頻道必須為 1 至 13"
+	],
+	"Must be a valid IPv4 address": [
+		"Muss eine gültige IPv4-Adresse sein",
+		"Debe ser una dirección IPv4 válida",
+		"Doit être une adresse IPv4 valide",
+		"Wymagany prawidłowy adres IPv4",
+		"必须是有效的 IPv4 地址",
+		"必須是有效的 IPv4 位址"
+	],
+	"Link Speed": [
+		"Verbindungsgeschwindigkeit",
+		"Velocidad del enlace",
+		"Vitesse de liaison",
+		"Prędkość łącza",
+		"链路速率",
+		"連線速率"
+	],
+	"Security:": [
+		"Sicherheit:",
+		"Seguridad:",
+		"Sécurité :",
+		"Zabezpieczenia:",
+		"安全模式：",
+		"安全模式："
+	],
+	", Channel:": [
+		", Kanal:",
+		", Canal:",
+		", Canal :",
+		", Kanał:",
+		"，信道：",
+		"，頻道："
+	],
+	"Open": [
+		"Offen",
+		"Abierta",
+		"Ouvert",
+		"Otwarta",
+		"开放",
+		"開放"
+	],
+	"Lingering": [
+		"Nachlauf",
+		"En espera de cierre",
+		"Maintien temporaire",
+		"Oczekiwanie na zamknięcie",
+		"延迟关闭中",
+		"延遲關閉中"
+	],
+	"Change MQTT Settings": [
+		"MQTT-Einstellungen ändern",
+		"Cambiar ajustes MQTT",
+		"Modifier les paramètres MQTT",
+		"Zmień ustawienia MQTT",
+		"更改 MQTT 设置",
+		"變更 MQTT 設定"
+	],
+	"Enable MQTT": [
+		"MQTT aktivieren",
+		"Habilitar MQTT",
+		"Activer MQTT",
+		"Włącz MQTT",
+		"启用 MQTT",
+		"啟用 MQTT"
+	],
+	"MQTT Disabled": [
+		"MQTT deaktiviert",
+		"MQTT deshabilitado",
+		"MQTT désactivé",
+		"MQTT wyłączone",
+		"MQTT 已禁用",
+		"MQTT 已停用"
+	],
+	"Client ID": [
+		"Client-ID",
+		"ID de cliente",
+		"Identifiant client",
+		"Identyfikator klienta",
+		"客户端 ID",
+		"用戶端 ID"
+	],
+	"Keep Alive": [
+		"Keep-Alive-Intervall",
+		"Intervalo de mantenimiento de conexión",
+		"Intervalle de maintien de connexion",
+		"Interwał podtrzymania połączenia",
+		"保活间隔",
+		"保活間隔"
+	],
+	"Clean Session?": [
+		"Neue Sitzung?",
+		"¿Sesión limpia?",
+		"Session vierge ?",
+		"Czysta sesja?",
+		"清除会话？",
+		"清除工作階段？"
+	],
+	"Must be a valid URI": [
+		"Muss eine gültige URI sein",
+		"Debe ser un URI válido",
+		"Doit être un URI valide",
+		"Wymagany prawidłowy URI",
+		"必须是有效的 URI",
+		"必須是有效的 URI"
+	],
+	"Must be between 1 and 600 seconds": [
+		"Muss zwischen 1 und 600 Sekunden liegen",
+		"Debe estar entre 1 y 600 segundos",
+		"Doit être compris entre 1 et 600 secondes",
+		"Wartość musi wynosić od 1 do 600 sekund",
+		"必须为 1 至 600 秒",
+		"必須為 1 至 600 秒"
+	],
+	"Must be between 0 and 1000 milliseconds": [
+		"Muss zwischen 0 und 1000 Millisekunden liegen",
+		"Debe estar entre 0 y 1000 milisegundos",
+		"Doit être compris entre 0 et 1000 millisecondes",
+		"Wartość musi wynosić od 0 do 1000 milisekund",
+		"必须为 0 至 1000 毫秒",
+		"必須為 0 至 1000 毫秒"
+	],
+	"Publish Message Interval": [
+		"Veröffentlichungsintervall",
+		"Intervalo de publicación",
+		"Intervalle de publication",
+		"Interwał publikowania wiadomości",
+		"消息发布间隔",
+		"訊息發布間隔"
+	],
+	"Seconds": [
+		"Sekunden",
+		"Segundos",
+		"Secondes",
+		"Sekundy",
+		"秒",
+		"秒"
+	],
+	"Milliseconds": [
+		"Millisekunden",
+		"Milisegundos",
+		"Millisecondes",
+		"Milisekundy",
+		"毫秒",
+		"毫秒"
+	],
+	"MQTT Broker Settings": [
+		"MQTT-Broker-Einstellungen",
+		"Ajustes del broker MQTT",
+		"Paramètres du broker MQTT",
+		"Ustawienia brokera MQTT",
+		"MQTT 代理设置",
+		"MQTT 代理設定"
+	],
+	"MQTT Path": [
+		"MQTT-Pfad",
+		"Ruta MQTT",
+		"Chemin MQTT",
+		"Ścieżka MQTT",
+		"MQTT 路径",
+		"MQTT 路徑"
+	],
+	"MQTT Status Topic": [
+		"MQTT-Statusthema",
+		"Tema de estado MQTT",
+		"Sujet d’état MQTT",
+		"Temat stanu MQTT",
+		"MQTT 状态主题",
+		"MQTT 狀態主題"
+	],
+	"MQTT path is limited to 64 characters": [
+		"MQTT-Pfad auf 64 Zeichen begrenzt",
+		"La ruta MQTT está limitada a 64 caracteres",
+		"Le chemin MQTT est limité à 64 caractères",
+		"Ścieżka MQTT jest ograniczona do 64 znaków",
+		"MQTT 路径最多 64 个字符",
+		"MQTT 路徑最多 64 個字元"
+	],
+	"MQTT status topic is limited to 64 characters": [
+		"MQTT-Statusthema auf 64 Zeichen begrenzt",
+		"El tema de estado MQTT está limitado a 64 caracteres",
+		"Le sujet d’état MQTT est limité à 64 caractères",
+		"Temat stanu MQTT jest ograniczony do 64 znaków",
+		"MQTT 状态主题最多 64 个字符",
+		"MQTT 狀態主題最多 64 個字元"
+	],
+	"Unique ID": [
+		"Eindeutige ID",
+		"ID único",
+		"Identifiant unique",
+		"Unikatowy identyfikator",
+		"唯一标识",
+		"唯一識別碼"
+	],
+	"Unique ID must be between 3 and 32 characters long": [
+		"Die ID muss 3 bis 32 Zeichen lang sein",
+		"El ID debe tener entre 3 y 32 caracteres",
+		"L’identifiant doit comporter entre 3 et 32 caractères",
+		"Identyfikator musi mieć od 3 do 32 znaków",
+		"唯一标识长度必须为 3 至 32 个字符",
+		"唯一識別碼長度必須為 3 至 32 個字元"
+	],
+	"Name must be between 3 and 32 characters long": [
+		"Der Name muss 3 bis 32 Zeichen lang sein",
+		"El nombre debe tener entre 3 y 32 caracteres",
+		"Le nom doit comporter entre 3 et 32 caractères",
+		"Nazwa musi mieć od 3 do 32 znaków",
+		"名称长度必须为 3 至 32 个字符",
+		"名稱長度必須為 3 至 32 個字元"
+	],
+	"Network Time": [
+		"Netzwerkzeit",
+		"Hora de red",
+		"Heure réseau",
+		"Czas sieciowy",
+		"网络时间",
+		"網路時間"
+	],
+	"NTP Server": [
+		"NTP-Server",
+		"Servidor NTP",
+		"Serveur NTP",
+		"Serwer NTP",
+		"NTP 服务器",
+		"NTP 伺服器"
+	],
+	"Local Time": [
+		"Ortszeit",
+		"Hora local",
+		"Heure locale",
+		"Czas lokalny",
+		"本地时间",
+		"本機時間"
+	],
+	"UTC Time": [
+		"UTC-Zeit",
+		"Hora UTC",
+		"Heure UTC",
+		"Czas UTC",
+		"UTC 时间",
+		"UTC 時間"
+	],
+	"Uptime": [
+		"Betriebszeit",
+		"Tiempo de actividad",
+		"Durée de fonctionnement",
+		"Czas pracy",
+		"运行时间",
+		"運作時間"
+	],
+	"Change NTP Settings": [
+		"NTP-Einstellungen ändern",
+		"Cambiar ajustes NTP",
+		"Modifier les paramètres NTP",
+		"Zmień ustawienia NTP",
+		"更改 NTP 设置",
+		"變更 NTP 設定"
+	],
+	"Enable NTP": [
+		"NTP aktivieren",
+		"Habilitar NTP",
+		"Activer NTP",
+		"Włącz NTP",
+		"启用 NTP",
+		"啟用 NTP"
+	],
+	"Server": [
+		"Server",
+		"Servidor",
+		"Serveur",
+		"Serwer",
+		"服务器",
+		"伺服器"
+	],
+	"Please enter a valid NTP server.": [
+		"Bitte einen gültigen NTP-Server eingeben.",
+		"Introduzca un servidor NTP válido.",
+		"Saisissez un serveur NTP valide.",
+		"Wprowadź prawidłowy serwer NTP.",
+		"请输入有效的 NTP 服务器。",
+		"請輸入有效的 NTP 伺服器。"
+	],
+	"Pick Time Zone": [
+		"Zeitzone auswählen",
+		"Seleccionar zona horaria",
+		"Choisir le fuseau horaire",
+		"Wybierz strefę czasową",
+		"选择时区",
+		"選擇時區"
+	],
+	"Set": [
+		"Festlegen",
+		"Establecer",
+		"Définir",
+		"Ustaw",
+		"设置",
+		"設定"
+	],
+	"Manage Users": [
+		"Benutzer verwalten",
+		"Gestionar usuarios",
+		"Gérer les utilisateurs",
+		"Zarządzaj użytkownikami",
+		"用户管理",
+		"使用者管理"
+	],
+	"Admin": [
+		"Administrator",
+		"Administrador",
+		"Administrateur",
+		"Administrator",
+		"管理员",
+		"管理員"
+	],
+	"Is Admin?": [
+		"Administrator?",
+		"¿Administrador?",
+		"Administrateur ?",
+		"Administrator?",
+		"管理员？",
+		"管理員？"
+	],
+	"Actuator role": [
+		"Aktorrolle",
+		"Rol del actuador",
+		"Rôle de l’actionneur",
+		"Rola w aktorze",
+		"执行器角色",
+		"致動器角色"
+	],
+	"Viewer": [
+		"Betrachter",
+		"Observador",
+		"Observateur",
+		"Obserwator",
+		"查看者",
+		"檢視者"
+	],
+	"Operator": [
+		"Bediener",
+		"Operador",
+		"Opérateur",
+		"Operator",
+		"操作员",
+		"操作員"
+	],
+	"Installer": [
+		"Installateur",
+		"Instalador",
+		"Installateur",
+		"Instalator",
+		"安装调试员",
+		"安裝調試員"
+	],
+	"Allowed relay bit mask (1–63; 0 denies all)": [
+		"Zulässige Relais-Bitmaske (1–63; 0 sperrt alle)",
+		"Máscara de relés permitidos (1–63; 0 deniega todos)",
+		"Masque des relais autorisés (1–63 ; 0 interdit tout)",
+		"Maska dozwolonych przekaźników (1–63; 0 zabrania wszystkich)",
+		"允许的继电器位掩码（1–63；0 禁止全部）",
+		"允許的繼電器位元遮罩（1–63；0 禁止全部）"
+	],
+	"Password (blank keeps current)": [
+		"Passwort (leer lässt es unverändert)",
+		"Contraseña (vacío conserva la actual)",
+		"Mot de passe (vide pour conserver l’actuel)",
+		"Hasło (puste zachowuje obecne)",
+		"密码（留空保留当前密码）",
+		"密碼（留空保留目前密碼）"
+	],
+	"Username must be between 3 and 32 characters long": [
+		"Der Benutzername muss 3 bis 32 Zeichen lang sein",
+		"El nombre de usuario debe tener entre 3 y 32 caracteres",
+		"Le nom d’utilisateur doit comporter entre 3 et 32 caractères",
+		"Nazwa użytkownika musi mieć od 3 do 32 znaków",
+		"用户名长度必须为 3 至 32 个字符",
+		"使用者名稱長度必須為 3 至 32 個字元"
+	],
+	"Add User": [
+		"Benutzer hinzufügen",
+		"Añadir usuario",
+		"Ajouter un utilisateur",
+		"Dodaj użytkownika",
+		"添加用户",
+		"新增使用者"
+	],
+	"Edit User": [
+		"Benutzer bearbeiten",
+		"Editar usuario",
+		"Modifier l’utilisateur",
+		"Edytuj użytkownika",
+		"编辑用户",
+		"編輯使用者"
+	],
+	"Security Settings": [
+		"Sicherheitseinstellungen",
+		"Ajustes de seguridad",
+		"Paramètres de sécurité",
+		"Ustawienia zabezpieczeń",
+		"安全设置",
+		"安全設定"
+	],
+	"JWT Secret": [
+		"JWT-Schlüssel",
+		"Secreto JWT",
+		"Secret JWT",
+		"Sekret JWT",
+		"JWT 密钥",
+		"JWT 金鑰"
+	],
+	"The JWT secret is used to sign authentication tokens. If you modify the JWT Secret, all users will be signed out.": [
+		"Der JWT-Schlüssel signiert Authentifizierungstoken. Eine Änderung meldet alle Benutzer ab.",
+		"El secreto JWT firma los tokens de autenticación. Al modificarlo, se cerrarán todas las sesiones.",
+		"Le secret JWT signe les jetons d’authentification. Sa modification déconnecte tous les utilisateurs.",
+		"Sekret JWT służy do podpisywania tokenów uwierzytelniających. Jego zmiana wyloguje wszystkich użytkowników.",
+		"JWT 密钥用于签署身份验证令牌。修改此密钥将使所有用户退出登录。",
+		"JWT 金鑰用於簽署身分驗證權杖。修改此金鑰將使所有使用者登出。"
+	],
+	"User {name} signed in": [
+		"Benutzer {name} angemeldet",
+		"Usuario {name} conectado",
+		"Utilisateur {name} connecté",
+		"Użytkownik {name} zalogowany",
+		"用户 {name} 已登录",
+		"使用者 {name} 已登入"
+	],
+	"Wrong Username or Password!": [
+		"Benutzername oder Passwort falsch!",
+		"¡Usuario o contraseña incorrectos!",
+		"Nom d’utilisateur ou mot de passe incorrect !",
+		"Nieprawidłowa nazwa użytkownika lub hasło!",
+		"用户名或密码错误！",
+		"使用者名稱或密碼錯誤！"
+	],
+	"User not authorized.": [
+		"Benutzer nicht berechtigt.",
+		"Usuario no autorizado.",
+		"Utilisateur non autorisé.",
+		"Użytkownik nie ma uprawnień.",
+		"用户无权限。",
+		"使用者無權限。"
+	],
+	"Connection to device established": [
+		"Verbindung zum Gerät hergestellt",
+		"Conexión con el dispositivo establecida",
+		"Connexion à l’appareil établie",
+		"Nawiązano połączenie z urządzeniem",
+		"已连接到设备",
+		"已連線至裝置"
+	],
+	"Connection to device lost": [
+		"Verbindung zum Gerät verloren",
+		"Conexión con el dispositivo perdida",
+		"Connexion à l’appareil perdue",
+		"Utracono połączenie z urządzeniem",
+		"与设备的连接已断开",
+		"與裝置的連線已中斷"
+	],
+	"Security settings updated.": [
+		"Sicherheitseinstellungen aktualisiert.",
+		"Ajustes de seguridad actualizados.",
+		"Paramètres de sécurité mis à jour.",
+		"Zaktualizowano ustawienia zabezpieczeń.",
+		"安全设置已更新。",
+		"安全設定已更新。"
+	],
+	"Wi-Fi settings updated.": [
+		"WLAN-Einstellungen aktualisiert.",
+		"Ajustes Wi-Fi actualizados.",
+		"Paramètres Wi-Fi mis à jour.",
+		"Zaktualizowano ustawienia Wi-Fi.",
+		"Wi-Fi 设置已更新。",
+		"Wi-Fi 設定已更新。"
+	],
+	"Access Point settings updated.": [
+		"Zugangspunkteinstellungen aktualisiert.",
+		"Ajustes del punto de acceso actualizados.",
+		"Paramètres du point d’accès mis à jour.",
+		"Zaktualizowano ustawienia punktu dostępowego.",
+		"接入点设置已更新。",
+		"基地台設定已更新。"
+	],
+	"Ethernet settings updated.": [
+		"Ethernet-Einstellungen aktualisiert.",
+		"Ajustes Ethernet actualizados.",
+		"Paramètres Ethernet mis à jour.",
+		"Zaktualizowano ustawienia Ethernet.",
+		"以太网设置已更新。",
+		"乙太網路設定已更新。"
+	],
+	"MQTT settings updated.": [
+		"MQTT-Einstellungen aktualisiert.",
+		"Ajustes MQTT actualizados.",
+		"Paramètres MQTT mis à jour.",
+		"Zaktualizowano ustawienia MQTT.",
+		"MQTT 设置已更新。",
+		"MQTT 設定已更新。"
+	],
+	"Broker settings updated.": [
+		"Broker-Einstellungen aktualisiert.",
+		"Ajustes del broker actualizados.",
+		"Paramètres du broker mis à jour.",
+		"Zaktualizowano ustawienia brokera.",
+		"代理设置已更新。",
+		"代理設定已更新。"
+	],
+	"Failed to update Wi-Fi settings.": [
+		"WLAN-Einstellungen konnten nicht aktualisiert werden.",
+		"No se pudieron actualizar los ajustes Wi-Fi.",
+		"Échec de la mise à jour des paramètres Wi-Fi.",
+		"Nie udało się zaktualizować ustawień Wi-Fi.",
+		"Wi-Fi 设置更新失败。",
+		"Wi-Fi 設定更新失敗。"
+	],
+	"Failed to update Ethernet settings.": [
+		"Ethernet-Einstellungen konnten nicht aktualisiert werden.",
+		"No se pudieron actualizar los ajustes Ethernet.",
+		"Échec de la mise à jour des paramètres Ethernet.",
+		"Nie udało się zaktualizować ustawień Ethernet.",
+		"以太网设置更新失败。",
+		"乙太網路設定更新失敗。"
+	],
+	"Error updating Ethernet settings.": [
+		"Fehler beim Aktualisieren der Ethernet-Einstellungen.",
+		"Error al actualizar los ajustes Ethernet.",
+		"Erreur lors de la mise à jour des paramètres Ethernet.",
+		"Błąd aktualizacji ustawień Ethernet.",
+		"更新以太网设置时出错。",
+		"更新乙太網路設定時發生錯誤。"
+	],
+	"Confirm Delete User": [
+		"Benutzerlöschung bestätigen",
+		"Confirmar eliminación de usuario",
+		"Confirmer la suppression de l’utilisateur",
+		"Potwierdź usunięcie użytkownika",
+		"确认删除用户",
+		"確認刪除使用者"
+	],
+	"Are you sure you want to delete the user \"{name}\"?": [
+		"Benutzer „{name}“ wirklich löschen?",
+		"¿Seguro que desea eliminar al usuario «{name}»?",
+		"Voulez-vous vraiment supprimer l’utilisateur « {name} » ?",
+		"Czy na pewno usunąć użytkownika „{name}”?",
+		"确定要删除用户“{name}”吗？",
+		"確定要刪除使用者「{name}」嗎？"
+	],
+	"Yes": [
+		"Ja",
+		"Sí",
+		"Oui",
+		"Tak",
+		"是",
+		"是"
+	],
+	"Confirm Restart": [
+		"Neustart bestätigen",
+		"Confirmar reinicio",
+		"Confirmer le redémarrage",
+		"Potwierdź ponowne uruchomienie",
+		"确认重启",
+		"確認重新啟動"
+	],
+	"Are you sure you want to restart the device?": [
+		"Gerät wirklich neu starten?",
+		"¿Seguro que desea reiniciar el dispositivo?",
+		"Voulez-vous vraiment redémarrer l’appareil ?",
+		"Czy na pewno uruchomić urządzenie ponownie?",
+		"确定要重启设备吗？",
+		"確定要重新啟動裝置嗎？"
+	],
+	"Confirm Factory Reset": [
+		"Werksreset bestätigen",
+		"Confirmar restablecimiento de fábrica",
+		"Confirmer la réinitialisation d’usine",
+		"Potwierdź reset fabryczny",
+		"确认恢复出厂设置",
+		"確認恢復原廠設定"
+	],
+	"Are you sure you want to reset the device to its factory defaults?": [
+		"Gerät wirklich auf Werkseinstellungen zurücksetzen?",
+		"¿Seguro que desea restablecer los valores de fábrica?",
+		"Voulez-vous vraiment rétablir les paramètres d’usine ?",
+		"Czy na pewno przywrócić ustawienia fabryczne urządzenia?",
+		"确定要将设备恢复为出厂设置吗？",
+		"確定要將裝置恢復為原廠設定嗎？"
+	],
+	"Confirm Going to Sleep": [
+		"Ruhezustand bestätigen",
+		"Confirmar suspensión",
+		"Confirmer la mise en veille",
+		"Potwierdź uśpienie",
+		"确认休眠",
+		"確認休眠"
+	],
+	"Are you sure you want to put the device into sleep?": [
+		"Gerät wirklich in den Ruhezustand versetzen?",
+		"¿Seguro que desea suspender el dispositivo?",
+		"Voulez-vous vraiment mettre l’appareil en veille ?",
+		"Czy na pewno uśpić urządzenie?",
+		"确定要使设备进入休眠吗？",
+		"確定要使裝置進入休眠嗎？"
+	],
+	"Confirm Power Down": [
+		"Ausschalten bestätigen",
+		"Confirmar apagado",
+		"Confirmer l’arrêt",
+		"Potwierdź wyłączenie",
+		"确认关机",
+		"確認關機"
+	],
+	"Are you sure you want to switch off the device?": [
+		"Gerät wirklich ausschalten?",
+		"¿Seguro que desea apagar el dispositivo?",
+		"Voulez-vous vraiment éteindre l’appareil ?",
+		"Czy na pewno wyłączyć urządzenie?",
+		"确定要关闭设备吗？",
+		"確定要關閉裝置嗎？"
+	],
+	"Battery History": [
+		"Batterieverlauf",
+		"Historial de batería",
+		"Historique de la batterie",
+		"Historia baterii",
+		"电池历史",
+		"電池歷史"
+	],
+	"CPU Frequency": [
+		"CPU-Frequenz",
+		"Frecuencia de CPU",
+		"Fréquence du processeur",
+		"Częstotliwość CPU",
+		"CPU 频率",
+		"CPU 頻率"
+	],
+	"Chip": [
+		"Chip",
+		"Chip",
+		"Puce",
+		"Układ",
+		"芯片",
+		"晶片"
+	],
+	"Core Temperature": [
+		"Kerntemperatur",
+		"Temperatura del núcleo",
+		"Température du cœur",
+		"Temperatura rdzenia",
+		"核心温度",
+		"核心溫度"
+	],
+	"Current Firmware Version:": [
+		"Aktuelle Firmware-Version:",
+		"Versión de firmware actual:",
+		"Version actuelle du micrologiciel :",
+		"Bieżąca wersja oprogramowania układowego:",
+		"当前固件版本：",
+		"目前韌體版本："
+	],
+	"Download Core Dump (coredump.bin)": [
+		"Speicherabbild herunterladen (coredump.bin)",
+		"Descargar volcado de memoria (coredump.bin)",
+		"Télécharger l’image mémoire (coredump.bin)",
+		"Pobierz zrzut pamięci (coredump.bin)",
+		"下载内存转储（coredump.bin）",
+		"下載記憶體傾印（coredump.bin）"
+	],
+	"File System": [
+		"Dateisystem",
+		"Sistema de archivos",
+		"Système de fichiers",
+		"System plików",
+		"文件系统",
+		"檔案系統"
+	],
+	"Firmware Version": [
+		"Firmware-Version",
+		"Versión de firmware",
+		"Version du micrologiciel",
+		"Wersja oprogramowania układowego",
+		"固件版本",
+		"韌體版本"
+	],
+	"Flash Chip": [
+		"Flash-Speicher",
+		"Memoria flash",
+		"Mémoire flash",
+		"Pamięć flash",
+		"闪存芯片",
+		"快閃記憶體"
+	],
+	"Github Firmware Manager": [
+		"GitHub-Firmwareverwaltung",
+		"Gestor de firmware de GitHub",
+		"Gestion du micrologiciel GitHub",
+		"Menedżer oprogramowania GitHub",
+		"GitHub 固件管理",
+		"GitHub 韌體管理"
+	],
+	"Install": [
+		"Installieren",
+		"Instalar",
+		"Installer",
+		"Zainstaluj",
+		"安装",
+		"安裝"
+	],
+	"Loading core dump...": [
+		"Speicherabbild wird geladen ...",
+		"Cargando volcado de memoria...",
+		"Chargement de l’image mémoire…",
+		"Wczytywanie zrzutu pamięci...",
+		"正在加载内存转储…",
+		"正在載入記憶體傾印…"
+	],
+	"Logo": [
+		"Logo",
+		"Logotipo",
+		"Logo",
+		"Logo",
+		"标志",
+		"標誌"
+	],
+	"Memory": [
+		"Arbeitsspeicher",
+		"Memoria",
+		"Mémoire",
+		"Pamięć",
+		"内存",
+		"記憶體"
+	],
+	"Oops! Something has gone wrong.": [
+		"Ein Fehler ist aufgetreten.",
+		"Se ha producido un error.",
+		"Une erreur s’est produite.",
+		"Wystąpił błąd.",
+		"出现错误。",
+		"發生錯誤。"
+	],
+	"Opening": [
+		"Wird geöffnet",
+		"Abriendo",
+		"Ouverture",
+		"Otwieranie",
+		"正在打开",
+		"正在開啟"
+	],
+	"Operations": [
+		"Aktionen",
+		"Operaciones",
+		"Opérations",
+		"Operacje",
+		"操作",
+		"操作"
+	],
+	"Page will reload automatically in": [
+		"Die Seite wird automatisch neu geladen in",
+		"La página se recargará automáticamente en",
+		"La page se rechargera automatiquement dans",
+		"Strona zostanie automatycznie odświeżona za",
+		"页面将自动重新加载，剩余",
+		"頁面將自動重新載入，剩餘"
+	],
+	"Please connect to a network with internet access to perform a firmware update.": [
+		"Für ein Firmware-Update mit einem Netzwerk mit Internetzugang verbinden.",
+		"Conéctese a una red con acceso a Internet para actualizar el firmware.",
+		"Connectez-vous à un réseau avec accès Internet pour mettre à jour le micrologiciel.",
+		"Połącz się z siecią z dostępem do Internetu, aby zaktualizować oprogramowanie.",
+		"请连接可访问互联网的网络以更新固件。",
+		"請連線至可存取網際網路的網路以更新韌體。"
+	],
+	"Refresh Now": [
+		"Jetzt aktualisieren",
+		"Actualizar ahora",
+		"Actualiser maintenant",
+		"Odśwież teraz",
+		"立即刷新",
+		"立即重新整理"
+	],
+	"Release": [
+		"Version",
+		"Versión",
+		"Version",
+		"Wydanie",
+		"发布版本",
+		"發布版本"
+	],
+	"Release Date": [
+		"Veröffentlichungsdatum",
+		"Fecha de publicación",
+		"Date de publication",
+		"Data wydania",
+		"发布日期",
+		"發布日期"
+	],
+	"Reset Reason": [
+		"Neustartursache",
+		"Motivo del reinicio",
+		"Cause du redémarrage",
+		"Przyczyna resetu",
+		"复位原因",
+		"重設原因"
+	],
+	"Rev": [
+		"Revision",
+		"Revisión",
+		"Révision",
+		"Wersja",
+		"修订版本",
+		"修訂版本"
+	],
+	"SDK Version": [
+		"SDK-Version",
+		"Versión del SDK",
+		"Version du SDK",
+		"Wersja SDK",
+		"SDK 版本",
+		"SDK 版本"
+	],
+	"Sketch": [
+		"Programm",
+		"Programa",
+		"Programme",
+		"Program",
+		"程序",
+		"程式"
+	],
+	"This page displays the last core dump of the device. The core dump is a snapshot of the memory when the device crashed. This information is useful for debugging.": [
+		"Diese Seite zeigt das letzte Speicherabbild des Geräts zum Absturzzeitpunkt. Diese Informationen dienen der Fehlerdiagnose.",
+		"Esta página muestra el último volcado de memoria del dispositivo en el momento del fallo. Esta información sirve para depurar errores.",
+		"Cette page affiche la dernière image mémoire de l’appareil au moment du plantage. Ces informations facilitent le débogage.",
+		"Ta strona wyświetla ostatni zrzut pamięci urządzenia z chwili awarii. Informacje te pomagają w diagnostyce.",
+		"本页显示设备最近一次崩溃时的内存快照，可用于故障调试。",
+		"本頁顯示裝置最近一次當機時的記憶體快照，可用於除錯。"
+	],
+	"Upload Firmware": [
+		"Firmware hochladen",
+		"Cargar firmware",
+		"Téléverser le micrologiciel",
+		"Prześlij oprogramowanie układowe",
+		"上传固件",
+		"上傳韌體"
+	],
+	"Upload a .bin file to flash the firmware": [
+		"Eine .bin-Datei zum Flashen hochladen",
+		"Cargue un archivo .bin para grabar el firmware",
+		"Téléversez un fichier .bin pour programmer le micrologiciel",
+		"Prześlij plik .bin, aby zaprogramować pamięć",
+		"上传 .bin 文件以烧录固件",
+		"上傳 .bin 檔案以燒錄韌體"
+	],
+	"Uploading a new firmware (.bin) file will replace the existing firmware. You may upload a (.md5) file first to verify the uploaded firmware.": [
+		"Eine neue Firmware-Datei (.bin) ersetzt die vorhandene Firmware. Optional zuerst eine .md5-Datei zur Prüfung hochladen.",
+		"Un nuevo archivo de firmware (.bin) sustituirá al actual. Puede cargar primero un archivo .md5 para verificarlo.",
+		"Un nouveau fichier de micrologiciel (.bin) remplacera l’existant. Vous pouvez d’abord téléverser un fichier .md5 pour le vérifier.",
+		"Nowy plik oprogramowania (.bin) zastąpi obecny. Możesz najpierw przesłać plik .md5 w celu weryfikacji.",
+		"上传新的固件文件（.bin）将替换现有固件。可先上传 .md5 文件以校验固件。",
+		"上傳新的韌體檔案（.bin）將取代現有韌體。可先上傳 .md5 檔案以驗證韌體。"
+	],
+	"Loading...": [
+		"Wird geladen ...",
+		"Cargando...",
+		"Chargement…",
+		"Wczytywanie...",
+		"正在加载…",
+		"正在載入…"
+	],
+	"Preparing...": [
+		"Wird vorbereitet ...",
+		"Preparando...",
+		"Préparation…",
+		"Przygotowywanie...",
+		"正在准备…",
+		"正在準備…"
+	],
+	"Uploading Firmware": [
+		"Firmware wird hochgeladen",
+		"Cargando firmware",
+		"Téléversement du micrologiciel",
+		"Przesyłanie oprogramowania",
+		"正在上传固件",
+		"正在上傳韌體"
+	],
+	"Downloading Firmware": [
+		"Firmware wird heruntergeladen",
+		"Descargando firmware",
+		"Téléchargement du micrologiciel",
+		"Pobieranie oprogramowania",
+		"正在下载固件",
+		"正在下載韌體"
+	],
+	"Updating Firmware": [
+		"Firmware wird aktualisiert",
+		"Actualizando firmware",
+		"Mise à jour du micrologiciel",
+		"Aktualizacja oprogramowania",
+		"正在更新固件",
+		"正在更新韌體"
+	],
+	"Updating...": [
+		"Wird aktualisiert ...",
+		"Actualizando...",
+		"Mise à jour…",
+		"Aktualizowanie...",
+		"正在更新…",
+		"正在更新…"
+	],
+	"Waiting for update...": [
+		"Warten auf Update ...",
+		"Esperando actualización...",
+		"En attente de mise à jour…",
+		"Oczekiwanie na aktualizację...",
+		"等待更新…",
+		"等待更新…"
+	],
+	"Update": [
+		"Aktualisieren",
+		"Actualizar",
+		"Mettre à jour",
+		"Aktualizuj",
+		"更新",
+		"更新"
+	],
+	"Upload": [
+		"Hochladen",
+		"Cargar",
+		"Téléverser",
+		"Prześlij",
+		"上传",
+		"上傳"
+	],
+	"Update failed.": [
+		"Update fehlgeschlagen.",
+		"Actualización fallida.",
+		"Échec de la mise à jour.",
+		"Aktualizacja nie powiodła się.",
+		"更新失败。",
+		"更新失敗。"
+	],
+	"Upload failed.": [
+		"Hochladen fehlgeschlagen.",
+		"Carga fallida.",
+		"Échec du téléversement.",
+		"Przesyłanie nie powiodło się.",
+		"上传失败。",
+		"上傳失敗。"
+	],
+	"Update finished successfully.": [
+		"Update erfolgreich abgeschlossen.",
+		"Actualización completada correctamente.",
+		"Mise à jour terminée avec succès.",
+		"Aktualizacja zakończona pomyślnie.",
+		"更新成功。",
+		"更新成功。"
+	],
+	"Firmware update available.": [
+		"Firmware-Update verfügbar.",
+		"Actualización de firmware disponible.",
+		"Mise à jour du micrologiciel disponible.",
+		"Dostępna aktualizacja oprogramowania.",
+		"有可用的固件更新。",
+		"有可用的韌體更新。"
+	],
+	"Failed to fetch latest release from GitHub.": [
+		"Neueste Version konnte nicht von GitHub geladen werden.",
+		"No se pudo obtener la última versión de GitHub.",
+		"Impossible de récupérer la dernière version depuis GitHub.",
+		"Nie udało się pobrać najnowszego wydania z GitHub.",
+		"无法从 GitHub 获取最新版本。",
+		"無法從 GitHub 取得最新版本。"
+	],
+	"No matching firmware found": [
+		"Keine passende Firmware gefunden",
+		"No se encontró firmware compatible",
+		"Aucun micrologiciel compatible trouvé",
+		"Nie znaleziono zgodnego oprogramowania",
+		"未找到匹配的固件",
+		"未找到相符的韌體"
+	],
+	"No matching firmware was found for the current device. Upload the firmware manually or build from sources.": [
+		"Keine passende Firmware für dieses Gerät gefunden. Firmware manuell hochladen oder aus dem Quellcode erstellen.",
+		"No se encontró firmware para este dispositivo. Cárguelo manualmente o compílelo desde el código fuente.",
+		"Aucun micrologiciel compatible avec cet appareil. Téléversez-le manuellement ou compilez les sources.",
+		"Nie znaleziono oprogramowania dla tego urządzenia. Prześlij je ręcznie lub zbuduj ze źródeł.",
+		"未找到适用于当前设备的固件。请手动上传或从源代码构建。",
+		"未找到適用於目前裝置的韌體。請手動上傳或從原始碼建置。"
+	],
+	"Confirm Flashing the Device": [
+		"Flashen des Geräts bestätigen",
+		"Confirmar grabación del dispositivo",
+		"Confirmer la programmation de l’appareil",
+		"Potwierdź programowanie urządzenia",
+		"确认烧录设备",
+		"確認燒錄裝置"
+	],
+	"Confirm flashing new firmware to the device": [
+		"Neue Firmware bestätigen",
+		"Confirmar grabación del nuevo firmware",
+		"Confirmer le nouveau micrologiciel",
+		"Potwierdź zapis nowego oprogramowania",
+		"确认烧录新固件",
+		"確認燒錄新韌體"
+	],
+	"Are you sure you want to overwrite the existing firmware with a new one?": [
+		"Vorhandene Firmware wirklich durch eine neue ersetzen?",
+		"¿Seguro que desea sustituir el firmware existente por uno nuevo?",
+		"Voulez-vous vraiment remplacer le micrologiciel existant ?",
+		"Czy na pewno zastąpić obecne oprogramowanie nowym?",
+		"确定要用新固件覆盖现有固件吗？",
+		"確定要以新韌體覆寫現有韌體嗎？"
+	],
+	"Insufficient storage space": [
+		"Nicht genügend Speicherplatz",
+		"Espacio de almacenamiento insuficiente",
+		"Espace de stockage insuffisant",
+		"Za mało miejsca w pamięci",
+		"存储空间不足",
+		"儲存空間不足"
+	],
+	"Internal server error during upload": [
+		"Interner Serverfehler beim Hochladen",
+		"Error interno del servidor durante la carga",
+		"Erreur interne du serveur pendant le téléversement",
+		"Wewnętrzny błąd serwera podczas przesyłania",
+		"上传时发生服务器内部错误",
+		"上傳時發生伺服器內部錯誤"
+	],
+	"Invalid MD5 file (must be exactly 32 bytes)": [
+		"Ungültige MD5-Datei (muss genau 32 Byte haben)",
+		"Archivo MD5 no válido (debe tener exactamente 32 bytes)",
+		"Fichier MD5 invalide (doit contenir exactement 32 octets)",
+		"Nieprawidłowy plik MD5 (wymagane dokładnie 32 bajty)",
+		"MD5 文件无效（必须恰好为 32 字节）",
+		"MD5 檔案無效（必須恰好為 32 位元組）"
+	],
+	"MD5 hash uploaded successfully.": [
+		"MD5-Prüfsumme erfolgreich hochgeladen.",
+		"Hash MD5 cargado correctamente.",
+		"Empreinte MD5 téléversée avec succès.",
+		"Suma MD5 przesłana pomyślnie.",
+		"MD5 校验值上传成功。",
+		"MD5 校驗值上傳成功。"
+	],
+	"Network error during firmware upload": [
+		"Netzwerkfehler beim Firmware-Upload",
+		"Error de red al cargar el firmware",
+		"Erreur réseau lors du téléversement du micrologiciel",
+		"Błąd sieci podczas przesyłania oprogramowania",
+		"上传固件时发生网络错误",
+		"上傳韌體時發生網路錯誤"
+	],
+	"Network error during upload": [
+		"Netzwerkfehler beim Hochladen",
+		"Error de red durante la carga",
+		"Erreur réseau pendant le téléversement",
+		"Błąd sieci podczas przesyłania",
+		"上传时发生网络错误",
+		"上傳時發生網路錯誤"
+	],
+	"Unauthorized - Admin access required": [
+		"Nicht berechtigt – Administratorzugriff erforderlich",
+		"No autorizado: se requiere acceso de administrador",
+		"Non autorisé : droits administrateur requis",
+		"Brak uprawnień — wymagany administrator",
+		"未授权：需要管理员权限",
+		"未授權：需要管理員權限"
+	],
+	"Unsupported file type": [
+		"Nicht unterstützter Dateityp",
+		"Tipo de archivo no compatible",
+		"Type de fichier non pris en charge",
+		"Nieobsługiwany typ pliku",
+		"不支持的文件类型",
+		"不支援的檔案類型"
+	],
+	"Wrong firmware for this device": [
+		"Firmware passt nicht zu diesem Gerät",
+		"Firmware incorrecto para este dispositivo",
+		"Micrologiciel incompatible avec cet appareil",
+		"Nieprawidłowe oprogramowanie dla tego urządzenia",
+		"固件与此设备不匹配",
+		"韌體與此裝置不相符"
+	],
+	"No core dump available.": [
+		"Kein Speicherabbild verfügbar.",
+		"No hay volcado de memoria disponible.",
+		"Aucune image mémoire disponible.",
+		"Brak zrzutu pamięci.",
+		"无可用的内存转储。",
+		"無可用的記憶體傾印。"
+	],
+	"Used": [
+		"Belegt",
+		"Utilizada",
+		"Utilisée",
+		"Użyte",
+		"已用",
+		"已用"
+	],
+	"Max Alloc": [
+		"Max. zuweisbar",
+		"Máx. asignable",
+		"Allocation max.",
+		"Maks. przydział",
+		"最大可分配",
+		"最大可配置"
+	],
+	"Memory [KB]": [
+		"Arbeitsspeicher [KB]",
+		"Memoria [KB]",
+		"Mémoire [Ko]",
+		"Pamięć [KB]",
+		"内存 [KB]",
+		"記憶體 [KB]"
+	],
+	"PSRAM [KB]": [
+		"PSRAM [KB]",
+		"PSRAM [KB]",
+		"PSRAM [Ko]",
+		"PSRAM [KB]",
+		"PSRAM [KB]",
+		"PSRAM [KB]"
+	],
+	"File System [KB]": [
+		"Dateisystem [KB]",
+		"Sistema de archivos [KB]",
+		"Système de fichiers [Ko]",
+		"System plików [KB]",
+		"文件系统 [KB]",
+		"檔案系統 [KB]"
+	],
+	"Core Temperature [°C]": [
+		"Kerntemperatur [°C]",
+		"Temperatura del núcleo [°C]",
+		"Température du cœur [°C]",
+		"Temperatura rdzenia [°C]",
+		"核心温度 [°C]",
+		"核心溫度 [°C]"
+	],
+	"State of Charge [%]": [
+		"Ladezustand [%]",
+		"Estado de carga [%]",
+		"État de charge [%]",
+		"Stan naładowania [%]",
+		"荷电状态 [%]",
+		"充電狀態 [%]"
+	],
+	"SOC": [
+		"Ladezustand",
+		"Estado de carga",
+		"État de charge",
+		"Stan naładowania",
+		"荷电状态",
+		"充電狀態"
+	],
+	"Charging": [
+		"Wird geladen",
+		"Cargando",
+		"En charge",
+		"Ładowanie",
+		"充电中",
+		"充電中"
+	],
+	"Single Core": [
+		"Ein Kern",
+		"Un núcleo",
+		"Monocœur",
+		"Jeden rdzeń",
+		"单核",
+		"單核心"
+	],
+	"Dual Core": [
+		"Zwei Kerne",
+		"Dos núcleos",
+		"Bicœur",
+		"Dwa rdzenie",
+		"双核",
+		"雙核心"
+	],
+	"% of": [
+		"% von",
+		"% de",
+		"% de",
+		"% z",
+		"% / 总量",
+		"% / 總量"
+	],
+	"KB free)": [
+		"KB frei)",
+		"KB libres)",
+		"Ko libres)",
+		"KB wolne)",
+		"KB 可用）",
+		"KB 可用）"
+	],
+	"KB free, Max alloc": [
+		"KB frei, max. zuweisbar",
+		"KB libres, máx. asignable",
+		"Ko libres, allocation max.",
+		"KB wolne, maks. przydział",
+		"KB 可用，最大可分配",
+		"KB 可用，最大可配置"
+	],
+	"Exp.": [
+		"Erwartet",
+		"Esperado",
+		"Attendu",
+		"Oczekiwane",
+		"预期",
+		"預期"
+	],
+	"Light State": [
+		"Lichtzustand",
+		"Estado de la luz",
+		"État de l’éclairage",
+		"Stan oświetlenia",
+		"灯光状态",
+		"燈光狀態"
+	],
+	"Light State?": [
+		"Licht eingeschaltet?",
+		"¿Luz encendida?",
+		"Éclairage activé ?",
+		"Oświetlenie włączone?",
+		"灯光开启？",
+		"燈光開啟？"
+	],
+	"Light state updated.": [
+		"Lichtzustand aktualisiert.",
+		"Estado de la luz actualizado.",
+		"État de l’éclairage mis à jour.",
+		"Zaktualizowano stan oświetlenia.",
+		"灯光状态已更新。",
+		"燈光狀態已更新。"
+	],
+	"Event Socket Example": [
+		"Event-Socket-Beispiel",
+		"Ejemplo de socket de eventos",
+		"Exemple de socket d’événements",
+		"Przykład gniazda zdarzeń",
+		"事件套接字示例",
+		"事件通訊端範例"
+	],
+	"REST Example": [
+		"REST-Beispiel",
+		"Ejemplo REST",
+		"Exemple REST",
+		"Przykład REST",
+		"REST 示例",
+		"REST 範例"
+	],
+	"The LED is controllable via MQTT with the demo project designed to work with Home Assistant's auto discovery feature.": [
+		"Das Demo steuert die LED per MQTT und unterstützt die automatische Erkennung durch Home Assistant.",
+		"El proyecto de demostración controla el LED por MQTT y admite el descubrimiento automático de Home Assistant.",
+		"Le projet de démonstration commande la LED par MQTT et prend en charge la découverte automatique de Home Assistant.",
+		"Projekt demonstracyjny steruje diodą LED przez MQTT i obsługuje automatyczne wykrywanie w Home Assistant.",
+		"演示项目可通过 MQTT 控制 LED，并支持 Home Assistant 自动发现。",
+		"示範專案可透過 MQTT 控制 LED，並支援 Home Assistant 自動探索。"
+	],
+	"The form below controls the LED via the RESTful service exposed by the ESP device.": [
+		"Dieses Formular steuert die LED über den REST-Dienst des ESP-Geräts.",
+		"Este formulario controla el LED mediante el servicio REST del dispositivo ESP.",
+		"Ce formulaire commande la LED via le service REST de l’appareil ESP.",
+		"Ten formularz steruje diodą LED przez usługę REST urządzenia ESP.",
+		"下方表单通过 ESP 设备提供的 REST 服务控制 LED。",
+		"下方表單透過 ESP 裝置提供的 REST 服務控制 LED。"
+	],
+	"The switch below controls the LED via the event system which uses WebSocket under the hood. It will automatically update whenever the LED state changes.": [
+		"Der Schalter steuert die LED über das WebSocket-Ereignissystem. Änderungen des LED-Zustands werden automatisch angezeigt.",
+		"El interruptor controla el LED mediante eventos WebSocket. Se actualiza automáticamente al cambiar el estado del LED.",
+		"L’interrupteur commande la LED via les événements WebSocket. Il se met à jour automatiquement lorsque l’état change.",
+		"Przełącznik steruje diodą LED przez zdarzenia WebSocket. Aktualizuje się automatycznie po zmianie stanu diody.",
+		"下方开关通过 WebSocket 事件系统控制 LED。LED 状态变化时会自动更新。",
+		"下方開關透過 WebSocket 事件系統控制 LED。LED 狀態變更時會自動更新。"
+	],
+	"Use area.line.device, for example 1.1.10.": [
+		"Bereich.Linie.Teilnehmer verwenden, z. B. 1.1.10.",
+		"Use área.línea.dispositivo, por ejemplo 1.1.10.",
+		"Utilisez zone.ligne.appareil, par exemple 1.1.10.",
+		"Użyj obszar.linia.urządzenie, np. 1.1.10.",
+		"请使用 区域.线路.设备 格式，例如 1.1.10。",
+		"請使用 區域.線路.裝置 格式，例如 1.1.10。"
+	],
+	"Area and line must be 0–15; device must be 1–255 (0 is reserved for couplers).": [
+		"Bereich und Linie: 0–15; Teilnehmer: 1–255 (0 für Koppler reserviert).",
+		"Área y línea: 0–15; dispositivo: 1–255 (0 reservado para acopladores).",
+		"Zone et ligne : 0–15 ; appareil : 1–255 (0 réservé aux coupleurs).",
+		"Obszar i linia: 0–15; urządzenie: 1–255 (0 zarezerwowane dla sprzęgieł).",
+		"区域和线路必须为 0–15；设备必须为 1–255（0 保留给耦合器）。",
+		"區域和線路必須為 0–15；裝置必須為 1–255（0 保留給耦合器）。"
+	],
+	"Use at most 8 group addresses per object.": [
+		"Maximal 8 Gruppenadressen je Objekt verwenden.",
+		"Use como máximo 8 direcciones de grupo por objeto.",
+		"Utilisez au maximum 8 adresses de groupe par objet.",
+		"Użyj maksymalnie 8 adresów grupowych na obiekt.",
+		"每个对象最多使用 8 个组地址。",
+		"每個物件最多使用 8 個群組位址。"
+	],
+	"Use main/middle/sub, for example 1/0/1; separate addresses with commas.": [
+		"Haupt/Mittel/Unter verwenden, z. B. 1/0/1; Adressen mit Kommas trennen.",
+		"Use principal/intermedio/secundario, por ejemplo 1/0/1; separe con comas.",
+		"Utilisez principal/médian/secondaire, par exemple 1/0/1 ; séparez par des virgules.",
+		"Użyj główna/środkowa/podrzędna, np. 1/0/1; oddziel adresy przecinkami.",
+		"请使用 主组/中间组/子组 格式，例如 1/0/1；地址之间用逗号分隔。",
+		"請使用 主群組/中間群組/子群組 格式，例如 1/0/1；位址之間用逗號分隔。"
+	],
+	"Main must be 0–31, middle 0–7, and sub 0–255.": [
+		"Hauptgruppe: 0–31, Mittelgruppe: 0–7, Untergruppe: 0–255.",
+		"Principal: 0–31, intermedio: 0–7 y secundario: 0–255.",
+		"Principal : 0–31, médian : 0–7, secondaire : 0–255.",
+		"Główna: 0–31, środkowa: 0–7, podrzędna: 0–255.",
+		"主组必须为 0–31，中间组为 0–7，子组为 0–255。",
+		"主群組必須為 0–31，中間群組為 0–7，子群組為 0–255。"
+	],
+	"0/0/0 is reserved for broadcast and cannot be assigned.": [
+		"0/0/0 ist für Broadcast reserviert und nicht zuweisbar.",
+		"0/0/0 está reservada para difusión y no se puede asignar.",
+		"0/0/0 est réservée à la diffusion et ne peut pas être affectée.",
+		"0/0/0 jest zarezerwowany do rozgłaszania i nie może być przypisany.",
+		"0/0/0 为广播保留地址，不可分配。",
+		"0/0/0 為廣播保留位址，不可指派。"
+	],
+	"Each group address must be unique within this object.": [
+		"Jede Gruppenadresse muss innerhalb dieses Objekts eindeutig sein.",
+		"Cada dirección de grupo debe ser única en este objeto.",
+		"Chaque adresse de groupe doit être unique dans cet objet.",
+		"Każdy adres grupowy musi być unikatowy w tym obiekcie.",
+		"同一对象内的组地址不可重复。",
+		"同一物件內的群組位址不可重複。"
+	],
+	"Request failed ({status})": [
+		"Anfrage fehlgeschlagen ({status})",
+		"Solicitud fallida ({status})",
+		"Échec de la requête ({status})",
+		"Żądanie nie powiodło się ({status})",
+		"请求失败（{status}）",
+		"請求失敗（{status}）"
+	],
+	"Page will reload automatically in {duration}.": [
+		"Die Seite wird in {duration} automatisch neu geladen.",
+		"La página se recargará automáticamente en {duration}.",
+		"La page se rechargera automatiquement dans {duration}.",
+		"Strona zostanie automatycznie odświeżona za {duration}.",
+		"页面将在 {duration}后自动重新加载。",
+		"頁面將在 {duration}後自動重新載入。"
+	],
+	"MD5 upload failed with error code {status}": [
+		"MD5-Upload fehlgeschlagen, Fehlercode {status}",
+		"Carga MD5 fallida, código de error {status}",
+		"Échec du téléversement MD5, code {status}",
+		"Przesyłanie MD5 nie powiodło się, kod {status}",
+		"MD5 上传失败，错误代码 {status}",
+		"MD5 上傳失敗，錯誤代碼 {status}"
+	],
+	"Invalid file type \"{extension}\". Please upload a .bin or .md5 file.": [
+		"Ungültiger Dateityp „{extension}“. Bitte eine .bin- oder .md5-Datei hochladen.",
+		"Tipo de archivo «{extension}» no válido. Cargue un archivo .bin o .md5.",
+		"Type de fichier « {extension} » invalide. Téléversez un fichier .bin ou .md5.",
+		"Nieprawidłowy typ pliku „{extension}”. Prześlij plik .bin lub .md5.",
+		"文件类型“{extension}”无效。请上传 .bin 或 .md5 文件。",
+		"檔案類型「{extension}」無效。請上傳 .bin 或 .md5 檔案。"
+	],
+	"Always": [
+		"Immer",
+		"Siempre",
+		"Toujours",
+		"Zawsze",
+		"始终",
+		"一律"
+	],
+	"Never": [
+		"Nie",
+		"Nunca",
+		"Jamais",
+		"Nigdy",
+		"从不",
+		"永不"
+	],
+	"When WiFi Disconnected": [
+		"Bei getrennter WLAN-Verbindung",
+		"Cuando se desconecta el Wi-Fi",
+		"Lorsque le Wi-Fi est déconnecté",
+		"Gdy Wi-Fi jest rozłączone",
+		"Wi-Fi 断开时",
+		"Wi-Fi 中斷時"
+	],
+	"Offline": [
+		"Offline",
+		"Sin conexión",
+		"Hors ligne",
+		"Offline",
+		"离线",
+		"離線"
+	],
+	"Signal Strength": [
+		"Signalstärke",
+		"Intensidad de señal",
+		"Puissance du signal",
+		"Siła sygnału",
+		"信号强度",
+		"訊號強度"
+	],
+	"Priority (Sequence)": [
+		"Priorität (Reihenfolge)",
+		"Prioridad (secuencia)",
+		"Priorité (ordre)",
+		"Priorytet (kolejność)",
+		"优先级（顺序）",
+		"優先順序"
+	],
+	"Are you sure you want to delete network '{name}'?": [
+		"Netzwerk „{name}“ wirklich löschen?",
+		"¿Seguro que desea eliminar la red «{name}»?",
+		"Voulez-vous vraiment supprimer le réseau « {name} » ?",
+		"Czy na pewno usunąć sieć „{name}”?",
+		"确定要删除网络“{name}”吗？",
+		"確定要刪除網路「{name}」嗎？"
+	],
+	"Reconnecting shortly as new WiFi settings will be applied in {seconds} seconds.": [
+		"Die neuen WLAN-Einstellungen werden in {seconds} Sekunden übernommen. Danach wird die Verbindung neu hergestellt.",
+		"Los nuevos ajustes Wi-Fi se aplicarán en {seconds} segundos. Se volverá a conectar en breve.",
+		"Les nouveaux paramètres Wi-Fi seront appliqués dans {seconds} secondes. Reconnexion imminente.",
+		"Nowe ustawienia Wi-Fi zostaną zastosowane za {seconds} sekund. Połączenie zostanie wznowione.",
+		"新的 Wi-Fi 设置将在 {seconds} 秒后应用，随后将重新连接。",
+		"新的 Wi-Fi 設定將在 {seconds} 秒後套用，隨後將重新連線。"
+	],
+	"CH": [
+		"Kanal",
+		"Canal",
+		"Canal",
+		"Kanał",
+		"通道",
+		"通道"
+	],
+	"Owner: {owner} · Revision {revision} · {state}": [
+		"Verantwortlich: {owner} · Revision {revision} · {state}",
+		"Propietario: {owner} · Revisión {revision} · {state}",
+		"Propriétaire : {owner} · Révision {revision} · {state}",
+		"Właściciel: {owner} · Wersja {revision} · {state}",
+		"配置所有者：{owner} · 修订版本 {revision} · {state}",
+		"設定擁有者：{owner} · 修訂版本 {revision} · {state}"
+	],
+	"{state} · Last gesture {gesture} · Events {count}": [
+		"{state} · Letzte Geste {gesture} · Ereignisse {count}",
+		"{state} · Último gesto {gesture} · Eventos {count}",
+		"{state} · Dernier geste {gesture} · Événements {count}",
+		"{state} · Ostatni gest {gesture} · Zdarzenia {count}",
+		"{state} · 上次手势 {gesture} · 事件数 {count}",
+		"{state} · 上次手勢 {gesture} · 事件數 {count}"
+	],
+	"Demo App": [
+		"Demo-Anwendung",
+		"Aplicación de demostración",
+		"Application de démonstration",
+		"Aplikacja demonstracyjna",
+		"演示应用",
+		"示範應用程式"
+	],
+	"Modbus function map": [
+		"Modbus-Funktionsübersicht",
+		"Mapa de funciones Modbus",
+		"Table des fonctions Modbus",
+		"Mapa funkcji Modbus",
+		"Modbus 功能映射",
+		"Modbus 功能對照"
+	],
+	"Reference follows the selected protocol. Apply settings to activate it on the device.": [
+		"Die Referenz folgt dem ausgewählten Protokoll. Übernehmen Sie die Einstellungen, um es am Gerät zu aktivieren.",
+		"La referencia corresponde al protocolo seleccionado. Aplique los ajustes para activarlo en el dispositivo.",
+		"La référence correspond au protocole sélectionné. Appliquez les paramètres pour l’activer sur l’appareil.",
+		"Opis odpowiada wybranemu protokołowi. Zastosuj ustawienia, aby uruchomić go w urządzeniu.",
+		"参考内容随所选协议更新。应用设置后，协议才会在设备上启用。",
+		"參考內容隨所選協定更新。套用設定後，協定才會在裝置上啟用。"
+	],
+	"Use hexadecimal, zero-based PDU offsets. Coils, discrete inputs, holding registers and input registers are separate address spaces; 00001/40001 are not wire addresses.": [
+		"Verwenden Sie hexadezimale PDU-Offsets ab null. Coils, diskrete Eingänge, Halteregister und Eingangsregister haben getrennte Adressräume; 00001/40001 sind keine übertragenen Adressen.",
+		"Use desplazamientos PDU hexadecimales desde cero. Las bobinas, entradas discretas, registros de retención y registros de entrada tienen espacios de direcciones independientes; 00001/40001 no son direcciones transmitidas.",
+		"Utilisez des offsets PDU hexadécimaux à partir de zéro. Les bobines, entrées discrètes, registres de maintien et registres d’entrée ont des espaces d’adressage distincts ; 00001/40001 ne sont pas les adresses transmises.",
+		"Używaj szesnastkowych adresów PDU liczonych od zera. Cewki, wejścia dyskretne, rejestry podtrzymujące i wejściowe mają oddzielne przestrzenie adresowe; 00001/40001 nie są adresami przesyłanymi w ramce.",
+		"使用从零开始的十六进制 PDU 偏移地址。线圈、离散输入、保持寄存器和输入寄存器属于独立地址空间；00001/40001 不是报文中的地址。",
+		"使用從零開始的十六進位 PDU 偏移位址。線圈、離散輸入、保持暫存器和輸入暫存器屬於獨立位址空間；00001/40001 不是封包中的位址。"
+	],
+	"Registers use big-endian byte order. 32-bit counters use two registers, high word first. Relay status is the commanded output, not measured contact feedback.": [
+		"Register verwenden Big-Endian-Bytefolge. 32-Bit-Zähler belegen zwei Register, höherwertiges Wort zuerst. Der Relaisstatus zeigt den angesteuerten Ausgang, keine gemessene Kontaktrückmeldung.",
+		"Los registros usan orden de bytes big-endian. Los contadores de 32 bits ocupan dos registros, con la palabra alta primero. El estado del relé indica la salida ordenada, no una realimentación medida del contacto.",
+		"Les registres utilisent l’ordre des octets big-endian. Les compteurs 32 bits occupent deux registres, mot de poids fort en premier. L’état du relais indique la sortie commandée, sans retour mesuré du contact.",
+		"Rejestry używają kolejności bajtów big-endian. Liczniki 32-bitowe zajmują dwa rejestry, starsze słowo jako pierwsze. Stan przekaźnika oznacza wysterowanie wyjścia, a nie pomiar położenia styków.",
+		"寄存器采用大端字节序。32 位计数器占用两个寄存器，高字在前。继电器状态表示输出指令状态，并非触点实测反馈。",
+		"暫存器採用大端位元組順序。32 位元計數器占用兩個暫存器，高位字在前。繼電器狀態表示輸出命令狀態，並非接點實測回授。"
+	],
+	"Read coils": [
+		"Coils lesen",
+		"Leer bobinas",
+		"Lire les bobines",
+		"Odczyt cewek",
+		"读线圈",
+		"讀取線圈"
+	],
+	"Read discrete inputs": [
+		"Diskrete Eingänge lesen",
+		"Leer entradas discretas",
+		"Lire les entrées discrètes",
+		"Odczyt wejść dyskretnych",
+		"读离散输入",
+		"讀取離散輸入"
+	],
+	"Read holding registers": [
+		"Halteregister lesen",
+		"Leer registros de retención",
+		"Lire les registres de maintien",
+		"Odczyt rejestrów podtrzymujących",
+		"读保持寄存器",
+		"讀取保持暫存器"
+	],
+	"Read input registers": [
+		"Eingangsregister lesen",
+		"Leer registros de entrada",
+		"Lire les registres d’entrée",
+		"Odczyt rejestrów wejściowych",
+		"读输入寄存器",
+		"讀取輸入暫存器"
+	],
+	"Write single coil": [
+		"Einzelnes Coil schreiben",
+		"Escribir una bobina",
+		"Écrire une bobine",
+		"Zapis pojedynczej cewki",
+		"写单个线圈",
+		"寫入單一線圈"
+	],
+	"Write single register": [
+		"Einzelnes Register schreiben",
+		"Escribir un registro",
+		"Écrire un registre",
+		"Zapis pojedynczego rejestru",
+		"写单个寄存器",
+		"寫入單一暫存器"
+	],
+	"Write multiple coils": [
+		"Mehrere Coils schreiben",
+		"Escribir varias bobinas",
+		"Écrire plusieurs bobines",
+		"Zapis wielu cewek",
+		"写多个线圈",
+		"寫入多個線圈"
+	],
+	"Write multiple registers": [
+		"Mehrere Register schreiben",
+		"Escribir varios registros",
+		"Écrire plusieurs registres",
+		"Zapis wielu rejestrów",
+		"写多个寄存器",
+		"寫入多個暫存器"
+	],
+	"Read device identification": [
+		"Geräteidentifikation lesen",
+		"Leer identificación del dispositivo",
+		"Lire l’identification de l’appareil",
+		"Odczyt identyfikacji urządzenia",
+		"读设备标识",
+		"讀取裝置識別"
+	],
+	"Diagnostics: return query data (RTU only)": [
+		"Diagnose: Anfragedaten zurückgeben (nur RTU)",
+		"Diagnóstico: devolver datos de consulta (solo RTU)",
+		"Diagnostic : renvoyer les données de requête (RTU uniquement)",
+		"Diagnostyka: zwrot danych zapytania (tylko RTU)",
+		"诊断：返回查询数据（仅 RTU）",
+		"診斷：傳回查詢資料（僅 RTU）"
+	],
+	"FC05: 0xFF00 = ON, 0x0000 = OFF. Send the command mailbox at 0x0200–0x0203 in one FC16 request; FC06 is not allowed there.": [
+		"FC05: 0xFF00 = EIN, 0x0000 = AUS. Den Befehlsblock 0x0200–0x0203 in einer einzigen FC16-Anfrage senden; FC06 ist dort nicht zulässig.",
+		"FC05: 0xFF00 = activado, 0x0000 = desactivado. Envíe el bloque de comandos 0x0200–0x0203 en una sola solicitud FC16; FC06 no está permitido en ese bloque.",
+		"FC05 : 0xFF00 = MARCHE, 0x0000 = ARRÊT. Envoyez le bloc de commande 0x0200–0x0203 dans une seule requête FC16 ; FC06 n’y est pas autorisé.",
+		"FC05: 0xFF00 = WŁ., 0x0000 = WYŁ. Blok polecenia 0x0200–0x0203 należy wysłać w jednym żądaniu FC16; FC06 jest tam niedozwolone.",
+		"FC05：0xFF00 = 开，0x0000 = 关。命令邮箱 0x0200–0x0203 必须通过一次 FC16 请求整体写入；此处不允许使用 FC06。",
+		"FC05：0xFF00 = 開，0x0000 = 關。命令信箱 0x0200–0x0203 必須透過一次 FC16 請求整體寫入；此處不允許使用 FC06。"
+	],
+	"Configuration writes are staged in RAM and require an authorized configuration window. Apply commits the staged profile; expiry discards unsaved changes. Access permissions still apply.": [
+		"Konfigurationsänderungen werden im RAM vorgemerkt und erfordern ein autorisiertes Konfigurationsfenster. Übernehmen speichert das vorgemerkte Profil; bei Ablauf werden ungespeicherte Änderungen verworfen. Zugriffsrechte gelten weiterhin.",
+		"Los cambios de configuración se preparan en RAM y requieren una ventana de configuración autorizada. Aplicar guarda el perfil preparado; al caducar se descartan los cambios sin guardar. Se siguen aplicando los permisos de acceso.",
+		"Les modifications de configuration sont préparées en RAM et nécessitent une fenêtre de configuration autorisée. Appliquer enregistre le profil préparé ; à l’expiration, les modifications non enregistrées sont abandonnées. Les droits d’accès restent applicables.",
+		"Zmiany konfiguracji są buforowane w RAM i wymagają autoryzowanego okna konfiguracji. Zastosowanie zapisuje przygotowany profil; wygaśnięcie okna odrzuca niezapisane zmiany. Nadal obowiązują uprawnienia dostępu.",
+		"配置写入暂存在 RAM 中，需要授权的配置窗口。应用操作提交暂存配置；窗口到期会丢弃未保存的更改。访问权限限制仍然有效。",
+		"設定寫入暫存在 RAM 中，需要授權的設定視窗。套用操作提交暫存設定；視窗到期會捨棄未儲存的變更。存取權限限制仍然有效。"
+	],
+	"The detailed tables and downloadable contract below are the original English reference.": [
+		"Die folgenden Detailtabellen und die herunterladbare Spezifikation sind die englische Originalreferenz.",
+		"Las tablas detalladas y la especificación descargable siguientes son la referencia original en inglés.",
+		"Les tableaux détaillés et la spécification téléchargeable ci-dessous constituent la référence originale en anglais.",
+		"Poniższe szczegółowe tabele i specyfikacja do pobrania stanowią oryginalną dokumentację w języku angielskim.",
+		"下方详细表格及可下载的接口规范为英文原始参考文档。",
+		"下方詳細表格及可下載的介面規範為英文原始參考文件。"
+	],
+	"Coils": [
+		"Coils",
+		"Bobinas",
+		"Bobines",
+		"Cewki",
+		"线圈",
+		"線圈"
+	],
+	"Discrete inputs": [
+		"Diskrete Eingänge",
+		"Entradas discretas",
+		"Entrées discrètes",
+		"Wejścia dyskretne",
+		"离散输入",
+		"離散輸入"
+	],
+	"Holding registers": [
+		"Halteregister",
+		"Registros de retención",
+		"Registres de maintien",
+		"Rejestry podtrzymujące",
+		"保持寄存器",
+		"保持暫存器"
+	],
+	"Input registers": [
+		"Eingangsregister",
+		"Registros de entrada",
+		"Registres d’entrée",
+		"Rejestry wejściowe",
+		"输入寄存器",
+		"輸入暫存器"
+	],
+	"Full reference (English)": [
+		"Vollständige Referenz (Englisch)",
+		"Referencia completa (inglés)",
+		"Référence complète (anglais)",
+		"Pełna dokumentacja (angielski)",
+		"完整参考文档（英文）",
+		"完整參考文件（英文）"
+	],
+	"Download reference (English)": [
+		"Referenz herunterladen (Englisch)",
+		"Descargar referencia (inglés)",
+		"Télécharger la référence (anglais)",
+		"Pobierz dokumentację (angielski)",
+		"下载参考文档（英文）",
+		"下載參考文件（英文）"
+	]
+}

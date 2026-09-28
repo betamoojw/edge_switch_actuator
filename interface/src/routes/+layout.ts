@@ -11,7 +11,7 @@ export const load = (async ({ fetch }) => {
 		features: item,
 		title: 'Edge Switching Actuator',
 		github: 'betamoojw/edge_switch_actuator/tree/dev',
-		copyright: '2026 MTech',
+		copyright: '2026 M-Tech',
 		appName: 'IoT Platform'
 	};
 }) satisfies LayoutLoad;

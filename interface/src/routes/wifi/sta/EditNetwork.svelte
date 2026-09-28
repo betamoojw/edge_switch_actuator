@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/i18n';
 	import { modals, type ModalProps } from 'svelte-modals';
 	import { fly } from 'svelte/transition';
 	import { slide } from 'svelte/transition';
@@ -136,7 +137,7 @@
 		<div
 			class="rounded-box bg-base-100 shadow-secondary/30 pointer-events-auto flex min-w-fit max-w-md flex-col justify-between p-4 shadow-lg md:w-[28rem]"
 		>
-			<h2 class="text-base-content text-start text-2xl font-bold">{title}</h2>
+			<h2 class="text-base-content text-start text-2xl font-bold">{$t(title)}</h2>
 			<div class="divider my-2"></div>
 			<form
 				class="fieldset"
@@ -149,7 +150,7 @@
 					transition:slide|local={{ duration: 300, easing: cubicOut }}
 				>
 					<div>
-						<label class="label" for="ssid">SSID</label>
+						<label class="label" for="ssid">{$t('SSID')}</label>
 						<input
 							type="text"
 							class="input input-bordered invalid:border-error w-full invalid:border-2 {formErrors.ssid
@@ -164,13 +165,15 @@
 						{#if formErrors.ssid}
 							<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 								<label for="ssid" class="label">
-									<span class="text-error"> SSID must be between 3 and 32 characters long. </span>
+									<span class="text-error">
+										{$t('SSID must be between 3 and 32 characters long.')}
+									</span>
 								</label>
 							</div>
 						{/if}
 					</div>
 					<div>
-						<label class="label" for="pwd">Password</label>
+						<label class="label" for="pwd">{$t('Password')}</label>
 						<InputPassword bind:value={networkEditable.password} id="pwd" />
 					</div>
 					<label
@@ -181,7 +184,7 @@
 							bind:checked={staticIPConfig}
 							class="checkbox checkbox-primary"
 						/>
-						<span>Use static IP config</span>
+						<span>{$t('Use static IP config')}</span>
 					</label>
 				</div>
 
@@ -191,7 +194,7 @@
 						transition:slide|local={{ duration: 300, easing: cubicOut }}
 					>
 						<div>
-							<label class="label" for="localIP">Local IP</label>
+							<label class="label" for="localIP">{$t('Local IP')}</label>
 							<input
 								type="text"
 								class="input input-bordered w-full {formErrors.local_ip
@@ -207,14 +210,14 @@
 							{#if formErrors.local_ip}
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="localIP" class="label">
-										<span class="text-error"> Local IP must be a valid IPv4 address. </span>
+										<span class="text-error"> {$t('Local IP must be a valid IPv4 address.')} </span>
 									</label>
 								</div>
 							{/if}
 						</div>
 
 						<div>
-							<label class="label" for="gateway">Gateway IP</label>
+							<label class="label" for="gateway">{$t('Gateway IP')}</label>
 							<input
 								type="text"
 								class="input input-bordered w-full {formErrors.gateway_ip
@@ -230,13 +233,15 @@
 							{#if formErrors.gateway_ip}
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="gateway" class="label">
-										<span class="text-error"> Gateway IP must be a valid IPv4 address. </span>
+										<span class="text-error">
+											{$t('Gateway IP must be a valid IPv4 address.')}
+										</span>
 									</label>
 								</div>
 							{/if}
 						</div>
 						<div>
-							<label class="label" for="subnet">Subnet Mask</label>
+							<label class="label" for="subnet">{$t('Subnet Mask')}</label>
 							<input
 								type="text"
 								class="input input-bordered w-full {formErrors.subnet_mask
@@ -252,13 +257,15 @@
 							{#if formErrors.subnet_mask}
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="subnet" class="label">
-										<span class="text-error"> Subnet Mask must be a valid IPv4 subnet mask. </span>
+										<span class="text-error">
+											{$t('Subnet Mask must be a valid IPv4 subnet mask.')}
+										</span>
 									</label>
 								</div>
 							{/if}
 						</div>
 						<div>
-							<label class="label" for="dns_1">DNS 1</label>
+							<label class="label" for="dns_1">{$t('DNS 1')}</label>
 							<input
 								type="text"
 								class="input input-bordered w-full {formErrors.dns_1
@@ -274,13 +281,13 @@
 							{#if formErrors.dns_1}
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="dns_1" class="label">
-										<span class="text-error"> DNS 1 must be a valid IPv4 address. </span>
+										<span class="text-error"> {$t('DNS 1 must be a valid IPv4 address.')} </span>
 									</label>
 								</div>
 							{/if}
 						</div>
 						<div>
-							<label class="label" for="dns_2">DNS 2</label>
+							<label class="label" for="dns_2">{$t('DNS 2')}</label>
 							<input
 								type="text"
 								class="input input-bordered w-full {formErrors.dns_2
@@ -296,7 +303,7 @@
 							{#if formErrors.dns_2}
 								<div transition:slide|local={{ duration: 300, easing: cubicOut }}>
 									<label for="dns_2" class="label">
-										<span class="text-error"> DNS 2 must be a valid IPv4 address. </span>
+										<span class="text-error"> {$t('DNS 2 must be a valid IPv4 address.')} </span>
 									</label>
 								</div>
 							{/if}
@@ -315,14 +322,14 @@
 						type="button"
 					>
 						<Cancel class="mr-2 h-5 w-5" />
-						<span>Cancel</span>
+						<span>{$t('Cancel')}</span>
 					</button>
 					<button
 						class="btn btn-primary text-primary-content inline-flex items-center"
 						type="submit"
 					>
 						<Set class="mr-2 h-5 w-5" />
-						<span>Set</span>
+						<span>{$t('Set')}</span>
 					</button>
 				</div>
 			</form>
