@@ -91,7 +91,7 @@ bool HomeAssistant::discovery(bool remove)
         auto dev = doc["device"].to<JsonObject>();
         dev["identifiers"].to<JsonArray>().add(id);
         dev["name"] = "Edge Switch " + id.substring(5);
-        dev["manufacturer"] = "M-Tech";
+        dev["manufacturer"] = "MTech";
         dev["model"] = "ESP32-S3 Relay 6CH";
         dev["sw_version"] = APP_VERSION;
         doc["origin"]["name"] = "Edge Switch Actuator";
