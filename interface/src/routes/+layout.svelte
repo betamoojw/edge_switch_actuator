@@ -31,6 +31,9 @@
 
 	let { data, children }: Props = $props();
 	onMount(initializePreferences);
+	$effect(() => {
+		if (page.data.features.security && !$user.bearer_token) socket.stop();
+	});
 
 	onMount(async () => {
 		if ($user.bearer_token !== '') {
@@ -53,6 +56,7 @@
 
 	onDestroy(() => {
 		removeEventListeners();
+		socket.stop();
 	});
 
 	const addEventListeners = () => {
@@ -70,6 +74,7 @@
 	const removeEventListeners = () => {
 		socket.off('analytics', handleAnalytics);
 		socket.off('open', handleOpen);
+		socket.off('error', handleError);
 		socket.off('close', handleClose);
 		socket.off('rssi', handleNetworkStatus);
 		socket.off('notification', handleNotification);

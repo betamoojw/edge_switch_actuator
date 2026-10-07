@@ -5,6 +5,7 @@
 #include <NetworkSupport.h>
 #include <WiFi.h>
 #include <esp32-hal-rgb-led.h>
+#include <driver/gpio.h>
 
 namespace actuator
 {
@@ -25,7 +26,9 @@ void Actuator::safePins()
 {
     for (auto pin : board::RelayPins)
     {
-        digitalWrite(pin, LOW);
+        // Preload LOW before enabling output; Arduino rejects digitalWrite
+        // until pinMode has registered the pin with its peripheral manager.
+        gpio_set_level(static_cast<gpio_num_t>(pin), 0);
         pinMode(pin, OUTPUT);
     }
     pinMode(board::BootPin, INPUT_PULLUP);
@@ -214,9 +217,12 @@ void Actuator::programming(bool value)
 
 void Actuator::binding(Binding b)
 {
-    uint8_t c = b.target - 1;
-    if (b.action >= 1 && b.action <= 4 && c < 6)
+    for (uint8_t c = 0; c < 6; ++c)
     {
+        if (b.action < 1 || b.action > 4 || (b.target && b.target != c + 1))
+        {
+            continue;
+        }
         if (b.action == 1)
         {
             relay(c, true, "button");

@@ -39,7 +39,7 @@
 #endif
 
 #ifndef FACTORY_NTP_SERVER
-#define FACTORY_NTP_SERVER "time.google.com"
+#define FACTORY_NTP_SERVER "time.windows.com"
 #endif
 
 #define NTP_SETTINGS_FILE         "/config/ntpSettings.json"

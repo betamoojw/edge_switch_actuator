@@ -1,128 +1,146 @@
 import { writable } from 'svelte/store';
 import msgpack from 'msgpack-lite';
 
-function createWebSocket() {
-	let listeners = new Map<string, Set<(data?: unknown) => void>>();
+export function createWebSocket() {
+	const listeners = new Map<string, Set<(data?: any) => void>>();
 	const { subscribe, set } = writable(false);
-	const socketEvents = ['open', 'close', 'error', 'message', 'unresponsive'] as const;
-	type SocketEvent = (typeof socketEvents)[number];
-	let unresponsiveTimeoutId: ReturnType<typeof setTimeout> | undefined;
-	let reconnectTimeoutId: ReturnType<typeof setTimeout> | undefined;
-	let ws: WebSocket;
+	const localEvents = new Set([
+		'open',
+		'close',
+		'error',
+		'message',
+		'binary',
+		'json',
+		'unresponsive',
+		'pong'
+	]);
+	let ws: WebSocket | undefined;
 	let socketUrl: string | URL;
-	let event_use_json = false;
+	let useJson = false;
+	let stopped = true;
+	let retry = 1000;
+	let lossReported = false;
+	let reconnectTimer: ReturnType<typeof setTimeout> | undefined;
+	let heartbeatTimer: ReturnType<typeof setTimeout> | undefined;
+	let pongTimer: ReturnType<typeof setTimeout> | undefined;
+	const emit = (event: string, data?: unknown) => listeners.get(event)?.forEach((fn) => fn(data));
 
-	function init(url: string | URL, use_json: boolean = false) {
-		socketUrl = url;
-		event_use_json = use_json;
-		connect();
+	function clearTimers() {
+		clearTimeout(reconnectTimer);
+		clearTimeout(heartbeatTimer);
+		clearTimeout(pongTimer);
 	}
-
-	function disconnect(reason: SocketEvent, event?: Event) {
-		//console.log('disconnect', reason, event);
-		ws.close();
+	function stop() {
+		stopped = true;
+		clearTimers();
+		const old = ws;
+		ws = undefined;
+		old?.close();
 		set(false);
-		clearTimeout(unresponsiveTimeoutId);
-		clearTimeout(reconnectTimeoutId);
-		listeners.get(reason)?.forEach((listener) => listener(event));
-		reconnectTimeoutId = setTimeout(connect, 1000);
 	}
-
-	function connect() {
-		//console.log('connect');
-		ws = new WebSocket(socketUrl);
-		ws.binaryType = 'arraybuffer';
-		ws.onopen = (ev) => {
-			set(true);
-			clearTimeout(reconnectTimeoutId);
-			listeners.get('open')?.forEach((listener) => listener(ev));
-			for (const event of listeners.keys()) {
-				if (socketEvents.includes(event as SocketEvent)) continue;
-				sendEvent('subscribe', event);
-			}
-		};
-		ws.onmessage = (message) => {
-			resetUnresponsiveCheck();
-			let payload = message.data;
-
-			const binary = payload instanceof ArrayBuffer;
-			listeners.get(binary ? 'binary' : 'message')?.forEach((listener) => listener(payload));
-			try {
-				payload = binary ? msgpack.decode(new Uint8Array(payload)) : JSON.parse(payload);
-			} catch (error) {
-				listeners.get('error')?.forEach((listener) => listener(error));
-				return;
-			}
-			listeners.get('json')?.forEach((listener) => listener(payload));
-			const { event, data } = payload;
-			if (event) listeners.get(event)?.forEach((listener) => listener(data));
-		};
-		ws.onerror = (ev) => disconnect('error', ev);
-		ws.onclose = (ev) => disconnect('close', ev);
+	function send(data: unknown) {
+		if (ws?.readyState === WebSocket.OPEN)
+			ws.send(useJson ? JSON.stringify(data) : msgpack.encode(data));
 	}
-
-	function unsubscribe(event: string, listener?: (data: any) => void) {
-		let eventListeners = listeners.get(event);
-		if (!eventListeners) return;
-
-		if (!eventListeners.size) {
-			sendEvent('unsubscribe', event);
-		}
-		if (listener) {
-			eventListeners?.delete(listener);
-		} else {
-			listeners.delete(event);
-		}
-	}
-
-	function resetUnresponsiveCheck() {
-		clearTimeout(unresponsiveTimeoutId);
-		unresponsiveTimeoutId = setTimeout(() => disconnect('unresponsive'), 2000);
-	}
-
-	function send(msg: unknown) {
-		if (!ws || ws.readyState !== WebSocket.OPEN) return;
-		if (event_use_json) {
-			ws.send(JSON.stringify(msg));
-		} else {
-			ws.send(msgpack.encode(msg));
-		}
-	}
-
-	function sendEvent(event: string, data: unknown) {
+	function sendEvent(event: string, data: unknown = {}) {
 		send({ event, data });
 	}
-
+	function disconnect(current: WebSocket, reason: string, event?: unknown) {
+		if (current !== ws || stopped) return;
+		ws = undefined; // Ignore the subsequent close/error callbacks from this socket.
+		clearTimers();
+		current.close();
+		set(false);
+		if (reason !== 'close') emit(reason, event);
+		if (!lossReported) emit('close', event);
+		lossReported = true;
+		reconnectTimer = setTimeout(connect, retry);
+		retry = Math.min(retry * 2, 30000);
+	}
+	function heartbeat(current: WebSocket) {
+		if (current !== ws || stopped) return;
+		sendEvent('ping');
+		pongTimer = setTimeout(() => disconnect(current, 'unresponsive'), 30000);
+	}
+	function connect() {
+		if (stopped) return;
+		const current = new WebSocket(socketUrl);
+		ws = current;
+		current.binaryType = 'arraybuffer';
+		current.onopen = (event) => {
+			if (current !== ws) return;
+			set(true);
+			// A reconnect is confirmed by a valid frame, not merely a TCP handshake.
+			if (!lossReported) emit('open', event);
+			for (const name of listeners.keys()) if (!localEvents.has(name)) sendEvent('subscribe', name);
+			heartbeatTimer = setTimeout(() => heartbeat(current), 15000);
+		};
+		current.onmessage = (message) => {
+			if (current !== ws) return;
+			const binary = message.data instanceof ArrayBuffer;
+			emit(binary ? 'binary' : 'message', message.data);
+			let payload;
+			try {
+				payload = binary ? msgpack.decode(new Uint8Array(message.data)) : JSON.parse(message.data);
+				if (!payload || typeof payload !== 'object') throw new Error('Invalid event frame');
+			} catch (error) {
+				emit('error', error);
+				return;
+			}
+			if (payload.event === 'pong') {
+				retry = 1000;
+				clearTimeout(pongTimer);
+				clearTimeout(heartbeatTimer);
+				heartbeatTimer = setTimeout(() => heartbeat(current), 15000);
+			}
+			if (lossReported) {
+				lossReported = false;
+				emit('open');
+			}
+			emit('json', payload);
+			if (payload.event) emit(payload.event, payload.data);
+		};
+		current.onerror = (event) => disconnect(current, 'error', event);
+		current.onclose = (event) => disconnect(current, 'close', event);
+	}
+	function init(url: string | URL, use_json = false) {
+		if (!stopped && String(url) === String(socketUrl) && useJson === use_json) return;
+		stop();
+		socketUrl = url;
+		useJson = use_json;
+		stopped = false;
+		lossReported = false;
+		retry = 1000;
+		connect();
+	}
+	function off(event: string, listener?: (data: any) => void) {
+		const members = listeners.get(event);
+		if (!members) return;
+		if (listener) members.delete(listener);
+		else members.clear();
+		if (!members.size) {
+			listeners.delete(event);
+			if (!localEvents.has(event)) sendEvent('unsubscribe', event);
+		}
+	}
 	return {
 		subscribe,
+		init,
+		stop,
 		send,
 		sendEvent,
-		init,
-		on: <T>(event: string, listener: (data: T) => void): (() => void) => {
-			let eventListeners = listeners.get(event);
-			if (!eventListeners) {
-				eventListeners = new Set();
-				listeners.set(event, eventListeners);
-
-				// Only send subscription if WebSocket is open and it's not a socket event
-				if (
-					!socketEvents.includes(event as SocketEvent) &&
-					ws &&
-					ws.readyState === WebSocket.OPEN
-				) {
-					sendEvent('subscribe', event);
-				}
+		off,
+		on<T>(event: string, listener: (data: T) => void): () => void {
+			let members = listeners.get(event);
+			const first = !members;
+			if (!members) {
+				members = new Set();
+				listeners.set(event, members);
 			}
-			eventListeners.add(listener as (data: any) => void);
-
-			return () => {
-				unsubscribe(event, listener);
-			};
-		},
-		off: (event: string, listener?: (data: any) => void) => {
-			unsubscribe(event, listener);
+			members.add(listener);
+			if (first && !localEvents.has(event)) sendEvent('subscribe', event);
+			return () => off(event, listener);
 		}
 	};
 }
-
 export const socket = createWebSocket();

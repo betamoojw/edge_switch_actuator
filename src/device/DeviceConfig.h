@@ -27,7 +27,7 @@ struct RelayConfig
 
 struct Binding
 {
-    uint8_t action = 0, target = 0;
+    uint8_t action = 0, target = 0; // 0 = all enabled channels for relay actions, otherwise device
 };
 
 struct Config

@@ -39,6 +39,10 @@ void setup()
     actuator::Actuator::safePins();
 #endif
     Serial.begin(115200);
+#if defined(ACTUATOR_BOARD) && ARDUINO_USB_MODE && ARDUINO_USB_CDC_ON_BOOT
+    // Diagnostics must never hold up HTTP/control tasks when a USB host stops reading.
+    Serial.setTxTimeoutMs(0);
+#endif
 #ifdef ACTUATOR_BOARD
     const String setupPassword = SetupIdentity::password();
     if (setupPassword.isEmpty())

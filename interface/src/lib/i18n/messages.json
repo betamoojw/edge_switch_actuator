@@ -3414,5 +3414,21 @@
 		"Użyj tego samego brokera MQTT co Home Assistant. Prefiks wykrywania: homeassistant.",
 		"使用与 Home Assistant 相同的 MQTT 服务器。发现前缀：homeassistant。",
 		"使用與 Home Assistant 相同的 MQTT 伺服器。探索前綴：homeassistant。"
+	],
+	"All enabled channels ON": [
+		"Alle aktivierten Kanäle EIN",
+		"Activar todos los canales habilitados",
+		"Activer tous les canaux activés",
+		"Włącz wszystkie włączone kanały",
+		"接通所有已启用通道",
+		"接通所有已啟用通道"
+	],
+	"All channels": [
+		"Alle Kanäle",
+		"Todos los canales",
+		"Tous les canaux",
+		"Wszystkie kanały",
+		"所有通道",
+		"所有通道"
 	]
 }

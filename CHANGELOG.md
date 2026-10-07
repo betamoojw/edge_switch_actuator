@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.2] - 2026-10-07
+
+- Patch individual device status values while preserving channel and indicator objects, focus and unsaved edits. Commands return state directly without an extra status request.
+- Keep live updates active during REST requests and prevent delayed polls from reverting newer state.
+- Queue WebSocket sends outside actuator/subscription locks, retain reconnect backoff, and report each continuous outage once.
+- Avoid synchronous Wi-Fi teardown from the OTA HTTP callback so restart can complete.
+- Make actuator USB diagnostic writes nonblocking when a serial monitor stops consuming output.
+
 All notable changes to this project will be documented in this file.
 
 ## [WIP] - Next Release
@@ -21,6 +29,14 @@ All notable changes to this project will be documented in this file.
 
 - WiFi reconnection issues [#109](https://github.com/theelims/ESP32-sveltekit/issues/109)
 - Blurred toast notifications [#114](https://github.com/theelims/ESP32-sveltekit/issues/114)
+
+## [0.6.1] - 2026-10-07
+
+- Add All enabled channels ON beside OFF, with whole-selection permission and block checks.
+- Support button target 0 (All channels) for ON, OFF, independent toggle and per-channel pulse; support target 0 for the Modbus pulse mailbox and document both contracts.
+- Keep device controls and unsaved edits stable during commands; reserve the settings banner's space and use device events with bounded REST fallback instead of continuous two-second polling.
+- Replace the two-second WebSocket idle cutoff with explicit 15-second ping/pong checks and a 30-second response allowance; prevent duplicate reconnects, clean up subscriptions and enable TCP keepalive probes.
+- Preload relay GPIO output latches LOW before Arduino output configuration.
 
 ## [0.6.0] - 2025-11-03
 

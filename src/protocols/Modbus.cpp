@@ -612,9 +612,19 @@ uint8_t Modbus::writeRegs(uint16_t start, uint16_t count, const uint8_t *bytes, 
         {
             return 2;
         }
-        if (op == 3 && (target < 1 || target > 6 || !(d.config.busMask & (1 << (target - 1)))))
+        if (op == 3 && (target > 6 || (target && !(d.config.busMask & (1 << (target - 1))))))
         {
             return 2;
+        }
+        if (op == 3 && target == 0)
+        {
+            for (uint8_t c = 0; c < 6; ++c)
+            {
+                if (d.config.relays[c].enabled && !(d.config.busMask & (1 << c)))
+                {
+                    return 2;
+                }
+            }
         }
         if (op != 3 && target)
         {
@@ -632,10 +642,28 @@ uint8_t Modbus::writeRegs(uint16_t start, uint16_t count, const uint8_t *bytes, 
             d.toneNow = 0;
             d.toneUntil = 0;
         }
-        if (op == 3 && !d.relay(target - 1, true, "modbus", true))
+        if (op == 3)
         {
-            lastResult = 3;
-            lastDetail = 2;
+            // Preflight the entire selection before pulsing any output.
+            for (uint8_t c = 0; c < 6; ++c)
+            {
+                if ((target == c + 1 || (!target && d.config.relays[c].enabled)) &&
+                    (!d.config.relays[c].enabled || d.blocks[c]))
+                {
+                    lastResult = 3;
+                    lastDetail = d.blocks[c] ? 3 : 2;
+                }
+            }
+            if (lastResult == 2)
+            {
+                for (uint8_t c = 0; c < 6; ++c)
+                {
+                    if (target == c + 1 || (!target && d.config.relays[c].enabled))
+                    {
+                        d.relay(c, true, "modbus", true);
+                    }
+                }
+            }
         }
         if (op == 4)
         {

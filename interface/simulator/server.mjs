@@ -102,7 +102,9 @@ export async function startSimulator({
 			if (binary === device.features.event_use_json) return;
 			try {
 				const { event, data } = binary ? msgpack.decode(bytes) : JSON.parse(bytes.toString());
-				if (event === 'subscribe' && eventNames().has(data)) {
+				if (event === 'ping') {
+					if (!paused) send(ws, 'pong', {});
+				} else if (event === 'subscribe' && eventNames().has(data)) {
 					ws.subscriptions.add(data);
 					if (data === 'led') send(ws, 'led', { led_on: device.runtime.led_on });
 					if (data === 'features') emit('features', device.features);

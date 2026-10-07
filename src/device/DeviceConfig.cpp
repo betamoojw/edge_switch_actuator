@@ -148,7 +148,9 @@ bool Config::parse(JsonObjectConst o, Config &c, String &error)
         auto v = n.clicks[i];
         if (v.action >= 1 && v.action <= 4)
         {
-            if (!v.target || !n.relays[v.target - 1].enabled)
+            // Target zero selects all enabled channels. A specific target
+            // still requires that channel to be enabled.
+            if (v.target && !n.relays[v.target - 1].enabled)
             {
                 return bad("Button action requires enabled channel");
             }

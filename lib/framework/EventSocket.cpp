@@ -1,4 +1,5 @@
 #include <EventSocket.h>
+#include <atomic>
 
 SemaphoreHandle_t clientSubscriptionsMutex = xSemaphoreCreateMutex();
 
@@ -75,7 +76,21 @@ esp_err_t EventSocket::onFrame(PsychicWebSocketRequest *request, httpd_ws_frame 
         if (!error && doc.is<JsonObject>())
         {
             String event = doc["event"];
-            if (event == "subscribe")
+            if (event == "ping")
+            {
+                // Reply on this authenticated connection even when telemetry is idle.
+                JsonDocument pong;
+                pong["event"] = "pong";
+                String output;
+#if FT_ENABLED(EVENT_USE_JSON)
+                serializeJson(pong, output);
+                return request->client()->sendMessage(HTTPD_WS_TYPE_TEXT, output.c_str(), output.length());
+#else
+                serializeMsgPack(pong, output);
+                return request->client()->sendMessage(HTTPD_WS_TYPE_BINARY, output.c_str(), output.length());
+#endif
+            }
+            else if (event == "subscribe")
             {
                 // only subscribe to events that are registered
                 if (isEventValid(doc["data"].as<String>()))
@@ -123,79 +138,64 @@ void EventSocket::emitEvent(String event, JsonObject &jsonObject, const char *or
         return;
     }
 
-    int originSubscriptionId = originId[0] ? atoi(originId) : -1;
-    xSemaphoreTake(clientSubscriptionsMutex, portMAX_DELAY);
-    auto &subscriptions = client_subscriptions[event];
-    if (subscriptions.empty())
+    // Run sends on the HTTP task, never under the actuator or subscription lock.
+    // Bound pending work so a slow peer cannot accumulate telemetry indefinitely.
+    static std::atomic<unsigned> pending{0};
+    if (pending.fetch_add(1) >= 8)
     {
-        xSemaphoreGive(clientSubscriptionsMutex);
+        --pending;
         return;
     }
-
+    struct Delivery
+    {
+        EventSocket *owner;
+        String event;
+        std::vector<uint8_t> payload;
+        std::list<int> recipients;
+        std::atomic<unsigned> *pending;
+    };
+    auto *delivery = new Delivery{this, event, {}, {}, &pending};
+    int origin = originId[0] ? atoi(originId) : -1;
+    xSemaphoreTake(clientSubscriptionsMutex, portMAX_DELAY);
+    for (int id : client_subscriptions[event])
+    {
+        if (onlyToSameOrigin ? id == origin : id != origin) delivery->recipients.push_back(id);
+    }
+    xSemaphoreGive(clientSubscriptionsMutex);
     JsonDocument doc;
     doc["event"] = event;
     doc["data"] = jsonObject;
-
 #if FT_ENABLED(EVENT_USE_JSON)
-    size_t len = measureJson(doc);
+    delivery->payload.resize(measureJson(doc));
+    serializeJson(doc, delivery->payload.data(), delivery->payload.size());
 #else
-    size_t len = measureMsgPack(doc);
+    delivery->payload.resize(measureMsgPack(doc));
+    serializeMsgPack(doc, delivery->payload.data(), delivery->payload.size());
 #endif
-
-    char *output = new char[len + 1];
-
+    auto deliver = [](void *arg) {
+        auto *job = static_cast<Delivery *>(arg);
+        for (int id : job->recipients)
+        {
+            xSemaphoreTake(clientSubscriptionsMutex, portMAX_DELAY);
+            const auto &members = job->owner->client_subscriptions[job->event];
+            bool subscribed = std::find(members.begin(), members.end(), id) != members.end();
+            xSemaphoreGive(clientSubscriptionsMutex);
+            auto *client = subscribed ? job->owner->_socket.getClient(id) : nullptr;
+            if (!client) continue;
 #if FT_ENABLED(EVENT_USE_JSON)
-    serializeJson(doc, output, len + 1);
+            client->sendMessage(HTTPD_WS_TYPE_TEXT, job->payload.data(), job->payload.size());
 #else
-    serializeMsgPack(doc, output, len);
+            client->sendMessage(HTTPD_WS_TYPE_BINARY, job->payload.data(), job->payload.size());
 #endif
-
-    // null terminate the string
-    output[len] = '\0';
-
-    // if onlyToSameOrigin == true, send the message back to the origin
-    if (onlyToSameOrigin && originSubscriptionId > 0)
+        }
+        --(*job->pending);
+        delete job;
+    };
+    if (delivery->recipients.empty() || httpd_queue_work(_server->server, deliver, delivery) != ESP_OK)
     {
-        auto *client = _socket.getClient(originSubscriptionId);
-        if (client)
-        {
-            ESP_LOGV(SVK_TAG, "Emitting event: %s to %s[%u], Message[%d]: %s", event, client->remoteIP().toString().c_str(),
-                     client->socket(), len, output);
-#if FT_ENABLED(EVENT_USE_JSON)
-            client->sendMessage(HTTPD_WS_TYPE_TEXT, output, len);
-#else
-            client->sendMessage(HTTPD_WS_TYPE_BINARY, output, len);
-#endif
-        }
+        --pending;
+        delete delivery;
     }
-    else
-    { // else send the message to all other clients
-
-        const auto recipients = client_subscriptions[event];
-        for (int subscription : recipients)
-        {
-            if (subscription == originSubscriptionId)
-            {
-                continue;
-            }
-            auto *client = _socket.getClient(subscription);
-            if (!client)
-            {
-                subscriptions.remove(subscription);
-                continue;
-            }
-            ESP_LOGV(SVK_TAG, "Emitting event: %s to %s[%u], Message[%d]: %s", event, client->remoteIP().toString().c_str(),
-                     client->socket(), len, output);
-#if FT_ENABLED(EVENT_USE_JSON)
-            client->sendMessage(HTTPD_WS_TYPE_TEXT, output, len);
-#else
-            client->sendMessage(HTTPD_WS_TYPE_BINARY, output, len);
-#endif
-        }
-    }
-
-    delete[] output;
-    xSemaphoreGive(clientSubscriptionsMutex);
 }
 
 void EventSocket::handleEventCallbacks(String event, JsonObject &jsonObject, int originId)

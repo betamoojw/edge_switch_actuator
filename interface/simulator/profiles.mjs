@@ -118,7 +118,7 @@ export function defaults(profile = 'actuator') {
 			},
 			ntpSettings: {
 				enabled: true,
-				server: 'time.google.com',
+				server: 'time.windows.com',
 				tz_label: 'Europe/Berlin',
 				tz_format: 'GMT0BST,M3.5.0/1,M10.5.0'
 			},
@@ -194,7 +194,7 @@ export function validateConfig(c) {
 	for (const b of c.clicks) {
 		if (!b || !integer(b.action, 0, 8) || !integer(b.target, 0, 6)) return 'Invalid button binding';
 		if (b.action >= 1 && b.action <= 4) {
-			if (!b.target || !c.relays[b.target - 1].enabled)
+			if (b.target && !c.relays[b.target - 1].enabled)
 				return 'Button action requires enabled channel';
 		} else if (b.target) return 'Device action target must be zero';
 	}

@@ -745,3 +745,143 @@ test('MODBUS-MAP reference follows selection and distinguishes RTU diagnostics',
 	await protocol.selectOption('off');
 	await expect(map).toBeHidden();
 });
+
+test('FIX-01 commands keep other controls, DOM nodes and unsaved settings stable', async ({
+	page,
+	request
+}) => {
+	await login(page);
+	const first = card(page, 1),
+		second = card(page, 2);
+	await first.getByText('Channel settings', { exact: true }).click();
+	const name = first.getByRole('textbox', { name: 'Name', exact: true });
+	await name.fill('Unsaved channel');
+	let statusRequests = 0;
+	page.on('request', (req) => {
+		if (req.url().endsWith('/rest/device/status')) statusRequests++;
+	});
+	const handle = await name.elementHandle();
+	await control(request, 'faults', {
+		path: '/rest/device/commands',
+		effect: 'latency',
+		ms: 700,
+		count: 1
+	});
+	await first.getByRole('button', { name: 'Turn ON', exact: true }).click();
+	await expect(second.getByRole('button', { name: 'Turn ON', exact: true })).toBeEnabled();
+	await expect(first.getByRole('button', { name: 'Turn OFF', exact: true })).toBeVisible();
+	expect(statusRequests).toBe(0);
+	expect(await handle!.evaluate((el) => el.isConnected)).toBe(true);
+	await expect(name).toHaveValue('Unsaved channel');
+	await expect(first.locator('details')).toHaveAttribute('open', '');
+	await page.getByRole('button', { name: 'Discard', exact: true }).click();
+	await page.getByRole('button', { name: 'All enabled channels ON', exact: true }).click();
+	await expect
+		.poll(async () => (await state(request)).status.relays.every((r: any) => r.on))
+		.toBe(true);
+	await page.getByRole('button', { name: 'All enabled channels OFF', exact: true }).click();
+	await expect
+		.poll(async () => (await state(request)).status.relays.every((r: any) => !r.on))
+		.toBe(true);
+	await page.getByRole('tab', { name: 'Indicators', exact: true }).click();
+	const rgb = page
+		.locator('.card')
+		.filter({ has: page.getByRole('heading', { name: 'RGB status indicator' }) });
+	const before = await rgb.boundingBox();
+	await rgb.getByRole('checkbox', { name: 'Enabled', exact: true }).uncheck();
+	const after = await rgb.boundingBox();
+	expect(Math.abs(after!.y - before!.y)).toBeLessThan(2);
+	await page.getByRole('button', { name: 'Discard', exact: true }).click();
+});
+
+test('FIX-02 all-channel target round trips and executes gesture', async ({ page, request }) => {
+	await login(page);
+	await page.getByRole('tab', { name: 'Button', exact: true }).click();
+	await page.getByRole('combobox', { name: 'Single click', exact: true }).selectOption('1');
+	await page
+		.getByRole('combobox', { name: 'Target', exact: true })
+		.first()
+		.selectOption({ label: 'All channels' });
+	await apply(page);
+	expect((await state(request)).config.clicks[0]).toEqual({ action: 1, target: 0 });
+	await control(request, 'actions', { type: 'gesture', clicks: 1 });
+	await page.getByRole('tab', { name: 'Outputs', exact: true }).click();
+	await expect(page.getByRole('button', { name: 'Turn OFF', exact: true })).toHaveCount(6);
+});
+
+test('FIX-03 telemetry pause does not cause two-second reconnect churn', async ({
+	page,
+	request
+}) => {
+	let opened = 0;
+	page.on('websocket', (ws) => {
+		if (ws.url().includes('/ws/events')) opened++;
+	});
+	await login(page);
+	await expect.poll(async () => (await state(request)).connections).toBe(1);
+	await control(request, 'socket', { action: 'pause' });
+	await page.waitForTimeout(5000);
+	expect(opened).toBe(1);
+	await expect(page.getByText('Connection to device lost', { exact: true })).toBeHidden();
+	await control(request, 'socket', { action: 'pause', active: false });
+	await expect.poll(async () => (await state(request)).connections).toBe(1);
+});
+
+test('FIX-04 transient REST failure recovers while WebSocket state remains live', async ({
+	page,
+	request
+}) => {
+	await login(page);
+	await page.getByRole('tab', { name: 'Indicators', exact: true }).click();
+	await control(request, 'faults', {
+		path: '/rest/device/status',
+		effect: 'http',
+		status: 503,
+		count: 1
+	});
+	await control(request, 'socket', { action: 'close' });
+	await expect(page.getByText(/Connection unavailable\. Controls are disabled\./)).toBeVisible();
+	await expect(page.getByText(/Connection unavailable\. Controls are disabled\./)).toBeHidden({
+		timeout: 10000
+	});
+	await expect(
+		page.getByRole('button', { name: 'Identify for 5 seconds', exact: true })
+	).toBeEnabled();
+});
+
+test('FIX-05 live updates continue during a poll and its old response cannot revert them', async ({
+	page,
+	request
+}) => {
+	await login(page);
+	let release!: () => void;
+	const held = new Promise<void>((resolve) => {
+		release = resolve;
+	});
+	let captured!: () => void;
+	const ready = new Promise<void>((resolve) => {
+		captured = resolve;
+	});
+	await page.route(
+		'**/rest/device/status',
+		async (route) => {
+			const response = await route.fetch();
+			captured();
+			await held;
+			await route.fulfill({ response });
+		},
+		{ times: 1 }
+	);
+	await control(request, 'socket', { action: 'close' });
+	await ready;
+	try {
+		await control(request, 'actions', { type: 'relay', channel: 0, value: true });
+		await expect(
+			card(page, 1).getByRole('button', { name: 'Turn OFF', exact: true })
+		).toBeVisible();
+	} finally {
+		release();
+	}
+	await page.waitForTimeout(500);
+	await expect(card(page, 1).getByRole('button', { name: 'Turn OFF', exact: true })).toBeVisible();
+});

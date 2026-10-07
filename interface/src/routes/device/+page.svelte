@@ -3,9 +3,11 @@
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { user } from '$lib/stores/user';
+	import { socket } from '$lib/stores/socket';
 	import { notifications } from '$lib/components/toasts/notifications';
 	import SettingsCard from '$lib/components/SettingsCard.svelte';
 	import ModbusReference from '$lib/device/ModbusReference.svelte';
+	import { reconcile } from '$lib/device/reconcile';
 	import Device from '~icons/tabler/cpu';
 	import Outputs from '~icons/tabler/circuit-switch-open';
 	import Indicators from '~icons/tabler/bulb';
@@ -33,6 +35,11 @@
 	let knx = $state<Knx>();
 	let section = $state('Outputs');
 	let busy = $state(false);
+	let pending = $state<string[]>([]);
+	let refreshing: Promise<void> | undefined;
+	let lastEvent = 0;
+	let stateGeneration = 0;
+	let active = false;
 	let offline = $state('');
 	let dirty = $state(false);
 	let takeover = $state(false);
@@ -78,6 +85,7 @@
 	];
 	async function api(path: string, body?: unknown) {
 		const response = await fetch('/rest/' + path, {
+			signal: AbortSignal.timeout(30000),
 			method: body === undefined ? 'GET' : 'POST',
 			headers: {
 				Authorization: 'Bearer ' + get(user).bearer_token,
@@ -94,17 +102,36 @@
 		}
 		return response.json();
 	}
-	async function refresh() {
-		try {
-			status = await api('device/status');
-			offline = '';
-		} catch (e) {
-			offline = String(e);
-		}
+	function updateStatus(next: Partial<Status>) {
+		if (!status) status = next as Status;
+		else reconcile(status, next);
+	}
+	function refresh() {
+		if (refreshing) return refreshing;
+		const generation = stateGeneration;
+		refreshing = (async () => {
+			try {
+				const next = await api('device/status');
+				if (active) {
+					// A delayed poll may refresh permissions, but cannot roll back live state.
+					updateStatus(
+						status && generation !== stateGeneration ? { capabilities: next.capabilities } : next
+					);
+					offline = '';
+				}
+			} catch (e) {
+				if (active) offline = String(e);
+			} finally {
+				refreshing = undefined;
+			}
+		})();
+		return refreshing;
 	}
 	async function loadConfig() {
 		try {
-			config = await api('device/config');
+			const next = await api('device/config');
+			if (config) reconcile(config, next);
+			else config = next;
 			dirty = false;
 		} catch (e) {
 			notifications.error(String(e), 5000);
@@ -121,26 +148,37 @@
 			notifications.error(String(e), 5000);
 		}
 	}
-	async function perform(path: string, body: unknown) {
-		busy = true;
+	async function perform(path: string, body: unknown, key = 'settings') {
+		if (pending.includes(key)) return false;
+		pending = [...pending, key];
+		if (key === 'settings') busy = true;
 		try {
-			await api(path, body);
-			await refresh();
+			const generation = stateGeneration;
+			const result = await api(path, body);
+			if (result.state) {
+				if (generation === stateGeneration) updateStatus(result.state);
+				++stateGeneration;
+			} else await refresh();
 			notifications.success('Applied', 3000);
 			return true;
 		} catch (e) {
 			notifications.error(String(e), 5000);
 			return false;
 		} finally {
-			busy = false;
+			pending = pending.filter((item) => item !== key);
+			if (key === 'settings') busy = false;
 		}
 	}
 	async function command(command: string, extra: Record<string, unknown> = {}) {
-		await perform('device/commands', {
-			command,
-			requestId: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-			...extra
-		});
+		await perform(
+			'device/commands',
+			{
+				command,
+				requestId: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+				...extra
+			},
+			extra.channel !== undefined ? `relay-${extra.channel}` : command
+		);
 	}
 	async function save() {
 		if (config && (await perform('device/config', config))) await loadConfig();
@@ -152,11 +190,46 @@
 	function allowed(channel: number) {
 		return !!status?.capabilities.command && !!(status.capabilities.channels & (1 << channel));
 	}
+	const bulkAllowed = $derived(
+		!!status?.capabilities.command &&
+			status.relays.some((relay) => relay.enabled) &&
+			status.relays.every((relay, i) => !relay.enabled || (allowed(i) && !relay.blocked))
+	);
+	function relayBusy(channel: number) {
+		return (
+			busy ||
+			pending.includes(`relay-${channel}`) ||
+			pending.includes('all_on') ||
+			pending.includes('all_off')
+		);
+	}
 	onMount(() => {
+		active = true;
 		refresh();
 		loadConfig();
-		const timer = setInterval(refresh, 2000);
-		return () => clearInterval(timer);
+		const offState = socket.on<Status>('device.state', (next) => {
+			lastEvent = Date.now();
+			// Events carry shared state; permissions come from the authenticated REST response.
+			if (status) {
+				const { capabilities: _ignored, ...shared } = next;
+				++stateGeneration;
+				updateStatus(shared);
+			}
+		});
+		const offOpen = socket.on('open', () => {
+			refresh();
+		});
+		const timer = setInterval(() => {
+			if (offline || Date.now() - lastEvent > 5000) refresh();
+		}, 5000);
+		const permissions = setInterval(refresh, 30000);
+		return () => {
+			active = false;
+			offState();
+			offOpen();
+			clearInterval(timer);
+			clearInterval(permissions);
+		};
 	});
 </script>
 
@@ -237,20 +310,20 @@
 				>{/each}
 		</div>
 		{#if config && status}
-			{#if dirty}<div class="alert alert-info">
-					<span
-						>{$t(
-							'Unsaved settings. Apply saves the complete profile and restarts the selected protocol interface.'
-						)}</span
-					><button class="btn btn-sm" disabled={busy} onclick={loadConfig}
-						><Discard class="h-4 w-4 shrink-0" aria-hidden="true" />{$t('Discard')}</button
-					><button
-						class="btn btn-primary btn-sm"
-						disabled={busy || !!offline || !status.capabilities.configure}
-						onclick={save}
-						><Save class="h-4 w-4 shrink-0" aria-hidden="true" />{$t('Apply settings')}</button
-					>
-				</div>{/if}
+			<div class="alert alert-info" class:invisible={!dirty} aria-hidden={!dirty}>
+				<span
+					>{$t(
+						'Unsaved settings. Apply saves the complete profile and restarts the selected protocol interface.'
+					)}</span
+				><button class="btn btn-sm" disabled={busy} onclick={loadConfig}
+					><Discard class="h-4 w-4 shrink-0" aria-hidden="true" />{$t('Discard')}</button
+				><button
+					class="btn btn-primary btn-sm"
+					disabled={busy || !!offline || !status.capabilities.configure}
+					onclick={save}
+					><Save class="h-4 w-4 shrink-0" aria-hidden="true" />{$t('Apply settings')}</button
+				>
+			</div>
 			{#if section === 'Outputs'}
 				<p class="mb-2 flex items-start gap-2 text-sm opacity-75">
 					<Info class="h-5 w-5 shrink-0" aria-hidden="true" />
@@ -282,7 +355,7 @@
 								<div class="flex flex-wrap gap-2">
 									<button
 										class="btn btn-primary btn-sm"
-										disabled={busy ||
+										disabled={relayBusy(i) ||
 											!!offline ||
 											!allowed(i) ||
 											!status.relays[i]?.enabled ||
@@ -293,7 +366,7 @@
 											: $t('Turn ON')}</button
 									><button
 										class="btn btn-sm"
-										disabled={busy ||
+										disabled={relayBusy(i) ||
 											!!offline ||
 											!allowed(i) ||
 											!status.relays[i]?.enabled ||
@@ -378,14 +451,23 @@
 						</div>
 					{/each}
 				</div>
-				<button
-					class="btn btn-outline mt-3 self-start"
-					disabled={busy || !!offline || !status.capabilities.command}
-					onclick={() => command('all_off')}
-					><Power class="h-5 w-5 shrink-0" aria-hidden="true" />{$t(
-						'All enabled channels OFF'
-					)}</button
-				>
+				<div class="mt-3 flex flex-wrap gap-3">
+					<button
+						class="btn btn-outline"
+						disabled={busy || pending.length > 0 || !!offline || !bulkAllowed}
+						onclick={() => command('all_off')}
+						><Power class="h-5 w-5 shrink-0" aria-hidden="true" />{$t(
+							'All enabled channels OFF'
+						)}</button
+					>
+					<button
+						class="btn btn-primary"
+						disabled={busy || pending.length > 0 || !!offline || !bulkAllowed}
+						onclick={() => command('all_on')}
+					>
+						<Power class="h-5 w-5 shrink-0" aria-hidden="true" />{$t('All enabled channels ON')}
+					</button>
+				</div>
 			{:else if section === 'Indicators'}
 				<div class="grid gap-4 md:grid-cols-2">
 					<div class="card bg-base-100 border-base-300 min-w-0 border shadow-sm">
@@ -443,7 +525,11 @@
 							>
 							<button
 								class="btn"
-								disabled={busy || !!offline || !status.capabilities.command || !config.rgb}
+								disabled={busy ||
+									pending.includes('rgb') ||
+									!!offline ||
+									!status.capabilities.command ||
+									!config.rgb}
 								onclick={() =>
 									command('rgb', {
 										red: parseInt(testColor.slice(1, 3), 16),
@@ -455,7 +541,10 @@
 							>
 							<button
 								class="btn"
-								disabled={busy || !!offline || !status.capabilities.command}
+								disabled={busy ||
+									pending.includes('identify') ||
+									!!offline ||
+									!status.capabilities.command}
 								onclick={() => command('identify')}>{$t('Identify for 5 seconds')}</button
 							>
 						</div>
@@ -514,12 +603,19 @@
 							>
 							<button
 								class="btn"
-								disabled={busy || !!offline || !status.capabilities.command || !config.buzzer}
+								disabled={busy ||
+									pending.includes('tone') ||
+									!!offline ||
+									!status.capabilities.command ||
+									!config.buzzer}
 								onclick={() => command('tone', { hz: testHz, ms: testMs, duty: testDuty })}
 								>{$t('Test tone')}</button
 							><button
 								class="btn"
-								disabled={busy || !!offline || !status.capabilities.command}
+								disabled={busy ||
+									pending.includes('acknowledge') ||
+									!!offline ||
+									!status.capabilities.command}
 								onclick={() => command('acknowledge')}>{$t('Silence current tone')}</button
 							>
 						</div>
@@ -576,8 +672,11 @@
 											binding.action < 1 ||
 											binding.action > 4}
 										onchange={() => (dirty = true)}
-										><option value={0}>{$t('Device')}</option>{#each config.relays as r, c}<option
-												value={c + 1}>{r.name}</option
+										><option value={0}
+											>{binding.action >= 1 && binding.action <= 4
+												? $t('All channels')
+												: $t('Device')}</option
+										>{#each config.relays as r, c}<option value={c + 1}>{r.name}</option
 											>{/each}</select
 									></label
 								>

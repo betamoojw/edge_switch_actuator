@@ -64,7 +64,7 @@ Manual controls ON start once on a rising edge; OFF cancels. Their coils clear w
 | 0x0111 | Manual buzzer duration | 10–2000 ms, default 100 |
 | 0x0112 | Manual buzzer duty | 1–50 percent, default 25 |
 | 0x0120 | Single-click action | Action enum below; staged |
-| 0x0121 | Single-click target | 0 none/all; 1–6 channel; staged |
+| 0x0121 | Single-click target | 0 all enabled channels for relay actions, device otherwise; 1–6 channel; staged |
 | 0x0122–0x0123 | Double-click action/target | Same format; staged |
 | 0x0124–0x0125 | Triple-click action/target | Same format; staged |
 | 0x0130–0x0135 | CH1–CH6 startup state | 0 OFF / 1 ON; staged |
@@ -72,11 +72,13 @@ Manual controls ON start once on a rising edge; OFF cancels. Their coils clear w
 | 0x0150–0x0155 | CH1–CH6 disconnect policy | 0 hold / 1 OFF; default hold; staged |
 | 0x0160–0x0165 | CH1–CH6 disconnect timeout | 1–3600 seconds; default 30; staged |
 | 0x0200 | Command opcode | 0 idle, 1 identify, 2 acknowledge alarm, 3 relay pulse, 4 apply staged config, 5 discard stage |
-| 0x0201 | Command target | 0 device, 1–6 relay |
+| 0x0201 | Command target | 0 all enabled channels for pulse, device otherwise; 1–6 relay |
 | 0x0202 | Request sequence | 1–65535; client increments per command |
 | 0x0203 | Commit trigger | Write 0xA55A, read returns 0; no action for 0 |
 
 Actions: 0 none, 1 relay ON, 2 relay OFF, 3 relay toggle, 4 relay pulse, 5 all OFF, 6 identify, 7 acknowledge, 8 KNX programming toggle (binding only executes in KNX mode). Validate action/target pairing at configuration apply. Manual RGB/buzzer values are RAM parameters, not flash writes. Changes take effect on the next trigger. Generic manual tests cannot suppress fault or programming indications.
+
+Button target 0 applies ON, OFF, toggle (each channel independently), or pulse (each channel's configured duration) to enabled channels; disabled and blocked channels remain unchanged. A specific button target must be enabled. A Modbus pulse with target 0 requires permission for every enabled channel and rejects the whole selection if any is blocked. Web `all_on` and `all_off` commands use the same all-enabled permission/block preflight, without changing disabled channels.
 
 The command mailbox must be submitted as one FC16 write covering 0x0200–0x0203; reject FC06 on these four registers. Latch all four words together, validate, execute once and expose result in IR. Deduplicate same request sequence and payload per TCP session or RTU bus session; an identical retry returns the previous result, and reused sequence with a different payload fails. Retain the last 16 results for 60 seconds; clients must not reuse a sequence within that interval. A restart clears this cache, so clients must check uptime before retrying a pulse. Only an authorized window can apply/discard configuration; ordinary runtime access is governed by the configured protocol interface policy.
 

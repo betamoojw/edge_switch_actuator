@@ -106,6 +106,11 @@ void ESP32SvelteKit::begin()
     // SvelteKit uses a lot of handlers, so we need to increase the max_uri_handlers
     // WWWData has 77 Endpoints, Framework has 27, and Lighstate Demo has 4
     _server->config.max_uri_handlers = _numberEndpoints;
+    // Probe stale TCP peers without imposing a short application idle timeout.
+    _server->config.keep_alive_enable = true;
+    _server->config.keep_alive_idle = 60;
+    _server->config.keep_alive_interval = 10;
+    _server->config.keep_alive_count = 3;
     _server->listen(80);
 
 #ifdef EMBED_WWW

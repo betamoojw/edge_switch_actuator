@@ -194,7 +194,7 @@ void Actuator::execute(Request &r)
                 error = "Channel disabled or blocked";
             }
         }
-        else if (op == "all_off")
+        else if (op == "all_off" || op == "all_on")
         {
             bool allowed = true;
             for (int i = 0; i < 6; ++i)
@@ -215,7 +215,7 @@ void Actuator::execute(Request &r)
                 {
                     if (config.relays[i].enabled)
                     {
-                        relay(i, false, "web");
+                        relay(i, op == "all_on", "web");
                     }
                 }
             }
@@ -310,6 +310,10 @@ void Actuator::execute(Request &r)
     response["error"] = error;
     response["revision"] = config.revision;
     audit(r.user + " " + r.path + " " + String(r.status));
+    if (r.status == 200 && r.path == "/rest/device/commands")
+    {
+        snapshot(response["state"].to<JsonObject>());
+    }
     serializeJson(response, r.result);
     if (requestId.length())
     {

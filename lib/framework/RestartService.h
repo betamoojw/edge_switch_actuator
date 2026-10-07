@@ -33,10 +33,8 @@ public:
     static void restartNow()
     {
         delay(250);
-        MDNS.end();
-        delay(100);
-        WiFi.disconnect(true);
-        delay(200);
+        // This can run on the HTTP server task. Network teardown here can wait
+        // for that same task and prevent the OTA reboot from ever completing.
         ESP.restart();
     }
 

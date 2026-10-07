@@ -103,6 +103,9 @@ test('firmware config boundary vectors and indexing', () => {
 	);
 	const bad = structuredClone(good);
 	bad.clicks[0] = { action: 1, target: 0 };
+	assert.equal(validateConfig(bad), '');
+	bad.clicks[0].target = 1;
+	bad.relays[0].enabled = false;
 	assert.equal(validateConfig(bad), 'Button action requires enabled channel');
 });
 
@@ -158,6 +161,57 @@ test('relay pulse, channel blocking, all-off atomicity and idempotency', () => {
 	assert.equal(command(d, { command: 'unblock', channel: 0 }).status, 200);
 	assert.equal(command(d, { command: 'all_off' }).status, 200);
 	assert.ok(d.snapshot().relays.every((r) => !r.on));
+});
+
+test('all-on preflights permissions and blocks and leaves disabled channels off', () => {
+	const d = new Device();
+	d.config.relays[5].enabled = false;
+	const operator = d.saved.users.find((u) => u.role === 'operator');
+	assert.equal(command(d, { command: 'all_on' }, operator).status, 403);
+	assert.ok(d.snapshot().relays.every((r) => !r.on));
+	d.runtime.blocks[3] = true;
+	assert.equal(command(d, { command: 'all_on' }).status, 403);
+	assert.ok(d.snapshot().relays.every((r) => !r.on));
+	d.runtime.blocks[3] = false;
+	assert.equal(command(d, { command: 'all_on', requestId: 'bulk-on' }).status, 200);
+	assert.deepEqual(
+		d.snapshot().relays.map((r) => r.on),
+		[true, true, true, true, true, false]
+	);
+	assert.equal(command(d, { command: 'all_off' }).status, 200);
+	assert.ok(d.snapshot().relays.every((r) => !r.on));
+});
+
+test('all-channel button actions persist and honor enabled, blocked and per-channel pulse settings', () => {
+	for (const action of [1, 2, 3, 4]) {
+		const d = new Device();
+		const config = structuredClone(d.config);
+		config.clicks[0] = { action, target: 0 };
+		config.relays[5].enabled = false;
+		config.relays[0].pulseMs = 100;
+		config.relays[1].pulseMs = 500;
+		assert.equal(save(d, config).status, 200);
+		d.reboot(0);
+		assert.equal(d.config.clicks[0].target, 0);
+		d.runtime.blocks[4] = true;
+		if (action === 2 || action === 3) d.relay(0, true, 'test');
+		d.action({ type: 'gesture', clicks: 1 });
+		assert.deepEqual(
+			d.snapshot().relays.map((r) => r.on),
+			action === 2
+				? [false, false, false, false, false, false]
+				: action === 3
+					? [false, true, true, true, false, false]
+					: [true, true, true, true, false, false]
+		);
+		if (action === 4) {
+			d.advance(101);
+			assert.equal(d.snapshot().relays[0].on, false);
+			assert.equal(d.snapshot().relays[1].on, true);
+			d.advance(400);
+			assert.equal(d.snapshot().relays[1].on, false);
+		}
+	}
 });
 
 test('durable profile, stale revision and rollback, reboot and factory reset', (t) => {

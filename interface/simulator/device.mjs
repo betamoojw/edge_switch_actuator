@@ -381,6 +381,7 @@ export class Device extends EventEmitter {
 						error = 'Channel disabled or blocked';
 					}
 					break;
+				case 'all_on':
 				case 'all_off':
 					if (
 						this.config.relays.some(
@@ -389,7 +390,7 @@ export class Device extends EventEmitter {
 					) {
 						status = 403;
 						error = 'Bulk command denied';
-					} else this.config.relays.forEach((_, i) => this.relay(i, false));
+					} else this.config.relays.forEach((_, i) => this.relay(i, body.command === 'all_on'));
 					break;
 				case 'rgb':
 					if (
@@ -466,6 +467,7 @@ export class Device extends EventEmitter {
 		}
 		this.audit(`${user.username} /rest/${path} ${status}`);
 		const result = { status, body: { ok: status === 200, error, revision: this.config.revision } };
+		if (status === 200 && path === 'device/commands') result.body.state = this.snapshot();
 		if (body.requestId) {
 			this.dedup.push({
 				user: user.username,
@@ -559,15 +561,17 @@ export class Device extends EventEmitter {
 				r.lastGesture = body.clicks;
 				r.gestureCount++;
 				if (!this.config.button) break;
-				const b = this.config.clicks[body.clicks - 1],
-					c = b.target - 1;
-				if (b.action >= 1 && b.action <= 4)
-					this.relay(
-						c,
-						b.action === 1 || b.action === 4 || (b.action === 3 && !r.outputs[c]),
-						'button',
-						b.action === 4
-					);
+				const b = this.config.clicks[body.clicks - 1];
+				for (let c = 0; c < 6; c++) {
+					if (b.target && b.target !== c + 1) continue;
+					if (b.action >= 1 && b.action <= 4)
+						this.relay(
+							c,
+							b.action === 1 || b.action === 4 || (b.action === 3 && !r.outputs[c]),
+							'button',
+							b.action === 4
+						);
+				}
 				if (b.action === 5) this.config.relays.forEach((_, i) => this.relay(i, false, 'button'));
 				if (b.action === 6) {
 					r.manualColor = [255, 255, 255];
