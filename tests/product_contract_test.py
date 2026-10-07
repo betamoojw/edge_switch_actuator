@@ -36,6 +36,61 @@ class ProductContract(unittest.TestCase):
             self.assertEqual(int(app.get("ApplicationNumber")), self.model["applicationNumber"])
             self.assertEqual(int(app.get("ApplicationVersion")), self.model["applicationVersion"])
             self.assertEqual(app.get("MaskVersion"), self.model["maskVersion"])
+            manufacturer = ET.fromstring(archive.read(candidates[0])).find(".//k:Manufacturer", NS)
+            self.assertEqual(manufacturer.get("RefId"), f"M-{self.model['manufacturerId']:04X}")
+
+    def test_packaged_product_labels_and_registration(self):
+        with zipfile.ZipFile(ROOT / "knx/Edge_S3_Relay_6CH.knxprod") as archive:
+            roots = [ET.fromstring(archive.read(n)) for n in archive.namelist()
+                     if n.endswith(".xml") and n != "knx_master.xml"]
+            products = [p for root in roots for p in root.findall(".//k:Product", NS)]
+            self.assertEqual(len(products), 1)
+            self.assertEqual(products[0].get("Text"), self.model["name"])
+            self.assertEqual(products[0].get("OrderNumber"), self.model["orderNumber"])
+            catalogs = [p for root in roots for p in root.findall(".//k:CatalogSection", NS)]
+            self.assertEqual(catalogs[0].get("Name"), self.model["catalogName"])
+            if self.model["registrationStatus"] == "Unregistered":
+                self.assertFalse([p for root in roots for p in root.findall(".//k:RegistrationInfo", NS)])
+            else:
+                for root in (self.xml, *roots):
+                    for parent in root.findall(".//k:Product", NS) + root.findall(".//k:Hardware2Program", NS):
+                        registration = parent.find("k:RegistrationInfo", NS)
+                        self.assertIsNotNone(registration)
+                        self.assertEqual(registration.get("RegistrationStatus"), "Registered")
+                        if parent.tag.endswith("Hardware2Program"):
+                            self.assertEqual(registration.get("RegistrationNumber"), self.model["registrationNumber"])
+                        if root is not self.xml:
+                            self.assertTrue(registration.get("RegistrationSignature"))
+
+    def test_packaged_parameters_match_source(self):
+        with zipfile.ZipFile(ROOT / "knx/Edge_S3_Relay_6CH.knxprod") as archive:
+            name = next(n for n in archive.namelist() if "_A-" in n and n.endswith(".xml"))
+            packaged = ET.fromstring(archive.read(name))
+            def layout(root):
+                return [
+                    (p.get("Name"), p.get("Value"), dict(p.find("k:Memory", NS).attrib, CodeSegment="segment"))
+                    for p in root.findall(".//k:Parameter", NS)
+                ]
+            self.assertEqual(layout(packaged), layout(self.xml))
+            for tag in ("RelativeSegment", "AddressTable", "AssociationTable", "LdCtrlWriteRelMem"):
+                source = self.xml.find(f".//k:{tag}", NS)
+                actual = packaged.find(f".//k:{tag}", NS)
+                self.assertIsNotNone(actual)
+                self.assertEqual(
+                    {k: v for k, v in actual.attrib.items() if k != "Id"},
+                    {k: v for k, v in source.attrib.items() if k != "Id"},
+                )
+
+    def test_packaged_objects_match_source(self):
+        with zipfile.ZipFile(ROOT / "knx/Edge_S3_Relay_6CH.knxprod") as archive:
+            name = next(n for n in archive.namelist() if "_A-" in n and n.endswith(".xml"))
+            packaged = ET.fromstring(archive.read(name))
+            def objects(root):
+                return [
+                    {k: v for k, v in obj.attrib.items() if k != "Id"}
+                    for obj in root.findall(".//k:ComObject", NS)
+                ]
+            self.assertEqual(objects(packaged), objects(self.xml))
 
 
 if __name__ == "__main__":

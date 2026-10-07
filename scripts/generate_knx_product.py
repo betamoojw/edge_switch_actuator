@@ -1,7 +1,7 @@
 """Generate ETS source and firmware constants from the same product contract.
 
 Run from any directory. Packaging: OpenKNXproducer create knx/Edge_S3_Relay_6CH.xml
-The development manufacturer identity must be replaced before commercial release.
+OpenKNX template registration metadata does not establish KNX certification.
 """
 
 import json
@@ -126,13 +126,16 @@ def add_objects(static: ET.Element, model: dict) -> None:
 
 
 def build_product(model: dict) -> ET.Element:
+    registered = model.get("registrationStatus") == "Registered"
+    if registered and model.get("registrationMode") != "openknx-template":
+        raise ValueError("Registered metadata requires explicit openknx-template mode")
     root = ET.Element(f"{{{NS}}}KNX", CreatedBy="Edge actuator generator", ToolVersion="1.0")
     manufacturer = element(element(root, "ManufacturerData"), "Manufacturer", RefId=f"M-{model['manufacturerId']:04X}")
     catalog = element(
         element(manufacturer, "Catalog"),
         "CatalogSection",
         Id=f"M-{model['manufacturerId']:04X}_CS-1",
-        Name="Development",
+        Name=model.get("catalogName", "Development"),
         Number=1,
         DefaultLanguage="en-US",
     )
@@ -208,25 +211,26 @@ def build_product(model: dict) -> ET.Element:
         HasApplicationProgram="true",
         IsIPEnabled="true",
     )
-    element(
+    product = element(
         element(hardware, "Products"),
         "Product",
         Id="%ProductId%",
         Text=model["name"],
-        OrderNumber="EDGE-S3-6CH-DEV",
+        OrderNumber=model.get("orderNumber", "EDGE-S3-6CH-DEV"),
         IsRailMounted="true",
         DefaultLanguage="en-US",
     )
-    element(
-        element(
-            element(hardware, "Hardware2Programs"),
-            "Hardware2Program",
-            Id="%Hardware2ProgramId%",
-            MediumTypes="MT-5",
-        ),
-        "ApplicationProgramRef",
-        RefId="%AID%",
+    hardware_program = element(
+        element(hardware, "Hardware2Programs"),
+        "Hardware2Program",
+        Id="%Hardware2ProgramId%",
+        MediumTypes="MT-5",
     )
+    element(hardware_program, "ApplicationProgramRef", RefId="%AID%")
+    if registered:
+        element(product, "RegistrationInfo", RegistrationStatus="Registered")
+        element(hardware_program, "RegistrationInfo", RegistrationStatus="Registered",
+                RegistrationNumber=model["registrationNumber"])
     return root
 
 
@@ -239,6 +243,13 @@ def main() -> None:
     header.parent.mkdir(exist_ok=True)
     header.write_text(HEADER_TEMPLATE.format(**model), encoding="utf-8")
     print("Generated six-channel ETS XML and firmware constants")
+    print(f"Profile: {model['buildProfile']}; declared registration: {model['registrationStatus']}")
+    print("OpenKNX template metadata is not proof of official KNX registration or certification. "
+          "ETS import remains a separate verification step. See knx/README.md.")
+    if model["manufacturerId"] == 0x00FA:
+        print("NOTE: 0x00FA is also the manufacturer reference in the OpenKNXproducer template. "
+              "The bundled master data names it KNX Association. Matching that reference "
+              "does not establish product registration or an ETS testing entitlement.")
 
 
 if __name__ == "__main__":

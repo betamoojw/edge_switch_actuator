@@ -1,5 +1,11 @@
 {
-  "name": "Edge S3 Relay 6CH DEVELOPMENT",
+  "name": "Edge S3 Relay 6CH",
+  "catalogName": "OpenKNX",
+  "orderNumber": "EDGE-S3-6CH",
+  "buildProfile": "production",
+  "registrationStatus": "Registered",
+  "registrationMode": "openknx-template",
+  "registrationNumber": "0001/11",
   "manufacturerId": 250,
   "applicationNumber": 600,
   "applicationVersion": 1,
@@ -8,5 +14,5 @@
   "parameterBytes": 52,
   "maxGroupAddresses": 64,
   "maxAssociations": 96,
-  "developmentOnly": true
+  "developmentOnly": false
 }

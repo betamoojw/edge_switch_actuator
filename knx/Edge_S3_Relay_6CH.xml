@@ -3,12 +3,12 @@
   <ManufacturerData>
     <Manufacturer RefId="M-00FA">
       <Catalog>
-        <CatalogSection Id="M-00FA_CS-1" Name="Development" Number="1" DefaultLanguage="en-US">
-          <CatalogItem Id="%CatalogItemId%" Name="Edge S3 Relay 6CH DEVELOPMENT" Number="1" ProductRefId="%ProductId%" Hardware2ProgramRefId="%Hardware2ProgramId%" DefaultLanguage="en-US" />
+        <CatalogSection Id="M-00FA_CS-1" Name="OpenKNX" Number="1" DefaultLanguage="en-US">
+          <CatalogItem Id="%CatalogItemId%" Name="Edge S3 Relay 6CH" Number="1" ProductRefId="%ProductId%" Hardware2ProgramRefId="%Hardware2ProgramId%" DefaultLanguage="en-US" />
         </CatalogSection>
       </Catalog>
       <ApplicationPrograms>
-        <ApplicationProgram Id="%AID%" ApplicationNumber="600" ApplicationVersion="1" ProgramType="ApplicationProgram" MaskVersion="MV-57B0" Name="Edge S3 Relay 6CH DEVELOPMENT" LoadProcedureStyle="MergedProcedure" PeiType="0" DefaultLanguage="en-US" DynamicTableManagement="false" Linkable="false" MinEtsVersion="5.0">
+        <ApplicationProgram Id="%AID%" ApplicationNumber="600" ApplicationVersion="1" ProgramType="ApplicationProgram" MaskVersion="MV-57B0" Name="Edge S3 Relay 6CH" LoadProcedureStyle="MergedProcedure" PeiType="0" DefaultLanguage="en-US" DynamicTableManagement="false" Linkable="false" MinEtsVersion="5.0">
           <Static>
             <Code>
               <RelativeSegment Id="%AID%_RS-04-00000" Name="Parameters" Offset="0" Size="52" LoadStateMachine="4" />
@@ -273,13 +273,16 @@
         </ApplicationProgram>
       </ApplicationPrograms>
       <Hardware>
-        <Hardware Id="%HardwareId%" Name="Edge S3 Relay 6CH DEVELOPMENT" SerialNumber="600" VersionNumber="1" HasIndividualAddress="true" HasApplicationProgram="true" IsIPEnabled="true">
+        <Hardware Id="%HardwareId%" Name="Edge S3 Relay 6CH" SerialNumber="600" VersionNumber="1" HasIndividualAddress="true" HasApplicationProgram="true" IsIPEnabled="true">
           <Products>
-            <Product Id="%ProductId%" Text="Edge S3 Relay 6CH DEVELOPMENT" OrderNumber="EDGE-S3-6CH-DEV" IsRailMounted="true" DefaultLanguage="en-US" />
+            <Product Id="%ProductId%" Text="Edge S3 Relay 6CH" OrderNumber="EDGE-S3-6CH" IsRailMounted="true" DefaultLanguage="en-US">
+              <RegistrationInfo RegistrationStatus="Registered" />
+            </Product>
           </Products>
           <Hardware2Programs>
             <Hardware2Program Id="%Hardware2ProgramId%" MediumTypes="MT-5">
               <ApplicationProgramRef RefId="%AID%" />
+              <RegistrationInfo RegistrationStatus="Registered" RegistrationNumber="0001/11" />
             </Hardware2Program>
           </Hardware2Programs>
         </Hardware>

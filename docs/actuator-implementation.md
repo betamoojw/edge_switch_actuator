@@ -43,6 +43,8 @@ Button, dashboard and ETS share the stack's programming state. Programming expir
 
 ## Reproduce checks
 
+For the ETS message **No valid license found to test the unregistered product(s) in this file**, see the [licensing diagnosis and import prerequisites](../knx/README.md). Structural generation success does not establish ETS import eligibility.
+
 ```text
 python scripts/generate_knx_product.py
 OpenKNXproducer create knx/Edge_S3_Relay_6CH.xml
