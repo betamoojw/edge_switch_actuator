@@ -155,6 +155,13 @@
 		try {
 			const generation = stateGeneration;
 			const result = await api(path, body);
+			if (path === 'knx/config' && result.knx) {
+				knx = result.knx;
+				groupInputs = Object.fromEntries(
+					knx!.objects.map((obj) => [obj.number, obj.groups.join(', ')])
+				);
+				takeover = false;
+			}
 			if (result.state) {
 				if (generation === stateGeneration) updateStatus(result.state);
 				++stateGeneration;
@@ -896,9 +903,18 @@
 								})}
 							</p>
 							<fieldset
-								disabled={!status.capabilities.configure || status.mode !== 'knx_ip' || knx.busy}
+								disabled={busy ||
+									!status.capabilities.configure ||
+									status.mode !== 'knx_ip' ||
+									knx.busy}
 								class="min-w-0 space-y-4"
 							>
+								<label class="label"
+									><input class="checkbox" type="checkbox" bind:checked={takeover} />
+									{$t(
+										'Take over for web editing (a later ETS download can replace these changes)'
+									)}</label
+								>
 								<label class="fieldset"
 									>{$t('Individual address')}<input
 										class="input"
@@ -915,12 +931,6 @@
 								<p id="knx-address-error" class="text-error text-sm" aria-live="polite">
 									{$t(addressError)}
 								</p>
-								<label class="label"
-									><input class="checkbox" type="checkbox" bind:checked={takeover} />
-									{$t(
-										'Take over for web editing (a later ETS download can replace these changes)'
-									)}</label
-								>
 								<p id="knx-group-help" class="text-sm">
 									{$t(
 										'Main/middle/sub: 0–31/0–7/0–255; 0/0/0 is reserved. Leave blank for no association. Up to 8 unique addresses per object; sending address first.'
@@ -1012,11 +1022,19 @@
 												? groupInputs[obj.number].split(',').map((v) => v.trim())
 												: []
 										}));
-										if (await perform('knx/config', { ...knx, objects, takeover })) await loadKnx();
+										await perform('knx/config', {
+											address: knx.address,
+											revision: knx.revision,
+											parameters: knx.parameters,
+											objects,
+											takeover
+										});
 									}}>{$t('Apply KNX commissioning')}</button
 								>
 							</fieldset>
-							<button class="btn" onclick={loadKnx}>{$t('Reload KNX snapshot')}</button>
+							<button class="btn" disabled={busy} onclick={loadKnx}
+								>{$t('Reload KNX snapshot')}</button
+							>
 						{/if}
 					</div>
 				</div>

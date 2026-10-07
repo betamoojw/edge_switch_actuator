@@ -1,5 +1,6 @@
 #include "device/Gesture.h"
 #include "device/HomeAssistantCommand.h"
+#include "protocols/KnxAddress.h"
 #include "protocols/ModbusPdu.h"
 #include <array>
 #include <assert.h>
@@ -212,6 +213,17 @@ static void gestureTests()
 
 int main()
 {
+    uint16_t address = 0;
+    assert(actuator::parseIndividualAddress("1.1.10", address) && address == 0x110a);
+    assert(actuator::parseIndividualAddress("01.01.010", address) && address == 0x110a);
+    assert(actuator::parseIndividualAddress("0.0.1", address) && address == 1);
+    assert(actuator::parseIndividualAddress("15.15.255", address) && address == 0xffff);
+    for (const char *invalid :
+         {"", "1.1", "1.1.0", "16.1.1", "1.16.1", "1.1.256", " 1.1.10", "+1.1.10", "1.1.10x", "1.1.10 ", "001.1.10", "4294967297.1.10"})
+    {
+        address = 0x110a;
+        assert(!actuator::parseIndividualAddress(invalid, address) && address == 0x110a);
+    }
     using actuator::homeAssistantCommand;
     for (int channel = 1; channel <= 6; ++channel)
     {
@@ -224,9 +236,13 @@ int main()
     assert(homeAssistantCommand("identify/set", "PRESS", false) == 12);
     assert(homeAssistantCommand("identify/set", "PRESS", true) == -1);
     for (auto topic : {"", "relay/0/set", "relay/7/set", "relay/11/set", "relay/1/set/extra", "relay/1"})
+    {
         assert(homeAssistantCommand(topic, "ON", false) == -1);
+    }
     for (auto payload : {"", "on", "ON ", "TOGGLE", "1", "{\"state\":\"ON\"}"})
+    {
         assert(homeAssistantCommand("relay/1/set", payload, false) == -1);
+    }
     assert(homeAssistantCommand(nullptr, "ON", false) == -1);
     assert(homeAssistantCommand("relay/1/set", nullptr, false) == -1);
     gestureTests();

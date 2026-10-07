@@ -205,7 +205,8 @@ export function validateKnx(k, current, running) {
 	if (!integer(k.revision, 0, 0xffffffff) || k.revision !== current.revision)
 		return 'KNX revision conflict';
 	if (current.owner === 'ets' && k.takeover !== true) return 'Explicit web takeover is required';
-	const address = typeof k.address === 'string' && /^(\d+)\.(\d+)\.(\d+)$/.exec(k.address);
+	const address =
+		typeof k.address === 'string' && /^(\d{1,2})\.(\d{1,2})\.(\d{1,3})$/.exec(k.address);
 	if (
 		!address ||
 		!integer(+address[1], 0, 15) ||

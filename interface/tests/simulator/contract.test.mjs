@@ -259,6 +259,7 @@ test('KNX commissioning boundaries, ownership, independent revision and object e
 	k.objects[0].groups = ['1/0/1'];
 	assert.equal(d.execute('knx/config', k, admin(d)).status, 200);
 	assert.equal(d.knxSnapshot().revision, 2);
+	assert.equal(d.knxSnapshot().address, '1.1.10');
 	assert.equal(d.config.revision, 2);
 	assert.equal(d.execute('knx/config', k, admin(d)).status, 409);
 	d.action({ type: 'knx-object', number: 1, value: true });
@@ -271,6 +272,26 @@ test('KNX commissioning boundaries, ownership, independent revision and object e
 	d.action({ type: 'network', wifi: false, ap: true });
 	assert.equal(d.snapshot().protocolState, 'waiting_network');
 	assert.equal(d.execute('knx/programming', { active: true }, admin(d)).status, 409);
+});
+
+test('KNX address-only updates commit with groups and parameters, roll back and survive reboot', () => {
+	const d = new Device({ profile: 'knx' });
+	const before = d.knxSnapshot();
+	const update = { ...before, address: '01.01.011', takeover: true };
+	d.failures.persistence = true;
+	assert.equal(d.execute('knx/config', update, admin(d)).status, 409);
+	assert.equal(d.knxSnapshot().address, before.address);
+	assert.equal(d.knxSnapshot().revision, before.revision);
+	d.failures.persistence = false;
+	const result = d.execute('knx/config', update, admin(d));
+	assert.equal(result.status, 200);
+	assert.equal(result.body.knx.address, '1.1.11');
+	assert.equal(result.body.revision, result.body.knx.revision);
+	assert.deepEqual(result.body.knx.objects, before.objects);
+	assert.deepEqual(result.body.knx.parameters, before.parameters);
+	d.reboot();
+	assert.equal(d.knxSnapshot().address, '1.1.11');
+	assert.equal(d.knxSnapshot().owner, 'web');
 });
 
 test('watchdog, network loss, indicators, gestures and configuration window timers', () => {

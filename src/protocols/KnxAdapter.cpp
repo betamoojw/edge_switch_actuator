@@ -1,4 +1,5 @@
 #include "KnxAdapter.h"
+#include "KnxAddress.h"
 #include "generated/KnxProduct.h"
 #include <NetworkSupport.h>
 #include <NetworkUdp.h>
@@ -42,6 +43,7 @@ class StoredPlatform: public Esp32Platform
     uint8_t bytes[8192];
     bool loaded = false, pending = false, ok = true, suspended = false;
     uint32_t revision = 1;
+    uint32_t retryAt = 0;
     String owner = "ets";
 
     explicit StoredPlatform(Actuator &d) : d(d)
@@ -137,7 +139,19 @@ class StoredPlatform: public Esp32Platform
             JsonDocument doc;
             if (d.store.read("/config/knx", payload) && !deserializeJson(doc, payload))
             {
-                String hex = doc["image"] | "";
+                String hex;
+                if (doc["image"].is<JsonArray>())
+                {
+                    hex.reserve(sizeof(bytes) * 2);
+                    for (auto chunk : doc["image"].as<JsonArrayConst>())
+                    {
+                        hex += chunk.as<String>();
+                    }
+                }
+                else
+                {
+                    hex = doc["image"] | ""; // Legacy image.
+                }
                 if (hex.length() == sizeof(bytes) * 2)
                 {
                     for (size_t i = 0; i < sizeof(bytes); ++i)
@@ -164,30 +178,52 @@ class StoredPlatform: public Esp32Platform
         {
             return false;
         }
-        JsonDocument doc;
-        String hex;
-        hex.reserve(sizeof(bytes) * 2);
-        const char *digits = "0123456789abcdef";
-        for (auto v : bytes)
-        {
-            hex += digits[v >> 4];
-            hex += digits[v & 15];
-        }
-        doc["image"] = hex;
-        doc["revision"] = revision + 1;
-        doc["owner"] = owner;
         String payload;
-        serializeJson(doc, payload);
+        {
+            JsonDocument doc;
+            const char *digits = "0123456789abcdef";
+            auto chunks = doc["image"].to<JsonArray>();
+            for (size_t offset = 0; offset < sizeof(bytes); offset += 512)
+            {
+                char hex[1025];
+                for (size_t i = 0; i < 512; ++i)
+                {
+                    hex[i * 2] = digits[bytes[offset + i] >> 4];
+                    hex[i * 2 + 1] = digits[bytes[offset + i] & 15];
+                }
+                hex[1024] = 0;
+                chunks.add(JsonString(hex, size_t(1024)));
+            }
+            doc["revision"] = revision + 1;
+            doc["owner"] = owner;
+            const size_t expected = measureJson(doc);
+            ok = !doc.overflowed() && payload.reserve(expected) && serializeJson(doc, payload) == expected;
+        }
+        if (!ok)
+        {
+            retryAt = millis() + 5000;
+            d.fault = 5;
+            d.faultText = "KNX persistence failed: image allocation failed";
+            return false;
+        }
+        // Release the hex image and JSON document before durable verification.
         ok = d.store.write("/config/knx", payload);
         if (ok)
         {
             ++revision;
             pending = false;
+            retryAt = 0;
+            if (d.fault == 5)
+            {
+                d.fault = 0;
+                d.faultText = "";
+            }
         }
         else
         {
             d.fault = 5;
-            d.faultText = "KNX persistence failed";
+            d.faultText = String("KNX persistence failed: ") + d.store.lastError();
+            retryAt = millis() + 5000;
         }
         return ok;
     }
@@ -449,6 +485,8 @@ bool KnxAdapter::begin()
         x.initialized = true;
         x.syncParameters();
         x.attach();
+        // Restoring a web-owned image is not a new ETS download.
+        x.wasConfigured = x.valid();
     }
     x.syncParameters();
     x.stack.enabled(true);
@@ -528,7 +566,7 @@ void KnxAdapter::loop()
         x.attach();
         x.platform.owner = "ets";
     }
-    if (x.platform.pending && !x.busy() && configured)
+    if (x.platform.pending && !x.busy() && configured && (!x.platform.retryAt || int32_t(millis() - x.platform.retryAt) >= 0))
     {
         x.platform.commit();
     }
@@ -614,9 +652,9 @@ bool KnxAdapter::configure(JsonObjectConst o, String &error)
         return bad("Explicit web takeover is required");
     }
     String text = o["address"] | "";
-    unsigned area, line, device;
+    uint16_t individualAddress;
     char tail;
-    if (sscanf(text.c_str(), "%u.%u.%u%c", &area, &line, &device, &tail) != 3 || area > 15 || line > 15 || device < 1 || device > 255)
+    if (!o["address"].is<String>() || !parseIndividualAddress(text.c_str(), individualAddress))
     {
         return bad("Invalid individual address");
     }
@@ -712,11 +750,12 @@ bool KnxAdapter::configure(JsonObjectConst o, String &error)
                                   uint8_t(product::Application), uint8_t(product::Version)};
         uint8_t count = 1;
         x.bau.parameters().writeProperty(PID_PROG_VERSION, 1, application, count);
-        x.bau.deviceObject().individualAddress((area << 12) | (line << 8) | device);
+        x.bau.deviceObject().individualAddress(individualAddress);
         x.platform.owner = "web";
         x.stack.writeMemory();
     }
     x.platform.suspended = false;
+    const bool tablesLoaded = ok;
     ok = ok && x.platform.commit();
     if (!ok)
     {
@@ -724,7 +763,7 @@ bool KnxAdapter::configure(JsonObjectConst o, String &error)
         x.platform.owner = previousOwner;
         x.stack.readMemory();
         x.platform.pending = false;
-        error = "KNX table commit failed; previous image restored";
+        error = tablesLoaded ? x.d.faultText + "; previous image restored" : "KNX table loading failed; previous image restored";
     }
     x.stack.enabled(true);
     x.callbacks = false;

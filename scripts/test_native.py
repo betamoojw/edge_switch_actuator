@@ -24,6 +24,11 @@ def main() -> None:
         ("native-tests", "tests/native_tests.cpp", ["-Isrc"]),
         ("network-tests", "tests/network_tests.cpp", ["-Itests/network_stubs", "-Ilib/framework"]),
     ]
+    headers = next((ROOT / ".pio/libdeps").glob("*/ArduinoJson/src/ArduinoJson.h"), None)
+    if headers is None:
+        raise SystemExit("Install PlatformIO dependencies before running durable storage tests")
+    cases.append(("durable-store-tests", "tests/durable_store_tests.cpp",
+                  ["-Itests/store_stubs", "-Isrc", "-I" + str(headers.parent)]))
     for name, source, includes in cases:
         binary = ROOT / ".pio" / (name + (".exe" if os.name == "nt" else ""))
         binary.parent.mkdir(exist_ok=True)

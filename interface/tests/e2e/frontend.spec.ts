@@ -169,13 +169,26 @@ test('KNX-04 validates addresses before saving', async ({ page, request }) => {
 	await group.fill('');
 	await expect(group).toHaveAttribute('aria-invalid', 'false');
 	await group.fill('0/0/1, 31/7/255');
+	await individual.fill('1.1.10');
+	await page.getByRole('spinbutton', { name: 'Pulse (ms)', exact: true }).first().fill('1500');
 	await page.getByRole('checkbox', { name: /Take over for web editing/ }).check();
 	await expect(saveKnx).toBeEnabled();
 	await saveKnx.click();
 	await expect(page.getByText(/Owner: web · Revision 2/)).toBeVisible();
 	const snapshot = await state(request);
-	expect(snapshot.knx.address).toBe('15.15.255');
+	expect(snapshot.knx.address).toBe('1.1.10');
 	expect(snapshot.knx.objects[0].groups).toEqual(['0/0/1', '31/7/255']);
+	expect(snapshot.knx.parameters[0].pulseMs).toBe(1500);
+	await expect(individual).toHaveValue('1.1.10');
+	// An address-only edit must retain group mappings and application parameters.
+	await individual.fill('1.1.11');
+	await saveKnx.click();
+	await expect(page.getByText(/Owner: web · Revision 3/)).toBeVisible();
+	await page.getByRole('button', { name: 'Reload KNX snapshot' }).click();
+	await expect(individual).toHaveValue('1.1.11');
+	const changed = await state(request);
+	expect(changed.knx.objects).toEqual(snapshot.knx.objects);
+	expect(changed.knx.parameters).toEqual(snapshot.knx.parameters);
 });
 
 const controlURL = `http://127.0.0.1:${process.env.SIM_CONTROL_PORT || 3081}`;

@@ -340,7 +340,7 @@ export class Device extends EventEmitter {
 				try {
 					const knx = {
 						revision: this.saved.knx.revision + 1,
-						address: body.address,
+						address: body.address.split('.').map(Number).join('.'),
 						owner: 'web',
 						configured: true,
 						objects: clone(body.objects),
@@ -467,6 +467,10 @@ export class Device extends EventEmitter {
 		}
 		this.audit(`${user.username} /rest/${path} ${status}`);
 		const result = { status, body: { ok: status === 200, error, revision: this.config.revision } };
+		if (status === 200 && path === 'knx/config') {
+			result.body.knx = this.knxSnapshot(user);
+			result.body.revision = this.saved.knx.revision;
+		}
 		if (status === 200 && path === 'device/commands') result.body.state = this.snapshot();
 		if (body.requestId) {
 			this.dedup.push({

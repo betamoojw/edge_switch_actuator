@@ -309,6 +309,14 @@ void Actuator::execute(Request &r)
     response["ok"] = r.status == 200;
     response["error"] = error;
     response["revision"] = config.revision;
+    if (r.status == 200 && r.path == "/rest/knx/config")
+    {
+        // Return the committed address, groups and parameters from the same
+        // transaction; the UI must not infer success from its editable draft.
+        auto committed = response["knx"].to<JsonObject>();
+        knx->snapshot(committed);
+        response["revision"] = committed["revision"];
+    }
     audit(r.user + " " + r.path + " " + String(r.status));
     if (r.status == 200 && r.path == "/rest/device/commands")
     {
