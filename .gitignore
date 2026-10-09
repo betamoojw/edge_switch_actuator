@@ -19,6 +19,7 @@ ssl_certs/cacert.pem
 /logs
 .aid
 /scripts/__pycache__
+/tests/__pycache__
 .DS_Store
 *.bak
 /interface/.sim-state/
