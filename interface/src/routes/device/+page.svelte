@@ -303,13 +303,13 @@
 				{$t('Factory reset armed. Release BOOT before 10 seconds to cancel.')}
 			</div>{/if}
 		<div
-			class="tabs tabs-box bg-base-100 mb-3 grid grid-cols-2 gap-1 p-1 sm:grid-cols-3 xl:grid-cols-6"
+			class="device-section-tabs tabs tabs-box bg-base-100 flex min-w-0 flex-nowrap gap-1 overflow-x-auto p-1"
 			role="tablist"
 			aria-label={$t('Hardware categories')}
 		>
 			{#each sections as item}<button
 					role="tab"
-					class="tab h-auto min-h-11 gap-2 px-3 py-2 text-center whitespace-normal"
+					class="tab h-14 min-h-14 min-w-25 flex-1 shrink-0 snap-start flex-col gap-0.5 px-2 py-1.5 text-center whitespace-nowrap lg:h-11 lg:min-h-11 lg:flex-row lg:gap-1.5 lg:py-2"
 					class:tab-active={section === item.title}
 					aria-selected={section === item.title}
 					onclick={() => selectSection(item.title)}
@@ -317,20 +317,26 @@
 				>{/each}
 		</div>
 		{#if config && status}
-			<div class="alert alert-info" class:invisible={!dirty} aria-hidden={!dirty}>
-				<span
+			{#if dirty}<div
+					class="alert alert-info fixed right-4 bottom-4 left-4 z-50 flex flex-col items-stretch gap-3 shadow-lg sm:left-auto sm:max-w-xl sm:flex-row sm:items-center"
+				>
+				<span class="min-w-0 flex-1 text-sm"
 					>{$t(
 						'Unsaved settings. Apply saves the complete profile and restarts the selected protocol interface.'
 					)}</span
-				><button class="btn btn-sm" disabled={busy} onclick={loadConfig}
-					><Discard class="h-4 w-4 shrink-0" aria-hidden="true" />{$t('Discard')}</button
-				><button
-					class="btn btn-primary btn-sm"
-					disabled={busy || !!offline || !status.capabilities.configure}
-					onclick={save}
-					><Save class="h-4 w-4 shrink-0" aria-hidden="true" />{$t('Apply settings')}</button
-				>
-			</div>
+				><div class="flex flex-wrap gap-2 sm:flex-nowrap">
+					<button class="btn btn-sm flex-1 sm:flex-none" disabled={busy} onclick={loadConfig}
+						><Discard class="h-4 w-4 shrink-0" aria-hidden="true" />{$t('Discard')}</button
+					><button
+						class="btn btn-primary btn-sm flex-1 sm:flex-none"
+						disabled={busy || !!offline || !status.capabilities.configure}
+						onclick={save}
+						><Save class="h-4 w-4 shrink-0" aria-hidden="true" />{$t(
+							'Apply settings'
+						)}</button
+					>
+				</div>
+			</div>{/if}
 			{#if section === 'Outputs'}
 				<p class="mb-2 flex items-start gap-2 text-sm opacity-75">
 					<Info class="h-5 w-5 shrink-0" aria-hidden="true" />
@@ -936,8 +942,8 @@
 										'Main/middle/sub: 0–31/0–7/0–255; 0/0/0 is reserved. Leave blank for no association. Up to 8 unique addresses per object; sending address first.'
 									)}
 								</p>
-								<div class="rounded-box border-base-300 min-w-0 overflow-x-auto border">
-									<table class="table table-zebra">
+								<div class="knx-object-editor rounded-box border-base-300 min-w-0 overflow-x-auto border">
+									<table class="knx-object-table table table-zebra w-full">
 										<thead
 											><tr
 												><th>{$t('Object')}</th><th>{$t('Function')}</th><th
@@ -946,13 +952,15 @@
 											></thead
 										><tbody
 											>{#each knx.objects as obj}<tr
-													><td>{obj.number}</td><td
+													><td data-label={$t('Object')}>{obj.number}</td><td
+														data-label={$t('Function')}
 														>{$t('CH')}
 														{Math.ceil(obj.number / 3)}
 														{[$t('Status'), $t('Switch'), $t('Block')][obj.number % 3]}</td
 													><td
+														data-label={$t('Group addresses (comma separated, sending address first)')}
 														><input
-															class="input w-full min-w-64"
+															class="input w-full"
 															placeholder="1/0/1, 1/0/2"
 															aria-label={$t('Group addresses for object {number}', {
 																number: obj.number
@@ -1112,5 +1120,63 @@
 		flex-grow: 0;
 		font-size: 0.875rem;
 		overflow-wrap: anywhere;
+	}
+	.device-section-tabs {
+		scrollbar-width: none;
+		scroll-snap-type: x proximity;
+		-webkit-overflow-scrolling: touch;
+	}
+	.device-section-tabs::-webkit-scrollbar {
+		display: none;
+	}
+	@media (max-width: 47.999rem) {
+		.knx-object-editor {
+			overflow-x: hidden;
+		}
+		.knx-object-table,
+		.knx-object-table tbody {
+			display: block;
+			width: 100%;
+		}
+		.knx-object-table thead {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0;
+		}
+		.knx-object-table tbody {
+			display: grid;
+			gap: 0.75rem;
+			padding: 0.75rem;
+		}
+		.knx-object-table tbody tr {
+			border: 1px solid var(--color-base-300);
+			border-radius: var(--radius-box);
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+			gap: 0.75rem;
+			padding: 0.75rem;
+		}
+		.knx-object-table tbody td {
+			display: grid;
+			gap: 0.25rem;
+			min-width: 0;
+			padding: 0;
+			white-space: normal;
+		}
+		.knx-object-table tbody td::before {
+			content: attr(data-label);
+			font-size: 0.75rem;
+			font-weight: 700;
+			opacity: 0.7;
+		}
+		.knx-object-table tbody td:last-child {
+			grid-column: 1 / -1;
+		}
 	}
 </style>

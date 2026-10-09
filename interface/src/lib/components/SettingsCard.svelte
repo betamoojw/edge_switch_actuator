@@ -59,7 +59,7 @@
 		</div>
 		{#if open}
 			<div
-				class="flex flex-col gap-2 p-4 pt-0"
+				class="flex min-w-0 flex-col gap-2 p-4 pt-0"
 				transition:slide|local={{ duration: 300, easing: cubicOut }}
 			>
 				{@render children?.()}
@@ -84,7 +84,7 @@
 				{/if}
 			</span>
 		</div>
-		<div class="flex flex-col gap-2 p-4 pt-0">
+		<div class="flex min-w-0 flex-col gap-2 p-4 pt-0">
 			{@render children?.()}
 		</div>
 	</div>

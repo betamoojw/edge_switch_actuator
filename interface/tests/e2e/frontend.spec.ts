@@ -717,6 +717,63 @@ test('DEVICE-UI responsive sections retain readable controls across languages an
 	}
 });
 
+test('DEVICE-UI compact navigation and KNX editor adapt across target viewports', async ({
+	page
+}) => {
+	await login(page);
+	const viewports = [
+		{ width: 320, height: 568 },
+		{ width: 360, height: 800 },
+		{ width: 390, height: 844 },
+		{ width: 667, height: 375 },
+		{ width: 844, height: 390 },
+		{ width: 915, height: 412 },
+		{ width: 768, height: 1024 },
+		{ width: 1280, height: 720 }
+	];
+	for (const viewport of viewports) {
+		await page.setViewportSize(viewport);
+		await page.getByRole('tab', { name: 'Outputs', exact: true }).click();
+		const layout = await page.evaluate(() => {
+			const tablist = document.querySelector<HTMLElement>('[role="tablist"]')!,
+				tabs = [...tablist.querySelectorAll<HTMLElement>('[role="tab"]')],
+				content = tablist.nextElementSibling!.getBoundingClientRect(),
+				navigation = tablist.getBoundingClientRect();
+			return {
+				pageOverflow:
+					document.documentElement.scrollWidth > document.documentElement.clientWidth,
+				contentGap: Math.round(content.top - navigation.bottom),
+				tabRows: new Set(tabs.map((tab) => Math.round(tab.getBoundingClientRect().top))).size,
+				minTabHeight: Math.min(...tabs.map((tab) => tab.getBoundingClientRect().height)),
+				navigationOverflow: tablist.scrollWidth > tablist.clientWidth
+			};
+		});
+		expect(layout.pageOverflow, JSON.stringify(viewport)).toBe(false);
+		expect(layout.contentGap, JSON.stringify(viewport)).toBeLessThanOrEqual(8);
+		expect(layout.tabRows, JSON.stringify(viewport)).toBe(1);
+		expect(layout.minTabHeight, JSON.stringify(viewport)).toBeGreaterThanOrEqual(44);
+		expect(layout.navigationOverflow, JSON.stringify(viewport)).toBe(viewport.width < 768);
+
+		await page.getByRole('tab', { name: 'KNX', exact: true }).click();
+		await expect(page.getByRole('heading', { name: 'KNXnet/IP commissioning' })).toBeVisible();
+		const knx = await page.evaluate(() => {
+			const editor = document.querySelector<HTMLElement>('.knx-object-editor')!,
+				row = editor.querySelector('tbody tr')!;
+			return {
+				pageOverflow:
+					document.documentElement.scrollWidth > document.documentElement.clientWidth,
+				localOverflow: editor.scrollWidth > editor.clientWidth,
+				rowDisplay: getComputedStyle(row).display
+			};
+		});
+		expect(knx.pageOverflow, JSON.stringify(viewport)).toBe(false);
+		expect(knx.localOverflow, JSON.stringify(viewport)).toBe(false);
+		expect(knx.rowDisplay, JSON.stringify(viewport)).toBe(
+			viewport.width < 768 ? 'grid' : 'table-row'
+		);
+	}
+});
+
 test('MODBUS-MAP reference follows selection and distinguishes RTU diagnostics', async ({
 	page
 }, testInfo) => {
