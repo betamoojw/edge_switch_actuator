@@ -11,6 +11,8 @@ nav:
       - esp32-s3-relay-6ch-hardware.md
       - actuator-modbus-map.md
       - actuator-knx-design.md
+      - Modbus verifier quick start: modbus-verifier-quickstart.md
+      - Modbus verification and validation: MODBUS_VERIFICATION_VALIDATION_PLAN.md
   - "Build Tools":
       - gettingstarted.md
       - buildprocess.md
