@@ -18,6 +18,13 @@ actuator. Sign in with `admin` / `sim-admin`. Other local-only fixture users are
 `viewer` / `sim-viewer` (read-only). These are simulator credentials, not device
 setup passwords. No external device, MQTT broker or KNX network is contacted.
 
+The actuator profile also models **Connections → Xiaozhi MCP** without contacting
+any external MCP service. The `mcp-only` and `mcp-off` profiles cover feature-aware
+navigation. Send `{ "type": "mcp", "state": "ready" }` to the authenticated
+`/__sim/actions` control endpoint to select a deterministic connection state.
+See [Xiaozhi MCP](xiaozhi-mcp.md) for settings, tools, native tests and the optional
+local WSS peer. Browser cases `MCP-*` exercise configuration and access roles.
+
 For a real device, set DEVICE_HOST explicitly:
 
 ```powershell

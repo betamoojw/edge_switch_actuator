@@ -176,3 +176,31 @@ export type EthernetSettings = {
 	dns_ip_1?: string;
 	dns_ip_2?: string;
 };
+
+export type XiaozhiMcpSettings = {
+	schema_version: number;
+	revision: number;
+	enabled: boolean;
+	alias: string;
+	channel_mask: number;
+	endpoint_configured: boolean;
+	endpoint_host: string;
+};
+export type XiaozhiMcpStatus = {
+	state: string;
+	error_code: string;
+	enabled: boolean;
+	connected: boolean;
+	ready: boolean;
+	alias: string;
+	device_id: string;
+	network_interface: string;
+	tool_count: number;
+	retry_in_ms: number;
+	connected_at_ms: number;
+};
+export type XiaozhiMcpTool = {
+	name: string;
+	description: string;
+	inputSchema: Record<string, unknown>;
+};

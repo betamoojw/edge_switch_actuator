@@ -133,6 +133,7 @@ void FeaturesService::createJSON(JsonObject &root)
     root["ethernet"] = false;
 #endif
 
+    root["xiaozhi_mcp"] = bool(FT_XIAOZHI_MCP);
     root["firmware_version"] = APP_VERSION;
     root["firmware_name"] = APP_NAME;
     root["firmware_built_target"] = BUILD_TARGET;

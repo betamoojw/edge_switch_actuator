@@ -8,6 +8,8 @@ See [frontend development and testing](docs/frontend-testing.md) for local simul
 
 The six-channel device supports opt-in [Home Assistant MQTT discovery](docs/home-assistant.md), with relay controls, button events, identify and diagnostics alongside the existing protocols.
 
+It also supports opt-in [Xiaozhi MCP](docs/xiaozhi-mcp.md) under **Connections → Xiaozhi MCP**. Configure your own WSS endpoint and select which relay channels to expose. MCP works independently of MQTT and starts disabled.
+
 Use **System → UI** for seven interface languages and five themes, with automatic
 dark-mode support. See [UI preferences](docs/ui-preferences.md).
 

@@ -13,6 +13,7 @@ namespace actuator
 class Modbus;
 class KnxAdapter;
 class HomeAssistant;
+class XiaozhiMcpAdapter;
 
 class Actuator
 {
@@ -55,6 +56,10 @@ public:
 #endif
 
 private:
+    friend class XiaozhiMcpAdapter;
+#if FT_ENABLED(FT_XIAOZHI_MCP)
+    std::unique_ptr<XiaozhiMcpAdapter> xiaozhiMcp;
+#endif
     ESP32SvelteKit &framework;
     SemaphoreHandle_t mutex;
     QueueHandle_t queue;

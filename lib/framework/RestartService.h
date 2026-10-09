@@ -16,6 +16,7 @@
  **/
 
 #include <WiFi.h>
+#include <ConnectionLifecycle.h>
 
 #include <ESPmDNS.h>
 #include <PsychicHttp.h>
@@ -32,6 +33,7 @@ public:
 
     static void restartNow()
     {
+        ConnectionLifecycle::stopping = true;
         delay(250);
         // This can run on the HTTP server task. Network teardown here can wait
         // for that same task and prevent the OTA reboot from ever completing.

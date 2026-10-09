@@ -389,6 +389,8 @@ test('LIVE-01 REST failure, held save and recovery', async ({ page, request }) =
 		status: 503,
 		count: 5
 	});
+	// Live telemetry normally avoids REST polling; a disconnect triggers recovery.
+	await control(request, 'socket', { action: 'close' });
 	await expect(page.getByText(/Connection unavailable. Controls are disabled/)).toBeVisible();
 	await expect(card(page).getByRole('button', { name: 'Turn ON', exact: true })).toBeDisabled();
 	await control(request, 'faults', { clear: true });
@@ -740,8 +742,7 @@ test('DEVICE-UI compact navigation and KNX editor adapt across target viewports'
 				content = tablist.nextElementSibling!.getBoundingClientRect(),
 				navigation = tablist.getBoundingClientRect();
 			return {
-				pageOverflow:
-					document.documentElement.scrollWidth > document.documentElement.clientWidth,
+				pageOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
 				contentGap: Math.round(content.top - navigation.bottom),
 				tabRows: new Set(tabs.map((tab) => Math.round(tab.getBoundingClientRect().top))).size,
 				minTabHeight: Math.min(...tabs.map((tab) => tab.getBoundingClientRect().height)),
@@ -760,8 +761,7 @@ test('DEVICE-UI compact navigation and KNX editor adapt across target viewports'
 			const editor = document.querySelector<HTMLElement>('.knx-object-editor')!,
 				row = editor.querySelector('tbody tr')!;
 			return {
-				pageOverflow:
-					document.documentElement.scrollWidth > document.documentElement.clientWidth,
+				pageOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
 				localOverflow: editor.scrollWidth > editor.clientWidth,
 				rowDisplay: getComputedStyle(row).display
 			};
@@ -954,4 +954,84 @@ test('FIX-05 live updates continue during a poll and its old response cannot rev
 	}
 	await page.waitForTimeout(500);
 	await expect(card(page, 1).getByRole('button', { name: 'Turn OFF', exact: true })).toBeVisible();
+});
+
+test('MCP-01 configure, preserve secret, reconnect and remove endpoint', async ({
+	page,
+	request
+}) => {
+	await login(page, 'admin', '/connections/xiaozhi-mcp');
+	await expect(
+		page.getByRole('heading', { name: 'Xiaozhi MCP settings', exact: true })
+	).toBeVisible();
+	await page.getByLabel('Enable Xiaozhi MCP', { exact: true }).check();
+	await page.getByLabel('Device alias', { exact: true }).fill('Plant relays');
+	await page
+		.getByLabel('MCP endpoint', { exact: true })
+		.fill('wss://example.invalid/mcp/?token=e2e-private');
+	await page.getByRole('checkbox', { name: '1. Channel 1', exact: true }).check();
+	await page.getByRole('button', { name: 'Apply Settings', exact: true }).click();
+	await expect(
+		page.getByText('Settings saved. Connection status updates separately.', { exact: true })
+	).toBeVisible();
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveValue('');
+	await expect(page.getByText('actuator_set_relay_020000000010', { exact: true })).toBeVisible();
+	await page.reload();
+	await expect(page.getByLabel('Device alias', { exact: true })).toHaveValue('Plant relays');
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveValue('');
+	expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain('e2e-private');
+	await page.getByRole('button', { name: 'Reconnect', exact: true }).click();
+	await expect(page.getByText('Reconnection requested.', { exact: true })).toBeVisible();
+	await control(request, 'actions', { type: 'mcp', state: 'ready' });
+	await expect(page.getByText('Ready', { exact: true })).toBeVisible();
+	await page.getByLabel('Enable Xiaozhi MCP', { exact: true }).uncheck();
+	await page.getByLabel('Remove saved endpoint', { exact: true }).check();
+	await page.getByRole('button', { name: 'Apply Settings', exact: true }).click();
+	await expect(page.getByText('No endpoint configured.', { exact: true })).toBeVisible();
+});
+
+test('MCP-02 viewer status and feature-unavailable route', async ({ page, request }) => {
+	await login(page, 'viewer', '/connections/xiaozhi-mcp');
+	await expect(
+		page.getByText('Connection settings are managed by an administrator.', { exact: true })
+	).toBeVisible();
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveCount(0);
+	await control(request, 'reset', { profile: 'mcp-off' });
+	await page.evaluate(() => localStorage.removeItem('user'));
+	await login(page, 'admin', '/connections/xiaozhi-mcp');
+	await expect(
+		page.getByText('Xiaozhi MCP is unavailable in this firmware.', { exact: true })
+	).toBeVisible();
+});
+
+test('MCP-03 standalone navigation and failed saves preserve the draft', async ({
+	page,
+	request
+}) => {
+	await control(request, 'reset', { profile: 'mcp-only' });
+	await login(page, 'admin', '/connections/xiaozhi-mcp');
+	const menuToggle = page.locator('label[for="main-menu"]').first();
+	if (await menuToggle.isVisible()) await menuToggle.click();
+	await expect(page.getByRole('link', { name: 'Xiaozhi MCP', exact: true })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'MQTT', exact: true })).toHaveCount(0);
+	await expect(page.getByRole('link', { name: 'NTP', exact: true })).toHaveCount(0);
+	await page.getByRole('link', { name: 'Xiaozhi MCP', exact: true }).click();
+	await page.getByLabel('Device alias', { exact: true }).fill('Unsaved draft');
+	await page.getByLabel('MCP endpoint', { exact: true }).fill('wss://example.invalid/?token=draft');
+	await page.route('**/rest/xiaozhiMcpSettings', (route) =>
+		route.request().method() === 'POST'
+			? route.fulfill({ status: 503, json: { error: 'storage_failed' } })
+			: route.continue()
+	);
+	await page.getByRole('button', { name: 'Apply Settings', exact: true }).click();
+	await expect(page.getByText('Request failed. Please try again.', { exact: true })).toBeVisible();
+	await expect(page.getByLabel('Device alias', { exact: true })).toHaveValue('Unsaved draft');
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveValue(
+		'wss://example.invalid/?token=draft'
+	);
+	await expect(page.getByRole('button', { name: 'Reconnect', exact: true })).toBeDisabled();
+	await page.unroute('**/rest/xiaozhiMcpSettings');
+	await page.getByRole('button', { name: 'Reload saved settings', exact: true }).click();
+	await expect(page.getByLabel('Device alias', { exact: true })).toHaveValue('Switching Actuator');
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveValue('');
 });

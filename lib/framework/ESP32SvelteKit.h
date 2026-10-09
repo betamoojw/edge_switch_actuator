@@ -47,6 +47,7 @@
 #include <WiFiSettingsService.h>
 #include <WiFiStatus.h>
 #include <vector>
+#include <XiaozhiMcpService.h>
 
 #ifdef EMBED_WWW
 #include <WWWData.h>
@@ -177,6 +178,9 @@ public:
     }
 #endif
 
+#if FT_ENABLED(FT_XIAOZHI_MCP)
+    XiaozhiMcpService *getXiaozhiMcpService() { return &_xiaozhiMcp; }
+#endif
     FeaturesService *getFeatureService()
     {
         return &_featureService;
@@ -256,6 +260,9 @@ private:
     RestartService _restartService;
     FactoryResetService _factoryResetService;
     SystemStatus _systemStatus;
+#if FT_ENABLED(FT_XIAOZHI_MCP)
+    XiaozhiMcpService _xiaozhiMcp;
+#endif
 
     String _appName = APP_NAME;
 

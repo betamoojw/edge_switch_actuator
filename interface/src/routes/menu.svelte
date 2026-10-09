@@ -57,7 +57,7 @@
 		{
 			title: 'Connections',
 			icon: Remote,
-			feature: page.data.features.mqtt || page.data.features.ntp,
+			feature: page.data.features.mqtt || page.data.features.ntp || page.data.features.xiaozhi_mcp,
 			submenu: [
 				{
 					title: 'MQTT',
@@ -70,6 +70,12 @@
 					icon: NTP,
 					href: '/connections/ntp',
 					feature: page.data.features.ntp
+				},
+				{
+					title: 'Xiaozhi MCP',
+					icon: PlugConnected,
+					href: '/connections/xiaozhi-mcp',
+					feature: !!page.data.features.xiaozhi_mcp
 				}
 			]
 		},

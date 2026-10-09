@@ -1,3 +1,4 @@
+#include <ConnectionLifecycle.h>
 /**
  *   ESP32 SvelteKit
  *
@@ -57,6 +58,7 @@ esp_err_t SleepService::sleep(PsychicRequest *request)
 
 void SleepService::sleepNow()
 {
+    ConnectionLifecycle::stopping = true;
 #ifdef SERIAL_INFO
     Serial.println("Going into deep sleep now");
 #endif

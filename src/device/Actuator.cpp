@@ -1,5 +1,7 @@
 #include "Actuator.h"
 #include "HomeAssistant.h"
+#include "XiaozhiMcpAdapter.h"
+#include <ConnectionLifecycle.h>
 #include "protocols/KnxAdapter.h"
 #include "protocols/Modbus.h"
 #include <NetworkSupport.h>
@@ -89,6 +91,10 @@ void Actuator::begin()
 #if FT_ENABLED(FT_MQTT)
     homeAssistant.reset(new HomeAssistant(*this, framework));
     homeAssistant->begin();
+#endif
+#if FT_ENABLED(FT_XIAOZHI_MCP)
+    xiaozhiMcp.reset(new XiaozhiMcpAdapter(*this, *framework.getXiaozhiMcpService()));
+    xiaozhiMcp->begin();
 #endif
     xTaskCreatePinnedToCore([](void *p) { static_cast<Actuator *>(p)->loop(); }, "Actuator", 16384, this, 2, nullptr, 1);
 }
@@ -357,6 +363,10 @@ bool Actuator::apply(Config candidate, String &error)
 
 void Actuator::reset()
 {
+    ConnectionLifecycle::stopping = true;
+#if FT_ENABLED(FT_XIAOZHI_MCP)
+    framework.getXiaozhiMcpService()->stop();
+#endif
     for (auto pin : board::RelayPins)
     {
         digitalWrite(pin, LOW);
@@ -510,6 +520,9 @@ void Actuator::loop()
             execute(*r);
             xSemaphoreGive(r->done);
         }
+#if FT_ENABLED(FT_XIAOZHI_MCP)
+        xiaozhiMcp->loop();
+#endif
         uint32_t now = millis();
         auto event = gesture.update(digitalRead(board::BootPin) == LOW, now);
         if (event != Gesture::None)

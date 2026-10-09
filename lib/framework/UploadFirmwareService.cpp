@@ -1,3 +1,4 @@
+#include <ConnectionLifecycle.h>
 /**
  *   ESP32 SvelteKit
  *
@@ -183,6 +184,7 @@ esp_err_t UploadFirmwareService::handleUpload(PsychicRequest *request,
                 return handleError(request, 503, "Wrong firmware for this device");
             }
             
+            if (!ConnectionLifecycle::beginUpdate()) return handleError(request, 503, "Connection is still stopping; retry update");
             if (Update.begin(fsize - sizeof(esp_image_header_t)))
             {
                 // Emit preparing status after validation succeeds
@@ -362,6 +364,7 @@ esp_err_t UploadFirmwareService::handleError(PsychicRequest *request, int code, 
 #endif
     }
 
+    ConnectionLifecycle::updating = false;
     // Reset state to allow new upload attempts
     _fileType = ft_none;
     _previousProgress = 0;
@@ -381,6 +384,7 @@ esp_err_t UploadFirmwareService::handleEarlyDisconnect()
     // if updated has not ended on connection close, abort it
     if (!Update.end(true))
     {
+        ConnectionLifecycle::updating = false;
         ESP_LOGE(SVK_TAG, "Update error on early disconnect:");
 #ifdef SERIAL_INFO
         Update.printError(Serial);

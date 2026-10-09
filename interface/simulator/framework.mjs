@@ -1,3 +1,4 @@
+import { mcpRoute } from './xiaozhi-mcp.mjs';
 import { clone, defaults, integer, ipv4 } from './profiles.mjs';
 import { hashPassword, verifyPassword } from './auth.mjs';
 import Busboy from 'busboy';
@@ -122,6 +123,7 @@ export async function upload(req, d) {
 }
 
 export function frameworkRoute(d, path, method, body, user, url) {
+	if (path.startsWith('xiaozhiMcp')) return mcpRoute(d, path, method, body, user);
 	const r = d.runtime,
 		s = d.saved.settings,
 		f = d.features;

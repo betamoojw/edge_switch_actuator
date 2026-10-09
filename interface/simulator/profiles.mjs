@@ -1,3 +1,4 @@
+import { mcpDefaults } from './xiaozhi-mcp.mjs';
 // Wire fixtures derived from dev fd848362: DeviceConfig.h, FeaturesService.cpp,
 // factory_settings.ini and framework *SettingsService.h. Credentials are local-only.
 export const profileNames = [
@@ -7,7 +8,9 @@ export const profileNames = [
 	'knx',
 	'battery',
 	'security-off',
-	'json'
+	'json',
+	'mcp-only',
+	'mcp-off'
 ];
 export const clone = (value) => structuredClone(value);
 export const integer = (value, min, max) => Number.isInteger(value) && value >= min && value <= max;
@@ -92,6 +95,7 @@ export function defaults(profile = 'actuator') {
 			{ username: 'viewer', password: 'sim-viewer', admin: false, role: 'viewer', channels: 0 }
 		],
 		settings: {
+			xiaozhiMcpSettings: mcpDefaults(),
 			wifiSettings: { hostname: 'esp32-simulator', connection_mode: 1, wifi_networks: [] },
 			apSettings: {
 				provision_mode: 1,
@@ -134,8 +138,9 @@ export function defaults(profile = 'actuator') {
 export function features(profile) {
 	return {
 		security: profile !== 'security-off',
-		mqtt: true,
-		ntp: true,
+		mqtt: profile !== 'mcp-only',
+		xiaozhi_mcp: !['template', 'security-off', 'mcp-off'].includes(profile),
+		ntp: profile !== 'mcp-only',
 		upload_firmware: true,
 		download_firmware: true,
 		sleep: profile === 'template',

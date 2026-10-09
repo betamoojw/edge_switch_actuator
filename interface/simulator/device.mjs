@@ -1,3 +1,4 @@
+import { mcpDefaults, mcpAction } from './xiaozhi-mcp.mjs';
 import { EventEmitter } from 'node:events';
 import { defaults, features, clone, integer, validateConfig, validateKnx } from './profiles.mjs';
 import { Auth, hashPassword } from './auth.mjs';
@@ -16,6 +17,7 @@ export class Device extends EventEmitter {
 				'State file profile differs; use a separate state file or reset it explicitly'
 			);
 		if (!this.saved) this.seed(profile);
+		this.saved.settings.xiaozhiMcpSettings ??= mcpDefaults();
 		this.boot();
 	}
 	now() {
@@ -597,6 +599,9 @@ export class Device extends EventEmitter {
 			case 'scan':
 				if (!Array.isArray(body.networks)) throw new Error('networks array required');
 				r.scanResults = clone(body.networks);
+				break;
+			case 'mcp':
+				mcpAction(this, body);
 				break;
 			case 'mqtt':
 				r.mqttConnected = !!body.connected;

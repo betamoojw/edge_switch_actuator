@@ -7,6 +7,7 @@ nav:
       - Implementation and validation: actuator-implementation.md
       - Network API migration: network-api-migration.md
       - Home Assistant: home-assistant.md
+      - Xiaozhi MCP: xiaozhi-mcp.md
       - actuator-source-review.md
       - esp32-s3-relay-6ch-hardware.md
       - actuator-modbus-map.md

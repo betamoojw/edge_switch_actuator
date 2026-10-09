@@ -3430,5 +3430,325 @@
 		"Wszystkie kanały",
 		"所有通道",
 		"所有通道"
+	],
+	"Xiaozhi MCP": [
+		"Xiaozhi MCP",
+		"Xiaozhi MCP",
+		"Xiaozhi MCP",
+		"Xiaozhi MCP",
+		"小智 MCP",
+		"小智 MCP"
+	],
+	"Xiaozhi MCP status": [
+		"Xiaozhi-MCP-Status",
+		"Estado de Xiaozhi MCP",
+		"État de Xiaozhi MCP",
+		"Stan Xiaozhi MCP",
+		"小智 MCP 状态",
+		"小智 MCP 狀態"
+	],
+	"Xiaozhi MCP settings": [
+		"Xiaozhi-MCP-Einstellungen",
+		"Configuración de Xiaozhi MCP",
+		"Paramètres Xiaozhi MCP",
+		"Ustawienia Xiaozhi MCP",
+		"小智 MCP 设置",
+		"小智 MCP 設定"
+	],
+	"Enable Xiaozhi MCP": [
+		"Xiaozhi MCP aktivieren",
+		"Activar Xiaozhi MCP",
+		"Activer Xiaozhi MCP",
+		"Włącz Xiaozhi MCP",
+		"启用小智 MCP",
+		"啟用小智 MCP"
+	],
+	"Device alias": [
+		"Gerätealias",
+		"Alias del dispositivo",
+		"Alias de l’appareil",
+		"Alias urządzenia",
+		"设备别名",
+		"裝置別名"
+	],
+	"MCP endpoint": [
+		"MCP-Endpunkt",
+		"Endpoint MCP",
+		"Point de terminaison MCP",
+		"Punkt końcowy MCP",
+		"MCP 接入点",
+		"MCP 端點"
+	],
+	"Show endpoint": [
+		"Endpunkt anzeigen",
+		"Mostrar endpoint",
+		"Afficher le point de terminaison",
+		"Pokaż punkt końcowy",
+		"显示接入点",
+		"顯示端點"
+	],
+	"Endpoint saved. Leave blank to keep it.": [
+		"Endpunkt gespeichert. Zum Beibehalten leer lassen.",
+		"Endpoint guardado. Déjelo vacío para conservarlo.",
+		"Point enregistré. Laisser vide pour le conserver.",
+		"Punkt zapisany. Pozostaw puste, aby go zachować.",
+		"接入点已保存。留空可保留。",
+		"端點已儲存。留空即可保留。"
+	],
+	"No endpoint configured.": [
+		"Kein Endpunkt konfiguriert.",
+		"No hay endpoint configurado.",
+		"Aucun point de terminaison configuré.",
+		"Nie skonfigurowano punktu końcowego.",
+		"尚未配置接入点。",
+		"尚未設定端點。"
+	],
+	"Remove saved endpoint": [
+		"Gespeicherten Endpunkt entfernen",
+		"Eliminar endpoint guardado",
+		"Supprimer le point enregistré",
+		"Usuń zapisany punkt końcowy",
+		"移除已保存的接入点",
+		"移除已儲存的端點"
+	],
+	"Allowed relay channels": [
+		"Freigegebene Relaiskanäle",
+		"Canales de relé permitidos",
+		"Canaux de relais autorisés",
+		"Dozwolone kanały przekaźnikowe",
+		"允许控制的继电器通道",
+		"允許控制的繼電器通道"
+	],
+	"Selected channels can be controlled by Xiaozhi. Unselected channels remain private.": [
+		"Xiaozhi kann ausgewählte Kanäle steuern. Andere Kanäle bleiben privat.",
+		"Xiaozhi puede controlar los canales seleccionados. Los demás permanecen privados.",
+		"Xiaozhi peut commander les canaux sélectionnés. Les autres restent privés.",
+		"Xiaozhi może sterować wybranymi kanałami. Pozostałe pozostają prywatne.",
+		"小智可以控制所选通道。未选通道不会对外公开。",
+		"小智可以控制所選通道。未選通道不會對外公開。"
+	],
+	"Reload saved settings": [
+		"Gespeicherte Einstellungen laden",
+		"Recargar configuración guardada",
+		"Recharger les paramètres enregistrés",
+		"Wczytaj zapisane ustawienia",
+		"重新加载已保存的设置",
+		"重新載入已儲存的設定"
+	],
+	"Available tools": [
+		"Verfügbare Werkzeuge",
+		"Herramientas disponibles",
+		"Outils disponibles",
+		"Dostępne narzędzia",
+		"可用工具",
+		"可用工具"
+	],
+	"Retry delay": [
+		"Wartezeit bis Neuversuch",
+		"Tiempo hasta reintento",
+		"Délai avant nouvelle tentative",
+		"Czas do ponowienia",
+		"重试等待时间",
+		"重試等待時間"
+	],
+	"Configure NTP": [
+		"NTP konfigurieren",
+		"Configurar NTP",
+		"Configurer NTP",
+		"Skonfiguruj NTP",
+		"配置 NTP",
+		"設定 NTP"
+	],
+	"Not configured": [
+		"Nicht konfiguriert",
+		"Sin configurar",
+		"Non configuré",
+		"Nie skonfigurowano",
+		"未配置",
+		"未設定"
+	],
+	"Waiting for network": [
+		"Warten auf Netzwerk",
+		"Esperando la red",
+		"En attente du réseau",
+		"Oczekiwanie na sieć",
+		"等待网络",
+		"等待網路"
+	],
+	"Waiting for time synchronization": [
+		"Warten auf Zeitsynchronisierung",
+		"Esperando sincronización horaria",
+		"En attente de synchronisation horaire",
+		"Oczekiwanie na synchronizację czasu",
+		"等待时间同步",
+		"等待時間同步"
+	],
+	"Initializing": [
+		"Initialisierung",
+		"Inicializando",
+		"Initialisation",
+		"Inicjalizacja",
+		"正在初始化",
+		"正在初始化"
+	],
+	"Retrying": [
+		"Erneuter Versuch",
+		"Reintentando",
+		"Nouvelle tentative",
+		"Ponawianie",
+		"正在重试",
+		"正在重試"
+	],
+	"Connection error": [
+		"Verbindungsfehler",
+		"Error de conexión",
+		"Erreur de connexion",
+		"Błąd połączenia",
+		"连接错误",
+		"連線錯誤"
+	],
+	"Paused": [
+		"Pausiert",
+		"En pausa",
+		"En pause",
+		"Wstrzymano",
+		"已暂停",
+		"已暫停"
+	],
+	"Check the endpoint, network and certificate trust.": [
+		"Endpunkt, Netzwerk und Zertifikatsvertrauen prüfen.",
+		"Compruebe el endpoint, la red y la confianza del certificado.",
+		"Vérifiez le point de terminaison, le réseau et le certificat.",
+		"Sprawdź punkt końcowy, sieć i zaufanie do certyfikatu.",
+		"请检查接入点、网络和证书信任。",
+		"請檢查端點、網路與憑證信任。"
+	],
+	"Connection settings are managed by an administrator.": [
+		"Verbindungseinstellungen werden vom Administrator verwaltet.",
+		"Un administrador gestiona la conexión.",
+		"Un administrateur gère les paramètres de connexion.",
+		"Ustawieniami połączenia zarządza administrator.",
+		"连接设置由管理员管理。",
+		"連線設定由管理員管理。"
+	],
+	"Xiaozhi MCP is unavailable in this firmware.": [
+		"Xiaozhi MCP ist in dieser Firmware nicht verfügbar.",
+		"Xiaozhi MCP no está disponible en este firmware.",
+		"Xiaozhi MCP n’est pas disponible dans ce micrologiciel.",
+		"Xiaozhi MCP jest niedostępne w tym oprogramowaniu.",
+		"此固件不支持小智 MCP。",
+		"此韌體不支援小智 MCP。"
+	],
+	"Settings saved. Connection status updates separately.": [
+		"Einstellungen gespeichert. Der Verbindungsstatus wird separat aktualisiert.",
+		"Configuración guardada. El estado de conexión se actualiza por separado.",
+		"Paramètres enregistrés. L’état de connexion est actualisé séparément.",
+		"Ustawienia zapisane. Stan połączenia jest aktualizowany osobno.",
+		"设置已保存。连接状态将单独更新。",
+		"設定已儲存。連線狀態將另外更新。"
+	],
+	"Reconnection requested.": [
+		"Neuverbinden angefordert.",
+		"Reconexión solicitada.",
+		"Reconnexion demandée.",
+		"Zażądano ponownego połączenia.",
+		"已请求重新连接。",
+		"已要求重新連線。"
+	],
+	"Connection status could not be refreshed.": [
+		"Verbindungsstatus konnte nicht aktualisiert werden.",
+		"No se pudo actualizar el estado de conexión.",
+		"Impossible d’actualiser l’état de connexion.",
+		"Nie można odświeżyć stanu połączenia.",
+		"无法刷新连接状态。",
+		"無法重新整理連線狀態。"
+	],
+	"Settings could not be loaded.": [
+		"Einstellungen konnten nicht geladen werden.",
+		"No se pudo cargar la configuración.",
+		"Impossible de charger les paramètres.",
+		"Nie można wczytać ustawień.",
+		"无法加载设置。",
+		"無法載入設定。"
+	],
+	"Session expired. Please sign in again.": [
+		"Sitzung abgelaufen. Bitte erneut anmelden.",
+		"Sesión caducada. Inicie sesión de nuevo.",
+		"Session expirée. Reconnectez-vous.",
+		"Sesja wygasła. Zaloguj się ponownie.",
+		"会话已过期，请重新登录。",
+		"工作階段已過期，請重新登入。"
+	],
+	"Settings changed. Reload saved settings before trying again.": [
+		"Einstellungen geändert. Gespeicherte Einstellungen vor dem erneuten Versuch laden.",
+		"La configuración cambió. Recargue los ajustes guardados antes de reintentar.",
+		"Les paramètres ont changé. Rechargez-les avant de réessayer.",
+		"Ustawienia zmieniły się. Wczytaj zapisane ustawienia i spróbuj ponownie.",
+		"设置已更改。请重新加载已保存的设置后再试。",
+		"設定已變更。請重新載入已儲存的設定後再試。"
+	],
+	"Administrator access required.": [
+		"Administratorzugriff erforderlich.",
+		"Se requiere acceso de administrador.",
+		"Accès administrateur requis.",
+		"Wymagany dostęp administratora.",
+		"需要管理员权限。",
+		"需要管理員權限。"
+	],
+	"Check the alias, endpoint and allowed channels.": [
+		"Alias, Endpunkt und freigegebene Kanäle prüfen.",
+		"Compruebe el alias, endpoint y canales permitidos.",
+		"Vérifiez l’alias, le point de terminaison et les canaux autorisés.",
+		"Sprawdź alias, punkt końcowy i dozwolone kanały.",
+		"请检查别名、接入点和允许控制的通道。",
+		"請檢查別名、端點與允許控制的通道。"
+	],
+	"Request failed. Your saved settings have not been changed.": [
+		"Anfrage fehlgeschlagen. Gespeicherte Einstellungen wurden nicht geändert.",
+		"La solicitud falló. Los ajustes guardados no han cambiado.",
+		"Échec de la requête. Les paramètres enregistrés sont inchangés.",
+		"Żądanie nie powiodło się. Zapisane ustawienia nie zmieniły się.",
+		"请求失败，已保存的设置未更改。",
+		"要求失敗，已儲存的設定未變更。"
+	],
+	"Alias must contain 1–64 UTF-8 bytes without control characters.": [
+		"Der Alias muss 1–64 UTF-8-Bytes ohne Steuerzeichen enthalten.",
+		"El alias debe contener entre 1 y 64 bytes UTF-8 sin caracteres de control.",
+		"L’alias doit contenir 1 à 64 octets UTF-8 sans caractères de contrôle.",
+		"Alias musi zawierać 1–64 bajty UTF-8 bez znaków sterujących.",
+		"别名须为 1–64 个 UTF-8 字节，且不含控制字符。",
+		"別名須為 1–64 個 UTF-8 位元組，且不含控制字元。"
+	],
+	"An MCP endpoint is required before enabling.": [
+		"Vor dem Aktivieren ist ein MCP-Endpunkt erforderlich.",
+		"Se requiere un endpoint MCP antes de activar.",
+		"Un point de terminaison MCP est requis avant activation.",
+		"Przed włączeniem wymagany jest punkt końcowy MCP.",
+		"启用前必须配置 MCP 接入点。",
+		"啟用前必須設定 MCP 端點。"
+	],
+	"Enter a secure wss:// endpoint, up to 2048 bytes.": [
+		"Sicheren wss://-Endpunkt mit bis zu 2048 Bytes eingeben.",
+		"Introduzca un endpoint seguro wss:// de hasta 2048 bytes.",
+		"Saisissez un point wss:// sécurisé de 2048 octets maximum.",
+		"Wprowadź bezpieczny punkt wss:// do 2048 bajtów.",
+		"请输入不超过 2048 字节的安全 wss:// 接入点。",
+		"請輸入不超過 2048 位元組的安全 wss:// 端點。"
+	],
+	"Reconnect": [
+		"Neu verbinden",
+		"Reconectar",
+		"Reconnecter",
+		"Połącz ponownie",
+		"重新连接",
+		"重新連線"
+	],
+	"Request failed. Please try again.": [
+		"Anfrage fehlgeschlagen. Bitte erneut versuchen.",
+		"La solicitud falló. Inténtelo de nuevo.",
+		"Échec de la requête. Réessayez.",
+		"Żądanie nie powiodło się. Spróbuj ponownie.",
+		"请求失败，请重试。",
+		"要求失敗，請重試。"
 	]
 }

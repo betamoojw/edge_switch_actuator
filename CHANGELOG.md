@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Add opt-in Xiaozhi MCP: a Connections settings/status page, verified outbound WSS, protected credential persistence, channel-scoped actuator tools, lifecycle handling, localization, simulator coverage and firmware/native regression tests. See [setup and validation limits](docs/xiaozhi-mcp.md).
+- Keep the ESP32 and WT32 profiles within their existing OTA slots using compile/link LTO, and check actual firmware binary sizes in CI.
 - Opt-in Home Assistant MQTT discovery for the six-channel actuator: relay controls, diagnostics, button gestures and identify, with reconnect handling, retained discovery cleanup, localized settings and regression tests. See [setup and compatibility](docs/home-assistant.md).
 - Add originID to StateUpdateResult update [#110](https://github.com/theelims/ESP32-sveltekit/pull/110)
 - Add originID to StateUpdateResult update [#110](https://github.com/theelims/ESP32-sveltekit/pull/110)

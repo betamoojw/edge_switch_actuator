@@ -1,0 +1,34 @@
+name: Xiaozhi MCP firmware and native tests
+on:
+  pull_request:
+    paths: ['src/**', 'lib/framework/**', 'tests/**', 'scripts/**', 'platformio.ini', 'features.ini', 'factory_settings.ini', '.github/workflows/mcp-tests.yml']
+  push:
+    branches: [dev, main]
+    paths: ['src/**', 'lib/framework/**', 'tests/**', 'scripts/**', 'platformio.ini', 'features.ini', 'factory_settings.ini', '.github/workflows/mcp-tests.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  firmware:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [waveshare-relay-6ch, waveshare-relay-6ch-mcp-off, waveshare-relay-6ch-mcp-no-mqtt, esp32-s3-devkitc-1, Kincony-B16M, esp32-c3-devkitm-1, esp32dev, esp32-wt32-eth01]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: pip install platformio
+      - run: pio run -e ${{ matrix.environment }}
+      - run: python scripts/check_firmware_size.py ${{ matrix.environment }}
+      - if: matrix.environment == 'waveshare-relay-6ch'
+        run: |
+          python scripts/test_native.py
+          python scripts/test_home_assistant.py
+          python scripts/test_xiaozhi_mcp.py

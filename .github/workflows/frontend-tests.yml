@@ -30,6 +30,7 @@ jobs:
           cache: npm
           cache-dependency-path: interface/package-lock.json
       - run: npm ci
+      - run: npm run test:i18n
       - run: npm run check
       - run: npm run build
       - run: npm run test:bundle

@@ -1,3 +1,4 @@
+#include <ConnectionLifecycle.h>
 /**
  *   ESP32 SvelteKit
  *
@@ -112,6 +113,15 @@ void updateTask(void *param)
     String url = *((String *) param);
     delete (String *) param; // Clean up the allocated memory
 
+    if (!ConnectionLifecycle::beginUpdate())
+    {
+        doc["status"] = "error";
+        doc["error"] = "Connection is still stopping; retry update";
+        auto json = doc.as<JsonObject>();
+        _socket->emitEvent(EVENT_OTA_UPDATE, json);
+        vTaskDelete(nullptr);
+        return;
+    }
     NetworkClientSecure client;
 
 #ifndef DOWNLOAD_OTA_SKIP_CERT_VERIFY
@@ -177,6 +187,7 @@ void updateTask(void *param)
         _socket->emitEvent(EVENT_OTA_UPDATE, jsonObject);
     }
 
+    ConnectionLifecycle::updating = false;
     // delay to allow the event to be sent out
     vTaskDelay(100 / portTICK_PERIOD_MS);
 

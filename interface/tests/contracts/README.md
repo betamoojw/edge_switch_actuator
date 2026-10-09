@@ -15,6 +15,16 @@ exercise the actual simulator HTTP/WebSocket server, not fetch interception.
 | Settings response envelopes                                    | lib/framework/HttpEndpoint.h and individual \*SettingsService.h |
 | Event codecs, subscriptions and origin exclusion               | lib/framework/EventSocket.cpp and EventEndpoint.h               |
 | Upload field, MD5, image header and HTTP/OTA errors            | lib/framework/UploadFirmwareService.cpp                         |
+| MCP public/secret settings, revisions, endpoint validation and tool schemas | lib/framework/XiaozhiMcpProtocol.{h,cpp} |
+| MCP authorization, availability and reconnect status | lib/framework/XiaozhiMcpService.{h,cpp} |
+| MCP channel exposure, actuator commands and pulse retry protection | src/device/XiaozhiMcpCommands.h and XiaozhiMcpPulseCache.h |
+
+MCP source-derived API vectors are in `../simulator/xiaozhi-mcp.test.mjs`.
+`python scripts/test_xiaozhi_mcp.py` (repository root) exercises production C++
+protocol/settings, relay policy, retry cache, framing and lifecycle helpers.
+The simulator models connection status deterministically and does not implement
+a cloud connection. Contract capture includes only the redacted MCP status route;
+it never captures the write-only endpoint or calls relay tools.
 
 No captured hardware results are checked in or claimed. `npm run contract:capture
 -- <output.json>` captures read-only routes from DEVICE_HOST with credentials in

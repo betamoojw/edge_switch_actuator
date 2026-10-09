@@ -1,3 +1,4 @@
+#include <ConnectionLifecycle.h>
 /**
  *   ESP32 SvelteKit
  *
@@ -44,6 +45,7 @@ esp_err_t FactoryResetService::handleRequest(PsychicRequest *request)
  */
 void FactoryResetService::factoryReset()
 {
+    ConnectionLifecycle::stopping = true;
     if (resetHandler)
     {
         resetHandler();

@@ -16,6 +16,9 @@
  **/
 
 #define FT_ENABLED(feature) feature
+#ifndef FT_XIAOZHI_MCP
+#define FT_XIAOZHI_MCP 0
+#endif
 
 // security feature on by default
 #ifndef FT_SECURITY
@@ -70,6 +73,13 @@
 // Ethernet feature off by default
 #ifndef FT_ETHERNET
 #define FT_ETHERNET 0
+#endif
+
+#if FT_XIAOZHI_MCP && (!FT_SECURITY || !FT_NTP)
+#error "Xiaozhi MCP requires security and NTP support"
+#endif
+#if FT_XIAOZHI_MCP && defined(SERVE_CONFIG_FILES) && SERVE_CONFIG_FILES
+#error "Xiaozhi MCP credentials must not be served as static configuration files"
 #endif
 
 #endif

@@ -55,6 +55,9 @@ ESP32SvelteKit::ESP32SvelteKit(PsychicHttpServer *server, unsigned int numberEnd
       _coreDump(server, &_securitySettingsService),
 #endif
       _systemStatus(server, &_securitySettingsService)
+#if FT_ENABLED(FT_XIAOZHI_MCP)
+      , _xiaozhiMcp(server, &ESPFS, &_securitySettingsService)
+#endif
 {
 }
 
@@ -252,6 +255,9 @@ void ESP32SvelteKit::begin()
     _analyticsService.begin();
 #endif
 
+#if FT_ENABLED(FT_XIAOZHI_MCP)
+    _xiaozhiMcp.begin();
+#endif
     // Start the loop task
     ESP_LOGV(SVK_TAG, "Starting loop task");
     xTaskCreatePinnedToCore(this->_loopImpl,            // Function that should be called

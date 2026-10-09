@@ -44,6 +44,7 @@ const paths = [
 ];
 if (features.ethernet) paths.push('ethernetStatus');
 if (features.mqtt) paths.push('mqttStatus');
+if (features.xiaozhi_mcp) paths.push('xiaozhiMcpStatus');
 if (features.ntp) paths.push('ntpStatus');
 const responses = {};
 for (const path of paths) {
