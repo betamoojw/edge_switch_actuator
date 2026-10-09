@@ -35,6 +35,69 @@ credentials, paths and query strings are rejected. `npm run build` requires no
 target. The `.env.example` documents shell variables; the runner does not load
 that example file automatically.
 
+## Marketing demo video
+
+The Playwright recorder produces a 1280×720 dark-theme demonstration from the
+real actuator interface backed by the local simulator. It signs in before
+recording, tours Outputs, Indicators, Button, Protocol, KNX and Maintenance,
+returns all outputs to OFF, and marks the result as a simulator demonstration.
+The implementation brief is saved in
+[the marketing demo agent prompt](tasks/device-marketing-demo-video-agent-prompt.md).
+
+Install dependencies and the Chromium runtime once:
+
+```sh
+cd interface
+npm ci
+npx playwright install chromium
+```
+
+Start the simulator in one terminal and leave it running:
+
+```sh
+cd interface
+npm run dev:sim
+```
+
+After Vite reports `http://127.0.0.1:5173`, record from a second terminal:
+
+```sh
+cd interface
+npm run video:marketing
+```
+
+The primary artifact is
+`interface/test-results/marketing/edge-switching-actuator-demo.webm`. The script
+also attempts to create an MP4 in the same directory. Playwright's bundled
+FFmpeg may not include an H.264 encoder; in that case the WebM remains the
+supported output and the command reports that MP4 conversion is unavailable.
+
+Use `DEMO_BASE_URL` when the simulator frontend is on another local port,
+`DEMO_OUTPUT_DIR` to select another output directory, and `DEMO_OUTPUT_NAME` to
+set the filename without a path or extension:
+
+```powershell
+$env:DEMO_BASE_URL='http://127.0.0.1:5174'
+$env:DEMO_OUTPUT_DIR='test-results/marketing-candidate'
+$env:DEMO_OUTPUT_NAME='actuator-dark-tour'
+npm run video:marketing
+```
+
+```sh
+DEMO_BASE_URL=http://127.0.0.1:5174 \
+DEMO_OUTPUT_DIR=test-results/marketing-candidate \
+DEMO_OUTPUT_NAME=actuator-dark-tour \
+npm run video:marketing
+```
+
+Review the opening title, relay interactions, all six section views and closing
+title before publishing. Confirm the output is 1280×720, contains changing
+frames, uses the dark theme, and retains the **Simulator demo** disclosure. The
+recorder uses only local fixture credentials, does not save configuration
+changes and finishes with all relay outputs OFF. Set `SIM_CONTROL_TOKEN` and
+optionally `SIM_CONTROL_URL` for simulator-originated button gestures. Stop the
+simulator with Ctrl+C after recording.
+
 ## Profiles, persistence and lifecycle
 
 Set SIM_PROFILE to `actuator` (default), `knx` (ETS-owned commissioned fixture),
@@ -78,26 +141,26 @@ Invoke-RestMethod http://127.0.0.1:3081/__sim/actions -Method Post `
   -Body '{"type":"relay","channel":0,"value":true,"source":"external"}'
 ```
 
-| Path / method | Example body or result |
-| --- | --- |
-| GET /__sim/state | Redacted status/config/KNX snapshot, connection count and OTA state; no users/passwords/tokens |
-| POST /__sim/reset | `{ "profile": "actuator" }`: reset fixture, timers, sessions, sockets and injected faults |
-| POST /__sim/clock | `{ "advanceMs": 61000 }`: advance device timers, maximum one day per call |
-| POST /__sim/actions | `{ "type":"relay", "channel":0, "value":true }` |
-| POST /__sim/actions | `{ "type":"network", "wifi":false, "ap":true }`: AP alone is not an uplink |
-| POST /__sim/actions | `{ "type":"knx-object", "number":1, "value":true }`: decoded Switch object; object 2 Block, object 3 Status |
-| POST /__sim/actions | `{ "type":"knx", "busy":true, "owner":"ets" }`: commissioning interlock/ownership |
-| POST /__sim/actions | `{ "type":"modbus", "channel":0, "value":true, "clients":1 }`: decoded bus effect/counters |
-| POST /__sim/actions | `{ "type":"gesture", "clicks":1 }`, or pressed/resetArmed/holdMs for recovery state |
-| POST /__sim/actions | `{ "type":"offline", "active":true, "durationMs":5000 }`: API unavailable while controls remain accessible |
-| POST /__sim/actions | `{ "type":"failure", "target":"persistence" }` or protocol: next configuration failure |
-| POST /__sim/actions | `{ "type":"reboot" }`, `{ "type":"factory-reset" }` |
-| POST /__sim/actions | `{ "type":"ota", "outcome":"Simulated write failure" }`, or success |
-| POST /__sim/actions | scan/networks array; mqtt/connected/error; battery/soc/charging; coredump/available; fault/code/error; notification/level/message |
-| POST /__sim/faults | `{ "path":"/rest/device/status", "effect":"http", "status":503, "count":2 }` |
-| POST /__sim/faults | effect latency with ms; malformed JSON; disconnect; hold; optional method and count (default 1) |
-| POST /__sim/faults | `{ "clear":true }`: clears rules, releases held replies as 503, restores event delivery |
-| POST /__sim/socket | action close, malformed, pause, refuse; pause/refuse accept active:false to restore |
+| Path / method         | Example body or result                                                                                                            |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| GET /\_\_sim/state    | Redacted status/config/KNX snapshot, connection count and OTA state; no users/passwords/tokens                                    |
+| POST /\_\_sim/reset   | `{ "profile": "actuator" }`: reset fixture, timers, sessions, sockets and injected faults                                         |
+| POST /\_\_sim/clock   | `{ "advanceMs": 61000 }`: advance device timers, maximum one day per call                                                         |
+| POST /\_\_sim/actions | `{ "type":"relay", "channel":0, "value":true }`                                                                                   |
+| POST /\_\_sim/actions | `{ "type":"network", "wifi":false, "ap":true }`: AP alone is not an uplink                                                        |
+| POST /\_\_sim/actions | `{ "type":"knx-object", "number":1, "value":true }`: decoded Switch object; object 2 Block, object 3 Status                       |
+| POST /\_\_sim/actions | `{ "type":"knx", "busy":true, "owner":"ets" }`: commissioning interlock/ownership                                                 |
+| POST /\_\_sim/actions | `{ "type":"modbus", "channel":0, "value":true, "clients":1 }`: decoded bus effect/counters                                        |
+| POST /\_\_sim/actions | `{ "type":"gesture", "clicks":1 }`, or pressed/resetArmed/holdMs for recovery state                                               |
+| POST /\_\_sim/actions | `{ "type":"offline", "active":true, "durationMs":5000 }`: API unavailable while controls remain accessible                        |
+| POST /\_\_sim/actions | `{ "type":"failure", "target":"persistence" }` or protocol: next configuration failure                                            |
+| POST /\_\_sim/actions | `{ "type":"reboot" }`, `{ "type":"factory-reset" }`                                                                               |
+| POST /\_\_sim/actions | `{ "type":"ota", "outcome":"Simulated write failure" }`, or success                                                               |
+| POST /\_\_sim/actions | scan/networks array; mqtt/connected/error; battery/soc/charging; coredump/available; fault/code/error; notification/level/message |
+| POST /\_\_sim/faults  | `{ "path":"/rest/device/status", "effect":"http", "status":503, "count":2 }`                                                      |
+| POST /\_\_sim/faults  | effect latency with ms; malformed JSON; disconnect; hold; optional method and count (default 1)                                   |
+| POST /\_\_sim/faults  | `{ "clear":true }`: clears rules, releases held replies as 503, restores event delivery                                           |
+| POST /\_\_sim/socket  | action close, malformed, pause, refuse; pause/refuse accept active:false to restore                                               |
 
 Use production config/command routes to change protocol and settings; control
 actions represent device-originated stimuli. KNX and Modbus require the selected
@@ -185,43 +248,43 @@ qualification; a simulator pass cannot substitute for those checks.
 
 ## Deliberate simulation limits and existing UI behavior
 
-* Measurements, scan results, MAC/IP identities, coredump bytes and NTP local time
+- Measurements, scan results, MAC/IP identities, coredump bytes and NTP local time
   are synthetic. Timezone configuration round-trips, but no POSIX timezone engine
   or real NTP synchronization runs. No physical contact sensing is claimed.
-* KNX/Modbus injection models decoded application effects, not their wire stacks,
+- KNX/Modbus injection models decoded application effects, not their wire stacks,
   ETS downloading or TCP peer authentication. Profile fixtures do not emulate RF,
   UART, PHY or flash. Queue-full errors can be injected; FreeRTOS scheduling and
   byte-for-byte ArduinoJson serialization are not emulated.
-* Firmware images are accepted only as bounded multipart fixtures with an ESP32-S3
+- Firmware images are accepted only as bounded multipart fixtures with an ESP32-S3
   header; checksum/error and progress UI are simulated. No image is flashed and
   download_url is never fetched. MD5 chunk-boundary quirks and partition sizing
   need real-firmware comparison. Binaries are kept in memory only during upload.
-* Framework defaults/normalization follow source where implemented; hardware
+- Framework defaults/normalization follow source where implemented; hardware
   library coercion details and device-specific provisioning still require captured
   fidelity checks. The Wi-Fi updater's current double counter increment is retained.
-* Manual indicator commands/timers and colors are modeled; autonomous connection
+- Manual indicator commands/timers and colors are modeled; autonomous connection
   chirps and exact RTOS blink/tone scheduling are not physical timing guarantees.
-* The current frontend has no fetch deadline: a held command remains busy until
+- The current frontend has no fetch deadline: a held command remains busy until
   the transport resolves. Tests explicitly release faults instead of inventing
   timeout recovery. Socket reconnect and listener cleanup limitations described
   in the plan remain production behavior. Session invalidation redirects to home.
-* A dashboard is optional and not included; the authenticated control API provides
+- A dashboard is optional and not included; the authenticated control API provides
   all automated scenario controls without adding UI mocks or firmware routes.
 
 ## Implementation validation (2026-09-28)
 
 Local Windows validation completed with Node 24:
 
-| Check | Result |
-| --- | --- |
-| Simulator contract suite | 12 passed |
-| Chromium / WebKit / mobile Chromium | 37 each; 111 passed |
-| Production static build, Chromium | 37 passed on full rerun |
-| Svelte / TypeScript | 0 errors, 0 warnings |
-| Production build and simulator marker exclusion | Passed; existing large-chunk warning remains |
-| Existing Python product contracts | 3 passed |
-| Formatting of added code and Vite config | Passed |
-| Firefox | Blocked before page launch by Windows SideBySide/mozglue assembly error, including after reinstall |
+| Check                                           | Result                                                                                             |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Simulator contract suite                        | 12 passed                                                                                          |
+| Chromium / WebKit / mobile Chromium             | 37 each; 111 passed                                                                                |
+| Production static build, Chromium               | 37 passed on full rerun                                                                            |
+| Svelte / TypeScript                             | 0 errors, 0 warnings                                                                               |
+| Production build and simulator marker exclusion | Passed; existing large-chunk warning remains                                                       |
+| Existing Python product contracts               | 3 passed                                                                                           |
+| Formatting of added code and Vite config        | Passed                                                                                             |
+| Firefox                                         | Blocked before page launch by Windows SideBySide/mozglue assembly error, including after reinstall |
 
 The first built-suite attempt lost its local server during login; an isolated
 login retry and the subsequent complete 37-test run passed. Reports remain under

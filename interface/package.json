@@ -20,7 +20,8 @@
 		"test:e2e:device": "node scripts/test-device.mjs",
 		"test:e2e:built": "node scripts/test-built.mjs",
 		"test:bundle": "node scripts/check-bundle.mjs",
-		"contract:capture": "node scripts/capture-contract.mjs"
+		"contract:capture": "node scripts/capture-contract.mjs",
+		"video:marketing": "node scripts/record-marketing-demo.mjs"
 	},
 	"devDependencies": {
 		"@iconify-json/tabler": "^1.2.19",
