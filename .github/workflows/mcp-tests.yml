@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: '24'
       - run: pip install platformio
+      - run: python -m unittest discover -s tests -p test_release_artifacts.py -v
       - run: pio run -e ${{ matrix.environment }}
       - run: python scripts/check_firmware_size.py ${{ matrix.environment }}
       - if: matrix.environment == 'waveshare-relay-6ch'
@@ -32,3 +33,9 @@ jobs:
           python scripts/test_native.py
           python scripts/test_home_assistant.py
           python scripts/test_xiaozhi_mcp.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ matrix.environment }}
+          path: buildRelease/
+          if-no-files-found: error
+          retention-days: 14

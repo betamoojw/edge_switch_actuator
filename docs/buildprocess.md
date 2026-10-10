@@ -178,6 +178,59 @@ The script will download a public certificate store from Mozilla (`board_ssl_cer
 
 The static files for the website are build using vite. By default vite adds a unique hash value to all filenames for improved caching performance. However, LittleFS on the ESP32 is limited to filenames with 32 characters. This restricts the number of characters available for the user to name svelte files. To give a little bit more headroom a vite-plugin removes all hash values, as they offer no benefit on an ESP32. However, have the 32 character limit in mind when naming files. Excessively long names may still cause some issues when building the LittleFS binary.
 
-## Merged Firmware File for Web Flasher
+## Firmware build and release artifacts
 
-The PIO build system calls a script `merge_bin.py` to create a merged firmware binary ready to be used with [ESP Web Tools](https://esphome.github.io/esp-web-tools/). The file is located under the PIO build folder. Typically `build/merged/{APP_NAME}_{$PIOENV}_{APP_VERSION}.bin`.
+Run the normal PlatformIO build from the project root:
+
+```sh
+pio run -e waveshare-relay-6ch
+python scripts/check_firmware_size.py waveshare-relay-6ch
+```
+
+`pio run` uses `waveshare-relay-6ch` by default. Other environments in
+`platformio.ini` use the same release hooks. The build flow is:
+
+1. `build_interface.py` rebuilds changed frontend sources and embeds the compressed
+   UI when `EMBED_WWW` is enabled (the default).
+2. `generate_cert_bundle.py` prepares the configured certificate bundle.
+3. PlatformIO compiles and links the application and produces `firmware.elf` and
+   `firmware.bin` under `.pio/build/<environment>/`.
+4. Existing hooks archive the ELF by SHA-256 under `build/elf/`, merge the boot and
+   application images under `build/merged/`, and copy the OTA binary plus its MD5
+   under `build/release/`. These legacy paths and filenames remain supported,
+   including for `scripts/build_manifest.py`.
+5. `package_release.py` packages the current build in **`buildRelease/` at the project
+   root**, creating the folder automatically. It also runs on incremental normal
+   builds, so running the command again restores deleted release files.
+
+The new filenames use `edge_switch_actuator`, followed by the exact PlatformIO
+environment and the effective firmware `APP_VERSION` from the build flags. Dots in
+the version are preserved. For version `0.6.3` and the default board:
+
+| File in `buildRelease/` | Purpose |
+| --- | --- |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_ota.bin` | Application-only image for manual upload or URL-based OTA |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_ota.md5` | Plain hexadecimal MD5 of the OTA image; optionally upload this first in the firmware-update UI |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_webflash.bin` | Merged initial-flash image containing the configured bootloader, partition table, boot application, and firmware; flash at offset `0x0` |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.3.elf` | Matching debug symbols for diagnosing this firmware |
+
+Use **`_ota.bin` for OTA**, never `_webflash.bin`. The default embedded UI travels
+with the OTA application. When `EMBED_WWW` is disabled, filesystem generation and
+upload remain separate (`pio run -e <environment> -t buildfs` / `-t uploadfs`);
+the release package does not include or overwrite device filesystem settings.
+
+Updating `APP_VERSION` changes the filename version segment automatically. Rebuilding the
+same version and environment replaces its release files; other versions and
+environments are retained. Release generation uses the current compiler outputs
+and flash layout, fails the build if merging fails, and finishes generation in a
+temporary directory before replacing previous release files. Generated files in
+`buildRelease/` are ignored by Git. Clean, filesystem-only, and erase targets do not
+generate this package; use a normal `pio run` to prepare release files.
+
+The firmware matrix in `.github/workflows/mcp-tests.yml` runs the packaging tests,
+builds and checks each image's partition fit, and retains `buildRelease/` as a workflow
+artifact for 14 days. It does not create a Git tag or publish a GitHub Release.
+The existing GitHub OTA UI matches `.bin` assets by board-name substring, so only
+attach the intended board's OTA binary to a GitHub Release used by that UI; keep
+merged images and alternate profiles in the workflow artifact or a separate
+download destination.
