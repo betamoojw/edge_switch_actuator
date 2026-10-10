@@ -109,6 +109,14 @@ void ESP32SvelteKit::begin()
     // SvelteKit uses a lot of handlers, so we need to increase the max_uri_handlers
     // WWWData has 77 Endpoints, Framework has 27, and Lighstate Demo has 4
     _server->config.max_uri_handlers = _numberEndpoints;
+    // Authenticated JSON settings handlers persist and verify DurableStore
+    // generations synchronously. Their LittleFS/newlib/flash call chain exceeds
+    // ESP-IDF's default 4 KB httpd stack (MCP settings saves triggered its canary).
+    // Keep larger caller allocations and reserve headroom for filesystem work.
+    if (_server->config.stack_size < 8192)
+    {
+        _server->config.stack_size = 8192;
+    }
     // Probe stale TCP peers without imposing a short application idle timeout.
     _server->config.keep_alive_enable = true;
     _server->config.keep_alive_idle = 60;

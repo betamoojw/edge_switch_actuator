@@ -15,6 +15,8 @@
 #include <NetworkSupport.h>
 #include <SystemStatus.h>
 #include <esp32-hal.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 
 #if CONFIG_IDF_TARGET_ESP32 // ESP32/PICO-D4
 #include "esp32/rom/rtc.h"
@@ -153,6 +155,9 @@ esp_err_t SystemStatus::systemStatus(PsychicRequest *request)
     root["used_heap"] = ESP.getHeapSize() - ESP.getFreeHeap();
     root["total_heap"] = ESP.getHeapSize();
     root["min_free_heap"] = ESP.getMinFreeHeap();
+    // This handler runs on httpd. ESP-IDF reports the lifetime low watermark
+    // in bytes; poll after settings saves to verify HTTP stack headroom.
+    root["http_stack_min_free_bytes"] = uxTaskGetStackHighWaterMark(nullptr);
     root["sketch_size"] = ESP.getSketchSize();
     root["free_sketch_space"] = ESP.getFreeSketchSpace();
     root["sdk_version"] = ESP.getSdkVersion();

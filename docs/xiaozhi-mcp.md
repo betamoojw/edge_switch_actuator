@@ -7,7 +7,7 @@ The actuator can expose a small set of tools to Xiaozhi through an outbound, cer
 1. Sign in as administrator and open **Connections → Xiaozhi MCP**, below MQTT and NTP.
 2. Enter a device alias and your own Xiaozhi MCP endpoint (`wss://…`). The endpoint usually includes a credential. The firmware never supplies a shared/default credential.
 3. Select the relay channels Xiaozhi may see and control. Initially none are exposed.
-4. Enable Xiaozhi MCP and apply settings. The saved endpoint is not returned to the browser. Leaving its input blank retains the saved value; entering a new value replaces it.
+4. Enable Xiaozhi MCP and apply settings. The saved endpoint is hidden by default. Leaving its input blank retains the saved value; entering a new value replaces it. Administrators can check **Show endpoint** to retrieve the saved value explicitly. Revealing it alone does not change settings or reconnect MCP. Unchecking hides and clears the retrieved value; an edited replacement remains masked until saved or discarded.
 5. Wait for **Ready**. Saving settings confirms persistence; Ready confirms the MCP initialization handshake. Configure NTP if the page shows **Waiting for time synchronization**.
 
 Use Reconnect to reconnect with the saved configuration. Disabling the service preserves the endpoint. To remove the active endpoint, disable the service and select **Remove saved endpoint** in the same save. Factory reset erases both configuration generations. Credentials are stored in the device filesystem; this feature does not add flash encryption. A previous credential can remain in the inactive recovery generation until it is overwritten or factory reset.
@@ -49,12 +49,30 @@ Limits: 2048 endpoint bytes, 64 UTF-8 alias bytes, 8192-byte assembled inbound M
 
 ## API
 
+Argument-free MCP tools accept omitted `arguments` as well as `{}`. Request
+metadata such as `_meta` is separate from a tool's input schema. See the
+[status-tool parameter compatibility fix](tasks/xiaozhi-mcp-tool-parameters-fix.md)
+for the regression and validation record.
+
+For settings-save reboots reporting `Stack canary watchpoint triggered (httpd)`,
+see the [2026-10-10 crash fix and hardware regression](tasks/xiaozhi-mcp-stack-overflow-fix.md).
+The HTTP server now reserves at least 8192 stack bytes. Authenticated system
+status exposes `http_stack_min_free_bytes` to measure the lifetime minimum
+remaining HTTP stack after saves and reconnects.
+
 | Route | Permission |
 | --- | --- |
 | `GET /rest/xiaozhiMcpStatus` | Authenticated |
 | `GET`, `POST /rest/xiaozhiMcpSettings` | Admin |
 | `GET /rest/xiaozhiMcpTools` | Admin |
 | `POST /rest/xiaozhiMcpReconnect` | Admin; returns 202 when queued |
+| `POST /rest/xiaozhiMcpEndpoint` | Admin; explicit saved-endpoint reveal, body `{ "revision": <current revision> }` |
+
+The reveal response contains `endpoint` and `revision`, with `Cache-Control: no-store`.
+Stale revisions return 409 and malformed requests return 422. Ordinary settings
+and status responses remain redacted. The UI discards revealed saved values on
+hide, reload, successful save, tab hiding and navigation, and never puts them
+in local storage. A new unsaved replacement remains a draft, masked when hidden.
 
 Settings POST accepts `revision`, `enabled`, `alias`, `channel_mask`, optional write-only `endpoint`, and optional boolean `clear_endpoint`. Omitted/empty endpoint preserves it. Clear and replacement cannot be combined; enabling requires a configured endpoint. GET returns `schema_version`, revision and editable public fields plus `endpoint_configured` and `endpoint_host`. Do not send the GET-only fields back in POST.
 

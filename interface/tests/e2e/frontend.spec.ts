@@ -979,6 +979,48 @@ test('MCP-01 configure, preserve secret, reconnect and remove endpoint', async (
 	await page.reload();
 	await expect(page.getByLabel('Device alias', { exact: true })).toHaveValue('Plant relays');
 	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveValue('');
+	await page.getByLabel('Show endpoint', { exact: true }).check();
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveValue(
+		'wss://example.invalid/mcp/?token=e2e-private'
+	);
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveAttribute('type', 'text');
+	await expect(page.getByRole('button', { name: 'Apply Settings', exact: true })).toBeDisabled();
+	await expect(page.getByRole('button', { name: 'Reconnect', exact: true })).toBeEnabled();
+	await page.getByLabel('Show endpoint', { exact: true }).uncheck();
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveValue('');
+	await page.getByLabel('Show endpoint', { exact: true }).check();
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).not.toHaveValue('');
+	await page.getByRole('button', { name: 'Reload saved settings', exact: true }).click();
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveValue('');
+	await expect(page.getByLabel('Show endpoint', { exact: true })).not.toBeChecked();
+	await page.route('**/rest/xiaozhiMcpEndpoint', (route) =>
+		route.fulfill({ status: 403, json: {} })
+	);
+	await page.getByLabel('Show endpoint', { exact: true }).check();
+	await expect(page.getByText('Administrator access required.', { exact: true })).toBeVisible();
+	await expect(page.getByLabel('Show endpoint', { exact: true })).not.toBeChecked();
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveValue('');
+	await page.unroute('**/rest/xiaozhiMcpEndpoint');
+	let releaseReveal!: () => void;
+	const holdReveal = new Promise<void>((resolve) => {
+		releaseReveal = resolve;
+	});
+	await page.route('**/rest/xiaozhiMcpEndpoint', async (route) => {
+		await holdReveal;
+		await route.fulfill({
+			json: { revision: 2, endpoint: 'wss://example.invalid/?token=late-secret' }
+		});
+	});
+	const revealRequest = page.waitForRequest('**/rest/xiaozhiMcpEndpoint');
+	await page.getByLabel('Show endpoint', { exact: true }).check();
+	await revealRequest;
+	await page.getByLabel('Show endpoint', { exact: true }).uncheck();
+	const lateResponse = page.waitForResponse('**/rest/xiaozhiMcpEndpoint');
+	releaseReveal();
+	await lateResponse;
+	await expect(page.getByLabel('MCP endpoint', { exact: true })).toHaveValue('');
+	await expect(page.getByLabel('Show endpoint', { exact: true })).not.toBeChecked();
+	await page.unroute('**/rest/xiaozhiMcpEndpoint');
 	expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain('e2e-private');
 	await page.getByRole('button', { name: 'Reconnect', exact: true }).click();
 	await expect(page.getByText('Reconnection requested.', { exact: true })).toBeVisible();

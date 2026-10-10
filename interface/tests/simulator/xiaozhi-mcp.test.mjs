@@ -40,6 +40,15 @@ test('MCP HTTP authorization, secret redaction, revisions and rollback', async (
 	const value = await saved.json();
 	assert.equal(value.revision, 2);
 	assert.equal(value.endpoint_configured, true);
+	assert.equal((await request('xiaozhiMcpEndpoint', '', { revision: 2 })).status, 401);
+	assert.equal((await request('xiaozhiMcpEndpoint', viewer, { revision: 2 })).status, 403);
+	assert.equal((await request('xiaozhiMcpEndpoint', admin)).status, 405);
+	assert.equal((await request('xiaozhiMcpEndpoint', admin, { revision: 1 })).status, 409);
+	assert.equal((await request('xiaozhiMcpEndpoint', admin, { revision: '2' })).status, 422);
+	const revealed = await request('xiaozhiMcpEndpoint', admin, { revision: 2 });
+	assert.equal(revealed.headers.get('cache-control'), 'no-store');
+	assert.deepEqual(await revealed.json(), { revision: 2, endpoint: edit().endpoint });
+	assert.deepEqual(await (await request('xiaozhiMcpSettings', admin)).json(), value);
 	for (const path of ['xiaozhiMcpSettings', 'xiaozhiMcpStatus', 'xiaozhiMcpTools'])
 		assert(!JSON.stringify(await (await request(path, admin)).json()).includes('private-test'));
 	assert.equal((await request('xiaozhiMcpSettings', admin, edit())).status, 409);
@@ -59,6 +68,10 @@ test('MCP HTTP authorization, secret redaction, revisions and rollback', async (
 		clear_endpoint: true
 	});
 	assert.equal((await saved.json()).endpoint_configured, false);
+	assert.equal(
+		(await (await request('xiaozhiMcpEndpoint', admin, { revision: 3 })).json()).endpoint,
+		''
+	);
 });
 
 test('MCP deterministic states, persistence failure, reboot and reset', () => {

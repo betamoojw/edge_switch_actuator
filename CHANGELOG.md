@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.3] - 2026-10-10
+
+- Make Show endpoint retrieve the saved MCP endpoint on an explicit administrator request without changing settings; keep ordinary API responses redacted.
+- Fix HTTP task stack overflow when saving Xiaozhi MCP settings and expose minimum remaining HTTP stack in system diagnostics.
+- Accept omitted arguments for argument-free MCP tools and support request metadata while retaining strict relay argument validation.
+
 ## [0.6.2] - 2026-10-07
 
 - Patch individual device status values while preserving channel and indicator objects, focus and unsaved edits. Commands return state directly without an extra status request.

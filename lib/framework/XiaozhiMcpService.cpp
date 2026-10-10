@@ -81,6 +81,31 @@ void XiaozhiMcpService::begin()
                    });
     };
     get("/rest/xiaozhiMcpSettings", true, [this](JsonObject out) { settings.write(out); });
+    // Reveal only on an explicit administrator request; ordinary reads stay redacted.
+    server->on("/rest/xiaozhiMcpEndpoint", HTTP_POST,
+               [this](PsychicRequest *request, JsonVariant &body)
+               {
+                   auto auth = security->authenticateRequest(request);
+                   if (!auth.authenticated) return request->reply(401);
+                   if (!auth.user->admin) return request->reply(403);
+                   if (!body.is<JsonObject>() || body.size() != 1 || !body["revision"].is<uint32_t>())
+                       return failure(request, 422, "invalid_settings", "revision");
+                   PsychicJsonResponse response(request, false);
+                   response.addHeader("Cache-Control", "no-store");
+                   int code = 200;
+                   {
+                       Lock lock(mutex);
+                       if (!storageValid) code = 503;
+                       else if (body["revision"].as<uint32_t>() != settings.revision) code = 409;
+                       else
+                       {
+                           response.getRoot()["endpoint"] = settings.endpoint;
+                           response.getRoot()["revision"] = settings.revision;
+                       }
+                   }
+                   if (code != 200) return failure(request, code, "endpoint_unavailable");
+                   return response.send();
+               });
     get("/rest/xiaozhiMcpStatus", false, [this](JsonObject out) { status(out); });
     get("/rest/xiaozhiMcpTools", true,
         [this](JsonObject out)

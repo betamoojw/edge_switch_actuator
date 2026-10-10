@@ -471,10 +471,22 @@ std::string Protocol::receive(const char *data, size_t length, const Settings &s
     {
         return error(-32601, "Method not found");
     }
-    if (!input["params"].is<JsonObject>() || input["params"].size() != 2 || !input["params"]["name"].is<std::string>() ||
-        !input["params"]["arguments"].is<JsonObject>())
+    // MCP request metadata is independent of a tool's input schema. Arguments
+    // are optional for zero-input tools (e.g. Xiaozhi's status calls), so do not
+    // constrain the envelope to exactly name + arguments.
+    if (!input["params"].is<JsonObject>() || !input["params"]["name"].is<std::string>() ||
+        (!input["params"]["arguments"].isUnbound() && !input["params"]["arguments"].is<JsonObject>()) ||
+        (!input["params"]["_meta"].isUnbound() && !input["params"]["_meta"].is<JsonObject>()))
     {
         return error(-32602, "Invalid tool parameters");
+    }
+    if (input["params"]["arguments"].isUnbound())
+    {
+        input["params"]["arguments"].to<JsonObject>();
+        if (input.overflowed())
+        {
+            return error(-32603, "Request capacity exceeded");
+        }
     }
     int index = -1;
     for (int i = 0; i < 6; ++i)

@@ -21,12 +21,15 @@
 		message = $state(''),
 		statusError = $state('');
 	let controller = new AbortController();
+	let revealedEndpoint = $state(''),
+		revealing = $state(false);
+	let revealRequest = 0;
 	const dirty = $derived(
 		!!saved &&
 			(enabled !== saved.enabled ||
 				alias !== saved.alias ||
 				mask !== saved.channel_mask ||
-				endpoint !== '' ||
+				(endpoint !== '' && endpoint !== revealedEndpoint) ||
 				clearEndpoint)
 	);
 	const labels: Record<string, string> = {
@@ -44,6 +47,7 @@
 	async function api<T>(path: string, body?: unknown): Promise<T> {
 		const response = await fetch(`/rest/${path}`, {
 			method: body === undefined ? 'GET' : 'POST',
+			cache: 'no-store',
 			signal: controller.signal,
 			headers: {
 				Authorization: `Bearer ${$user.bearer_token}`,
@@ -65,7 +69,43 @@
 		}
 		return response.json();
 	}
+	function hideEndpoint() {
+		++revealRequest;
+		reveal = false;
+		revealing = false;
+		if (endpoint === revealedEndpoint) endpoint = '';
+		revealedEndpoint = '';
+	}
+	async function toggleEndpoint() {
+		if (!reveal) {
+			hideEndpoint();
+			return;
+		}
+		if (endpoint || !saved?.endpoint_configured || clearEndpoint) return;
+		const request = ++revealRequest;
+		const revision = saved.revision;
+		revealing = true;
+		error = '';
+		try {
+			const value = await api<{ endpoint: string; revision: number }>('xiaozhiMcpEndpoint', {
+				revision
+			});
+			if (request !== revealRequest || !reveal || controller.signal.aborted) return;
+			if (value.revision !== revision || typeof value.endpoint !== 'string')
+				throw new Error('Request failed. Please try again.');
+			revealedEndpoint = value.endpoint;
+			endpoint = value.endpoint;
+		} catch (e) {
+			if (request === revealRequest && !controller.signal.aborted) {
+				hideEndpoint();
+				error = e instanceof Error ? e.message : 'Request failed. Please try again.';
+			}
+		} finally {
+			if (request === revealRequest) revealing = false;
+		}
+	}
 	function accept(value: XiaozhiMcpSettings) {
+		hideEndpoint();
 		saved = value;
 		enabled = value.enabled;
 		alias = value.alias;
@@ -84,6 +124,7 @@
 		}
 	}
 	async function loadSettings() {
+		hideEndpoint();
 		busy = true;
 		error = '';
 		try {
@@ -108,6 +149,7 @@
 		else loaded = true;
 		let polling = false;
 		const tick = async () => {
+			if (document.hidden) hideEndpoint();
 			if (polling) return;
 			polling = true;
 			try {
@@ -119,6 +161,7 @@
 		const timer = setInterval(tick, 3000);
 		document.addEventListener('visibilitychange', tick);
 		return () => {
+			hideEndpoint();
 			controller.abort();
 			endpoint = '';
 			clearInterval(timer);
@@ -127,7 +170,7 @@
 	});
 	async function save(event: SubmitEvent) {
 		event.preventDefault();
-		if (!saved || busy) return;
+		if (!saved || busy || revealing) return;
 		error = '';
 		message = '';
 		const bytes = new TextEncoder().encode(alias.trim()).length;
@@ -156,7 +199,7 @@
 					enabled,
 					alias: alias.trim(),
 					channel_mask: mask,
-					endpoint,
+					endpoint: endpoint === revealedEndpoint ? '' : endpoint,
 					clear_endpoint: clearEndpoint
 				})
 			);
@@ -242,13 +285,20 @@
 								bind:value={endpoint}
 								autocomplete="off"
 								spellcheck={false}
-								disabled={clearEndpoint}
+								disabled={clearEndpoint || revealing}
 								placeholder="wss://…"
 							/>
 							<label class="mt-2 flex items-center gap-2"
-								><input class="checkbox checkbox-sm" type="checkbox" bind:checked={reveal} />{$t(
-									'Show endpoint'
-								)}</label
+								><input
+									class="checkbox checkbox-sm"
+									type="checkbox"
+									checked={reveal}
+									onchange={(event) => {
+										reveal = event.currentTarget.checked;
+										void toggleEndpoint();
+									}}
+									disabled={clearEndpoint}
+								/>{$t('Show endpoint')}</label
 							>
 							<p class="mt-2 text-sm">
 								{$t(
@@ -262,9 +312,13 @@
 									><input
 										class="checkbox checkbox-sm"
 										type="checkbox"
-										bind:checked={clearEndpoint}
-										onchange={() => {
-											if (clearEndpoint) endpoint = '';
+										checked={clearEndpoint}
+										onchange={(event) => {
+											clearEndpoint = event.currentTarget.checked;
+											if (clearEndpoint) {
+												hideEndpoint();
+												endpoint = '';
+											}
 										}}
 									/>{$t('Remove saved endpoint')}</label
 								>{/if}
@@ -291,16 +345,16 @@
 						</fieldset>
 					</fieldset>
 					<div class="flex flex-wrap justify-end gap-2">
-						<button class="btn" type="button" disabled={busy} onclick={loadSettings}
+						<button class="btn" type="button" disabled={busy || revealing} onclick={loadSettings}
 							>{$t('Reload saved settings')}</button
 						>
 						<button
 							class="btn"
 							type="button"
-							disabled={busy || dirty || !saved.enabled || !saved.endpoint_configured}
+							disabled={busy || revealing || dirty || !saved.enabled || !saved.endpoint_configured}
 							onclick={reconnect}>{$t('Reconnect')}</button
 						>
-						<button class="btn btn-primary" type="submit" disabled={busy || !dirty}
+						<button class="btn btn-primary" type="submit" disabled={busy || revealing || !dirty}
 							>{$t('Apply Settings')}</button
 						>
 					</div>

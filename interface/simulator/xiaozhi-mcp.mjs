@@ -129,9 +129,13 @@ export function mcpAction(d, body) {
 }
 export function mcpRoute(d, path, method, body, user) {
 	if (
-		!['xiaozhiMcpSettings', 'xiaozhiMcpStatus', 'xiaozhiMcpTools', 'xiaozhiMcpReconnect'].includes(
-			path
-		) ||
+		![
+			'xiaozhiMcpSettings',
+			'xiaozhiMcpStatus',
+			'xiaozhiMcpTools',
+			'xiaozhiMcpReconnect',
+			'xiaozhiMcpEndpoint'
+		].includes(path) ||
 		!d.features.xiaozhi_mcp
 	)
 		return null;
@@ -139,6 +143,25 @@ export function mcpRoute(d, path, method, body, user) {
 	if (!user) return { status: 401 };
 	if (path !== 'xiaozhiMcpStatus' && !user.admin) return { status: 403 };
 	const s = d.saved.settings.xiaozhiMcpSettings || mcpDefaults();
+	if (path === 'xiaozhiMcpEndpoint') {
+		if (method !== 'POST') return { status: 405 };
+		if (
+			!body ||
+			typeof body !== 'object' ||
+			Array.isArray(body) ||
+			Object.keys(body).length !== 1 ||
+			!Number.isInteger(body.revision) ||
+			body.revision < 0 ||
+			body.revision > 0xffffffff
+		)
+			return fail(422, 'invalid_settings', 'revision');
+		if (body.revision !== s.revision) return fail(409, 'endpoint_unavailable');
+		return {
+			status: 200,
+			headers: { 'Cache-Control': 'no-store' },
+			body: { endpoint: s.endpoint, revision: s.revision }
+		};
+	}
 	if (method === 'GET') {
 		if (path === 'xiaozhiMcpSettings') return { status: 200, body: publicMcp(s) };
 		if (path === 'xiaozhiMcpStatus') return { status: 200, body: mcpStatus(d) };

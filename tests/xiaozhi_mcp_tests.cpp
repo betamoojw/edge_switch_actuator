@@ -43,8 +43,73 @@ struct FakeDevice
     }
 };
 
+static void testToolCallEnvelope()
+{
+    using namespace xiaozhi;
+    Protocol protocol("001122334455", "test");
+    Settings settings;
+    settings.mask = 63;
+    FakeDevice device;
+    unsigned calls = 0;
+    uint32_t now = 0;
+    JsonDocument response;
+    auto read = [&](const std::string &wire)
+    {
+        auto reply = protocol.receive(wire.data(), wire.size(), settings, now += 100,
+                                      [&](Operation op, JsonObjectConst args, JsonObject out)
+                                      {
+                                          ++calls;
+                                          assert(!args.isNull());
+                                          if (op == Operation::Alias)
+                                          {
+                                              out["alias"] = settings.alias;
+                                              return true;
+                                          }
+                                          return command(device, op, args, settings.mask, out);
+                                      });
+        if (!reply.empty()) assert(!deserializeJson(response, reply));
+    };
+    read(R"({"jsonrpc":"2.0","id":"init","method":"initialize","params":{"protocolVersion":"2024-11-05","clientInfo":{},"capabilities":{}}})");
+    read(R"({"jsonrpc":"2.0","method":"notifications/initialized"})");
+
+    // MCP arguments are optional. A status call must work without an empty object.
+    read(R"({"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"actuator_status_001122334455"}})");
+    assert(response["result"]["isError"] == false && calls == 1 && device.writes == 0);
+    read(R"({"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"actuator_get_alias_001122334455","_meta":{"progressToken":"p"}}})");
+    assert(response["result"]["isError"] == false && calls == 2);
+    read(R"({"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"actuator_status_001122334455","arguments":{},"_meta":{"progressToken":3}}})");
+    assert(response["result"]["isError"] == false && calls == 3);
+    const std::string relay = R"({"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"actuator_set_relay_001122334455","arguments":{"channel":1,"on":true},"_meta":{"progressToken":"relay"}}})";
+    read(relay);
+    assert(response["result"]["isError"] == false && calls == 4 && device.writes == 1);
+    read(relay);
+    assert(response["result"]["isError"] == false && calls == 4 && device.writes == 1);
+    read(R"({"jsonrpc":"2.0","id":5,"method":"tools/call","params":{"name":"actuator_all_off_001122334455"}})");
+    assert(response["result"]["isError"] == false && !device.outputs[0]);
+    read(R"({"jsonrpc":"2.0","id":6,"method":"tools/call","params":{"name":"actuator_identify_001122334455"}})");
+    assert(response["result"]["isError"] == false && device.identifies == 1);
+
+    const auto accepted = calls, writes = device.writes;
+    for (auto params : {
+             R"({"name":"actuator_status_001122334455","arguments":null})",
+             R"({"name":"actuator_status_001122334455","arguments":[]})",
+             R"({"name":"actuator_status_001122334455","arguments":"{}"})",
+             R"({"name":"actuator_status_001122334455","arguments":{"extra":true}})",
+             R"({"name":"actuator_status_001122334455","_meta":null})",
+             R"({"name":"actuator_status_001122334455","_meta":[]})",
+             R"({"arguments":{}})",
+             R"({"name":"actuator_set_relay_001122334455"})",
+             R"({"name":"actuator_pulse_relay_001122334455","_meta":{}})",
+             R"({"name":"actuator_set_relay_001122334455","arguments":{"channel":1,"on":"true"},"_meta":{}})"})
+    {
+        read(std::string(R"({"jsonrpc":"2.0","id":99,"method":"tools/call","params":)") + params + "}");
+        assert(response["error"]["code"] == -32602 && calls == accepted && device.writes == writes);
+    }
+}
+
 int main()
 {
+    testToolCallEnvelope();
     using namespace xiaozhi;
     Endpoint url;
     assert(parseEndpoint("wss://example.invalid:8443/mcp/?token=test", url));
