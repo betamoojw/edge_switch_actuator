@@ -2,7 +2,7 @@
 	import { t } from '$lib/i18n';
 	import logo from '$lib/assets/logo.png';
 	import Github from '~icons/tabler/brand-github';
-	import Discord from '~icons/tabler/brand-discord';
+	import Website from '~icons/tabler/world';
 	import Users from '~icons/tabler/users';
 	import Settings from '~icons/tabler/settings';
 	import Palette from '~icons/tabler/palette';
@@ -28,7 +28,7 @@
 
 	const github = { href: 'https://github.com/' + page.data.github, active: true };
 
-	const discord = { href: 'https://discord.gg/MTn9mVUG5n', active: true };
+	const website = { href: 'https://betamoojw.github.io/edge_switch_actuator/', active: true };
 
 	type menuItem = {
 		title: string;
@@ -242,9 +242,14 @@
 				><Github class="h-5 w-5" /></a
 			>
 		{/if}
-		{#if discord.active}
-			<a href={discord.href} class="btn btn-ghost" target="_blank" rel="noopener noreferrer"
-				><Discord class="h-5 w-5" /></a
+		{#if website.active}
+			<a
+				href={website.href}
+				class="btn btn-ghost"
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-label="Project website"
+				title="Project website"><Website class="h-5 w-5" /></a
 			>
 		{/if}
 		<div class="inline-flex grow items-center justify-end text-sm">

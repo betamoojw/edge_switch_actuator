@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.6.4] - 2026-10-10
+
+- Fix GitHub release-list and latest-release requests by using the repository slug without a branch path.
+- Replace the web interface's Discord link with the project's GitHub Pages website.
+
 ## [0.6.3] - 2026-10-10
 
 - Make Show endpoint retrieve the saved MCP endpoint on an explicit administrator request without changing settings; keep ordinary API responses redacted.
