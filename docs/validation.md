@@ -59,6 +59,23 @@ files under `.github/workflows/`.
 
 ## Existing evidence and its limits
 
+GitHub CI was also inspected for the exact reviewed commit `ced3e6d`:
+
+| Existing run | Observed result |
+| --- | --- |
+| [Frontend functional tests](https://github.com/betamoojw/edge_switch_actuator/actions/runs/38049531978) | Successful |
+| [Firmware and native matrix](https://github.com/betamoojw/edge_switch_actuator/actions/runs/38049531980) | Seven profiles passed, including the Waveshare actuator and both MCP variants; ESP32-C3 failed |
+
+The [C3 job](https://github.com/betamoojw/edge_switch_actuator/actions/runs/38049531980/job/114205685278)
+reached the size check: **2,039,455 bytes** exceeded the configured **1,966,080-byte**
+maximum by **73,375 bytes**. This is a confirmed image-size failure, not the older
+local toolchain-download limitation. It needs a separate firmware/profile change;
+the documentation refresh does not change partitions or remove firmware features.
+
+Publication of the initial refresh at `5642042` passed both jobs in the
+[Documentation run](https://github.com/betamoojw/edge_switch_actuator/actions/runs/38057005002).
+The public home and REST API pages returned HTTP 200 with the refreshed content.
+
 - [Implementation history](actuator-implementation.md) records earlier software
   checks, KNX persistence/address hardware checks and their artifact hashes.
 - [MCP hardware validation](tasks/xiaozhi-mcp-hardware-validation.md) and

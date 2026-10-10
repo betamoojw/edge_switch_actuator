@@ -15,6 +15,7 @@ historical intent; [architecture](architecture.md) describes actual code.
 
 | Priority | Evidence | Impact and next change |
 | --- | --- | --- |
+| P1 | GitHub CI for `ced3e6d`, `esp32-c3-devkitm-1`, fails `checkprogsize`: 2,039,455 > 1,966,080 bytes | The generic C3 profile does not fit its configured application slot. Reduce its image or qualify an appropriate partition/profile change; see the [CI evidence](validation.md#existing-evidence-and-its-limits). The default Waveshare profile passed. |
 | P1 | `lib/framework/FSPersistence.h`, `writeToFS()` opens the active file with `w`; read failure applies and writes defaults | Generic Wi-Fi/security/MQTT settings can be lost after an interrupted write. Unlike actuator/KNX/MCP storage, these files do not use verified generations. Migrate them to durable commits and test interrupted writes and recovery. |
 | P1 | `interface/src/routes/+layout.ts` sets `github` to `betamoojw/edge_switch_actuator/tree/dev`; both release components append `/releases` to it | GitHub OTA lookup constructs an invalid repository API path. Separate the browsable source URL from the `owner/repository` API identifier. Use manual OTA meanwhile. |
 | P1 | `UpdateIndicator.svelte` and `GithubFirmwareManager.svelte` select assets using `.bin` and board-name substring checks; `scripts/release_artifacts.py` emits both OTA and merged binaries | If both image kinds or related MCP profiles appear in a release, the wrong image can be selected. Match the exact target and `_ota.bin` suffix, with explicit artifact metadata/validation. |
