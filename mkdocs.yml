@@ -1,78 +1,79 @@
-site_name: Switching Actuator
+site_name: Edge Switching Actuator
+site_url: https://betamoojw.github.io/edge_switch_actuator/
+site_description: Six-channel ESP32-S3 relay actuator — setup, protocols, architecture, API and development.
+repo_name: betamoojw/edge_switch_actuator
+repo_url: https://github.com/betamoojw/edge_switch_actuator
+edit_uri: edit/dev/docs/
 
 nav:
-  - Home: index.md
-  - "Switching Actuator Design":
-      - actuator-production-design.md
-      - Implementation and validation: actuator-implementation.md
-      - Network API migration: network-api-migration.md
+  - Overview: index.md
+  - User guide:
+      - Getting started: gettingstarted.md
+      - Device operation: device-operation.md
+      - Credentials and setup labels: device-credentials.md
+      - UI preferences: ui-preferences.md
+      - Hardware reference: esp32-s3-relay-6ch-hardware.md
+  - Protocols and integrations:
+      - Modbus register map: actuator-modbus-map.md
+      - Modbus verifier: modbus-verifier-quickstart.md
+      - KNX commissioning: knx-address-entry.md
+      - KNX implementation: actuator-knx-design.md
       - Home Assistant: home-assistant.md
       - Xiaozhi MCP: xiaozhi-mcp.md
-      - actuator-source-review.md
-      - esp32-s3-relay-6ch-hardware.md
-      - actuator-modbus-map.md
-      - actuator-knx-design.md
-      - Modbus verifier quick start: modbus-verifier-quickstart.md
-      - Modbus verification and validation: MODBUS_VERIFICATION_VALIDATION_PLAN.md
-  - "Build Tools":
-      - gettingstarted.md
-      - buildprocess.md
-      - Credentials and label quick start: device-credentials.md
-  - "Front End":
-      - sveltekit.md
-      - structure.md
-      - KNX address entry: knx-address-entry.md
-      - Development and testing: frontend-testing.md
-      - stores.md
-      - components.md
-  - "Back End":
-      - statefulservice.md
-      - restfulapi.md
-
-site_author: elims
-site_description: >-
-  ESP32-S3 Switching Actuator: six relay outputs, Protocol Interface configuration, and a responsive device management interface.
-
-# Repository
-repo_name: theelims/ESP32-sveltekit
-repo_url: https://github.com/theelims/ESP32-sveltekit
+  - Development:
+      - Architecture: architecture.md
+      - Build and firmware updates: buildprocess.md
+      - REST and events: restfulapi.md
+      - Frontend structure: structure.md
+      - SvelteKit and theming: sveltekit.md
+      - Frontend testing: frontend-testing.md
+      - Stores: stores.md
+      - Components: components.md
+      - Framework services: statefulservice.md
+      - Code style: code-style.md
+      - Documentation publishing: documentation.md
+  - Review and validation:
+      - Current dev review: actuator-source-review.md
+      - Validation record: validation.md
+      - Implementation history: actuator-implementation.md
+      - Network API migration: network-api-migration.md
+      - Modbus validation plan: MODBUS_VERIFICATION_VALIDATION_PLAN.md
+      - TCP acceptance procedure: modbus-tcp-relay-fat-sat.md
+      - RTU acceptance procedure: modbus-rtu-relay-fat-sat.md
+      - Frontend test plan: FRONTEND_HARDWARE_INDEPENDENT_TEST_PLAN.md
+      - Original design: actuator-production-design.md
 
 theme:
   name: material
-  logo: media/svelte-logo.png
-  favicon: media/favicon.png
   icon:
+    logo: material/electric-switch
     repo: fontawesome/brands/github
+  favicon: media/favicon.png
   palette:
-    # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
+      primary: teal
+      accent: teal
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
-      primary: blue
-      accent: blue
-
-    # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: teal
+      accent: teal
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
-      primary: indigo
-      accent: indigo
-
   features:
     - navigation.instant
     - navigation.tracking
     - navigation.tabs
-    - navigation.tabs.sticky
     - navigation.sections
-    - navigation.expand
-    - toc.follow
-    - toc.integrate
     - navigation.top
+    - search.suggest
+    - search.highlight
     - content.code.copy
+    - content.action.edit
 
 markdown_extensions:
   - attr_list
@@ -86,30 +87,23 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search
+
+not_in_nav: |
+  /tasks/**
+validation:
+  nav:
+    omitted_files: info
+  links:
+    not_found: warn
+    unrecognized_links: warn
+    anchors: warn
 
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/theelims/
-    - icon: fontawesome/brands/discord
-      link: https://discord.gg/MTn9mVUG5n
-  consent:
-    title: Cookie consent
-    description: >-
-      We use cookies to recognize your repeated visits and preferences, as well
-      as to measure the effectiveness of our documentation and whether users
-      find what they're searching for. With your consent, you're helping us to
-      make our documentation better.
-    actions:
-      - accept
-      - reject
-
-plugins:
-  - search:
-      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
-
-copyright: |
-  Copyright &copy; 2025 by <a href="https://github.com/theelims"  target="_blank" rel="noopener">elims</a> -
-  <a href="#__consent">Change cookie settings</a>
+      link: https://github.com/betamoojw/edge_switch_actuator

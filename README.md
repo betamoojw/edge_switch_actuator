@@ -1,71 +1,79 @@
-# Switching Actuator
+# Edge Switching Actuator
 
-ESP32-S3 switching actuator with six relay outputs and a browser interface for output control, Modbus RTU/TCP or KNXnet/IP configuration, network settings, and device maintenance. Opening the web interface starts at `/device` (Switching Actuator). The Protocol Interface settings select one active protocol at a time.
+ESP32-S3 firmware and a Svelte browser interface for a six-channel relay actuator.
+The `dev` branch targets the Waveshare ESP32-S3 Relay 6CH board, with Modbus RTU,
+Modbus TCP or KNXnet/IP routing, plus optional Home Assistant and Xiaozhi MCP.
 
-Built on ESP32-SvelteKit, originally forked from rjwats/esp8266-react. The framework features below depend on the selected firmware profile; the light demo is retained only for explicit template development.
+**[Read the documentation](https://betamoojw.github.io/edge_switch_actuator/)** ·
+[Getting started](docs/gettingstarted.md) · [Architecture](docs/architecture.md) ·
+[Current source review](docs/actuator-source-review.md)
 
-See [frontend development and testing](docs/frontend-testing.md) for local simulation, and [KNX address entry](docs/knx-address-entry.md) for commissioning rules.
+## Capabilities
 
-The six-channel device supports opt-in [Home Assistant MQTT discovery](docs/home-assistant.md), with relay controls, button events, identify and diagnostics alongside the existing protocols.
+- Six independent relay channels: names, enable flags, startup state, pulses,
+  blocking and configurable disconnect-off behavior.
+- One selected fieldbus mode: off, Modbus RTU, Modbus TCP or KNX/IP.
+- Web commissioning of KNX individual/group addresses and relay parameters,
+  with explicit ownership transfer from ETS.
+- BOOT button gestures, RGB status/identify indication and buzzer control.
+- Wi-Fi provisioning, role-based device commands, durable settings, diagnostics
+  and firmware updates.
+- Opt-in [Home Assistant MQTT discovery](docs/home-assistant.md) and
+  [Xiaozhi MCP](docs/xiaozhi-mcp.md), independent of the selected fieldbus.
+- Seven interface languages and five themes under **System → UI**.
 
-It also supports opt-in [Xiaozhi MCP](docs/xiaozhi-mcp.md) under **Connections → Xiaozhi MCP**. Configure your own WSS endpoint and select which relay channels to expose. MCP works independently of MQTT and starts disabled.
+## Build or try the interface
 
-Use **System → UI** for seven interface languages and five themes, with automatic
-dark-mode support. See [UI preferences](docs/ui-preferences.md).
+Use Python 3.11+ and Node.js 24. From the repository root:
 
-## Features
+```sh
+python -m pip install -r requirements-dev.txt
+cd interface
+npm ci
+cd ..
+pio run -e waveshare-relay-6ch
+python scripts/check_firmware_size.py waveshare-relay-6ch
+```
 
-### :butterfly: Beautiful UI powered by DaisyUI and TailwindCSS
+Versioned OTA, initial-flash and debug files are packaged in `buildRelease/`.
+Use the `_ota.bin` image for OTA; see [build and firmware updates](docs/buildprocess.md).
 
-Beautiful, responsive UI which works equally well on desktop and on mobile. Gently animated for a snappy and modern feeling without ever being obtrusive or in the way. Easy theming with DaisyUI and media-queries to respect the users wish for a light or dark theme.
+To explore the real frontend without hardware:
 
-### :t-rex: Low Memory Footprint and Easy Customization by Courtesy of SvelteKit
+```sh
+cd interface
+npm ci
+npm run dev:sim
+```
 
-SvelteKit is ideally suited to be served from constrained devices like an ESP32. It's unique approach leads to very slim files. No bloatware like other popular JS frameworks. Not only the low memory footprint make it ideal but the developer experience is also outstanding letting you customize the front end with ease. Adapt and add functionality as you need it. The back end has you covered as well.
+The simulator uses `admin` / `sim-admin`. Physical actuator units use a unique
+setup password printed on the local serial console at 115200 baud, with username
+`admin`. See [credentials and labels](docs/device-credentials.md).
 
-### :telephone: Rich Communication Interfaces
+## Status and scope
 
-Comes with a rich set of communication interfaces to cover most standard needs of an IoT application. Like MQTT client, HTTP RESTful API, a WebSocket based Event Socket and a classic Websocket Server. All communication channels are stateful and fully synchronized. Changes propagate and are communicated to all other participants. The states can be persisted on the file system as well. For accurate time keeping time can by synchronized over NTP.
+The reviewed source baseline is `dev` commit `ced3e6d` (firmware `0.6.3`). Generic
+ESP32 profiles retain framework demonstrations; they are not six-relay board
+ports. Reported relay state is commanded GPIO state, not contact feedback.
+Management uses HTTP; deploy on a controlled network. KNX package generation
+does not establish ETS acceptance or certification.
 
-### :file_cabinet: WiFi Provisioning and Management
+See the [validation record](docs/validation.md) for checks performed during this
+documentation refresh and the remaining hardware qualification work.
 
-Naturally ESP32 SvelteKit comes with rich features to manage all your WiFi needs. From pulling up an access point for provisioning or as fall back, to fully manage your WiFi networks. Scan for available networks and connect to them. Advanced configuration options like static IP are on board as well.
+## Documentation development
 
-### :old_key: Secured API and User Management
+```sh
+python -m pip install -r requirements-docs.txt
+python -m mkdocs serve
+python -m mkdocs build --strict
+```
 
-Manage different user of your app with two authorization levels. An administrator and a guest user. Authenticate their API calls with a JWT token. Manage the user's profile from the admin interface. Use at own risk, as it is neither secure without the ability to use TLS/SSL encryption on the ESP32 server, nor very convenient, as only an admin can change passwords.
+Documentation changes pushed to `dev` are built and published by GitHub Actions.
+See [publishing setup](docs/documentation.md).
 
-### :airplane: OTA Upgrade Service
+## Attribution and license
 
-The framework can provide two different channels for Over-the-Air updates. Either by uploading a \*.bin file from the web interface. Or by pulling a firmware image from an update server. This is implemented with the github release page as an example. It is even possible to have different build environments at the same time and the Github OTA process pulls the correct binary.
-
-### :building_construction: Automated Build Chain
-
-The automated build chain takes out the pain and tears of getting all the bits and pieces play nice together. The repository contains a PlatformIO project at its heart. A SvelteKit project for the frontend code and a mkdocs project for the documentation go alongside. The PlatformIO build tools not only build the SvelteKit frontend with Vite, but also ensure that the build results are gzipped and find their way into the flash memory of the ESP32. You have two choices to serve the frontend either from the flash partition, or embedded into the firmware binary. The latter is much more friendly if your frontend code should be distributed OTA as well, leaving all configuration files intact.
-
-### :icecream: Compatible with all ESP32 Flavours
-
-The code runs on many variants of the ESP32 chip family. From the plain old ESP32, the ESP32-S3 and ESP32-C3. Other ESP32 variants might work, but haven't been tested. Sorry, no support for the older ESP8266. Go with one of the ESP32's instead.
-
-## Visit the Project Site
-
-[https://theelims.github.io/ESP32-sveltekit/](https://theelims.github.io/ESP32-sveltekit/)
-
-## Join our [Discord](https://discord.gg/MTn9mVUG5n)
-
-## Libraries Used
-
-- [SvelteKit](https://kit.svelte.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [DaisyUI](https://daisyui.com/)
-- [tabler ICONS](https://tabler-icons.io/)
-- [unplugin-icons](https://github.com/antfu/unplugin-icons)
-- [svelte-modals](https://svelte-modals.mattjennings.io/)
-- [svelte-dnd-action](https://github.com/isaacHagoel/svelte-dnd-action)
-- [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
-- [PsychicHttp](https://github.com/hoeken/PsychicHttp)
-- [PsychicMqttClient](https://github.com/theelims/PsychicMqttClient)
-
-## Licensing
-
-ESP32 SvelteKit is distributed with two licenses for different sections of the code. The back end code inherits the GNU LESSER GENERAL PUBLIC LICENSE Version 3 and is therefore distributed with said license. The front end code is distributed under the MIT License. See the [LICENSE](LICENSE) for a full text of both licenses.
+Built on [ESP32-SvelteKit](https://github.com/theelims/ESP32-sveltekit), originally
+derived from rjwats/esp8266-react. Backend code is LGPL-3.0 and frontend code is
+MIT as described in [LICENSE](LICENSE); dependencies retain their own licenses.

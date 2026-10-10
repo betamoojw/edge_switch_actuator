@@ -1,236 +1,119 @@
-# Build Process
+# Build and firmware updates
 
-The build process is controlled by [platformio.ini](https://github.com/theelims/ESP32-sveltekit/platformio.ini) and automates the build of the front end website with Vite as well as the binary compilation for the ESP32 firmware. Whenever PlatformIO is building a new binary it will call the python script [build_interface.py](https://github.com/theelims/ESP32-sveltekit/scripts/build_interface.py) to action. It will check the frontend files for changes. If necessary it will start the Vite build and gzip the resulting files either to the `data/` directory or embed them into a header file. In case the WWW files go into a LITTLEFS partition a file system image for the flash is created for the default build environment and upload to the ESP32.
+## Toolchain and targets
 
-## Changing the JS package manager
+Use Python 3.11+ and Node.js 24. Install `requirements-dev.txt` and run `npm ci`
+in `interface/`; see [getting started](gettingstarted.md). `platformio.ini`
+pins the pioarduino platform to `55.03.312-1`, uses Arduino, and isolates its core
+under `.pio/network-platformio`. Firmware `APP_VERSION` is currently `0.6.3`.
 
-This project uses NPM as the default package manager. However, many users might have different preferences and like to use YARN or PNPM instead. Just switch the interface to one of the other package managers. The build script identify the package manager by the presence of its lock-file and start the vite build process accordingly.
+| Environment | Application / purpose |
+| --- | --- |
+| `waveshare-relay-6ch` | Default six-relay actuator; ESP32-S3, 8 MB partition table |
+| `waveshare-relay-6ch-mcp-off` | Compile regression with MCP excluded |
+| `waveshare-relay-6ch-mcp-no-mqtt` | Compile regression proving MCP does not require MQTT |
+| `esp32-s3-devkitc-1`, `esp32-c3-devkitm-1`, `esp32dev` | Generic framework/light demo profiles |
+| `Kincony-B16M`, `esp32-wt32-eth01` | Framework profiles with Ethernet enabled |
 
-## Serving from Flash or Embedding into the Binary
+The KNX dependency is pinned to commit
+`980c047ad7fc5e27bf2fae95e48acde5d5e0b4fd`; WebSockets is pinned to 2.7.2.
+Other dependencies include version ranges, so the entire firmware dependency
+set is not a complete reproducible lock. The frontend uses `package-lock.json`.
 
-The front end website can be served either from the LITTLEFS partition of the flash, or embedded into the firmware binary (default). Later has the advantage that only one binary needs to be distributed easing the OTA process. Further more this is desirable if you like to preserve the settings stored in the LITTLEFS partition, or have other files there that need to survive a firmware update. To serve from the LITTLEFS partition instead please comment the following build flag out:
+## Selecting features
 
-```ini
-build_flags =
-    ...
-    -D EMBED_WWW
-```
+The effective actuator flags combine `features.ini`, common flags and profile
+overrides. Security, MQTT, NTP, manual/download OTA, analytics, core dump and MCP
+are compiled in. Sleep and battery are disabled; Ethernet is not enabled for the
+default Waveshare profile. MQTT and MCP still start disabled at runtime.
 
-### Partitioning
+MCP requires security and NTP and forbids `SERVE_CONFIG_FILES`. Keep credentials
+out of source/build flags. Device factory admin/AP credentials come from
+`SetupIdentity`, overriding the generic template values; see
+[device credentials](device-credentials.md).
 
-If you choose to embed the frontend it becomes part of the firmware binary (default). As many ESP32 modules only come with 4MB built-in flash this results in the binary being too large for the reserved flash. Therefor a partition scheme with a larger section for the executable code is selected. However, this limits the LITTLEFS partition to 200kb. There are a great number of [default partition tables](https://github.com/espressif/arduino-esp32/tree/master/tools/partitions) for Arduino-ESP32 to choose from. If you have 8MB or 16MB flash this would be your first choice. If you don't need OTA you can choose a partition scheme without OTA.
-
-Should you want to deploy the frontend from the flash's LITTLEFS partition on a 4MB chip you need to comment out the following two lines. Otherwise the 200kb will not be large enough to host the front end code.
-
-```ini
-board_build.partitions = min_spiffs.csv
-```
-
-## Selecting Features
-
-Many of the framework's built in features may be enabled or disabled as required at compile time. This can help save sketch space and memory if your project does not require the full suite of features. The access point and WiFi management features are "core features" and are always enabled. Feature selection may be controlled with the build flags defined in [features.ini](https://github.com/theelims/ESP32-sveltekit/blob/main/features.ini).
-
-Customize the settings as you see fit. A value of 0 will disable the specified feature:
-
-```ini
-  -D FT_SECURITY=1
-  -D FT_MQTT=1
-  -D FT_NTP=1
-  -D FT_UPLOAD_FIRMWARE=1
-  -D FT_DOWNLOAD_FIRMWARE=1
-  -D FT_SLEEP=1
-  -D FT_BATTERY=1
-  -D FT_ETHERNET=1
-```
-
-| Flag                 | Description                                                                                                                                                                                                              |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| FT_SECURITY          | Controls whether the [security features](statefulservice.md#security-features) are enabled. Disabling this means you won't need to authenticate to access the device and all authentication predicates will be bypassed. |
-| FT_MQTT              | Controls whether the MQTT features are enabled. Disable this if your project does not require MQTT support.                                                                                                              |
-| FT_NTP               | Controls whether network time protocol synchronization features are enabled. Disable this if your project does not require accurate time.                                                                                |
-| FT_UPLOAD_FIRMWARE   | Controls whether the manual upload firmware feature is enabled. Disable this if you won't be manually uploading firmware.                                                                                                |
-| FT_DOWNLOAD_FIRMWARE | Controls whether the firmware download feature is enabled. Disable this if you won't firmware pulled from a server.                                                                                                      |
-| FT_SLEEP             | Controls whether the deep sleep feature is enabled. Disable this if your device is not battery operated or you don't need to place it in deep sleep to save energy.                                                      |
-| FT_BATTERY           | Controls whether the battery state of charge shall be reported to the clients. Disable this if your device is not battery operated.                                                                                      |
-| FT_ETHERNET          | Controls whether an ethernet interface will be used. Disable this if your device has no ethernet interface connected.                                                                                      |
-
-In addition custom features might be added or removed at runtime. See [Custom Features](statefulservice.md#custom-features) on how to use this in your application.
-
-## Factory Settings
-
-The framework has built-in factory settings which act as default values for the various configurable services where settings are not saved on the file system. These settings can be overridden using the build flags defined in [factory_settings.ini](https://github.com/theelims/ESP32-sveltekit/blob/main/factory_settings.ini). All strings entered here must be escaped, especially special characters.
-
-Customize the settings as you see fit, for example you might configure your home WiFi network as the factory default:
-
-```ini
-  -D FACTORY_WIFI_SSID=\"My\ Awesome\ WiFi\ Network\"
-  -D FACTORY_WIFI_PASSWORD=\"secret\"
-  -D FACTORY_WIFI_HOSTNAME=\"awesome_light_controller\"
-```
-
-### Default access point settings
-
-By default, the factory settings configure the device to bring up an access point on start up which can be used to configure the device:
-
-- SSID: ESP32-Sveltekit
-- Password: esp-sveltekit
-
-### Security settings and user credentials
-
-By default, the factory settings configure two user accounts with the following credentials:
-
-| Username | Password |
-| -------- | -------- |
-| admin    | admin    |
-| guest    | guest    |
-
-It is recommended that you change the user credentials from their defaults to better protect your device. You can do this in the user interface, or by modifying [factory_settings.ini](https://github.com/theelims/ESP32-sveltekit/blob/main/factory_settings.ini) as mentioned above.
-
-### Customizing the factory time zone setting
-
-Changing factory time zone setting is a common requirement. This requires a little effort because the time zone name and POSIX format are stored as separate values for the moment. The time zone names and POSIX formats are contained in the UI code in [timezones.ts](https://github.com/theelims/ESP32-sveltekit/blob/main/interface/src/routes/connections/timezones.ts). Take the appropriate pair of values from there, for example, for Los Angeles you would use:
-
-```ini
-  -D FACTORY_NTP_TIME_ZONE_LABEL=\"America/Los_Angeles\"
-  -D FACTORY_NTP_TIME_ZONE_FORMAT=\"PST8PDT,M3.2.0,M11.1.0\"
-```
-
-### Placeholder substitution
-
-Various settings support placeholder substitution, indicated by comments in [factory_settings.ini](https://github.com/theelims/ESP32-sveltekit/blob/main/factory_settings.ini). This can be particularly useful where settings need to be unique, such as the Access Point SSID or MQTT client id. The following placeholders are supported:
-
-| Placeholder  | Substituted value                                                     |
-| ------------ | --------------------------------------------------------------------- |
-| #{platform}  | The microcontroller platform, e.g. "esp32" or "esp32c3"               |
-| #{unique_id} | A unique identifier derived from the MAC address, e.g. "0b0a859d6816" |
-| #{random}    | A random number encoded as a hex string, e.g. "55722f94"              |
-
-## Other Build Flags
-
-### Cross-Origin Resource Sharing
-
-If you need to enable Cross-Origin Resource Sharing (CORS) on the ESP32 server just uncomment the following build flags:
-
-```ini
-build_flags =
-...
-  ; Uncomment to configure Cross-Origin Resource Sharing
-  -D ENABLE_CORS
-  -D CORS_ORIGIN=\"*\"
-```
-
-This will add the `Access-Control-Allow-Origin` and `Access-Control-Allow-Credentials` headers to any request made.
-
-### ESP32 `CORE_DEBUG_LEVEL`
-
-The ESP32 Arduino Core and many other libraries use the ESP Logging tools. To enable these debug and error messages from deep inside your libraries uncomment the following build flag.
-
-```ini
-build_flags =
-...
-	-D CORE_DEBUG_LEVEL=5
-```
-
-It accepts values from 5 (Verbose) to 1 (Errors) for different information depths to be logged on the serial terminal. If commented out there won't be debug messages from the core libraries. For a production build you should comment this out.
-
-### Serve Config Files
-
-By enabling this build flag the ESP32 will serve all config files stored on the LittleFS flash partition under `http:\\[IP]\config\[filename].json`. This can be helpful to troubleshoot problems. However, it is strongly advised to disable this for production builds.
-
-```ini
-build_flags =
-...
-  -D SERVE_CONFIG_FILES
-```
-
-### Serial Info
-
-In some circumstances it might be beneficial to not print any information on the serial consol (Serial1 or USB CDC). By commenting out the following build flag ESP32-Sveltekit will not print any information on the serial console.
-
-```ini
-build_flags =
-...
-  -D SERIAL_INFO
-```
-
-## SSL Root Certificate Store
-
-Some features like firmware download or the MQTT client require a SSL connection. For that the SSL Root CA certificate must be known to the ESP32. The build system contains a python script derived from Espressif ESP-IDF building a certificate store containing one or more certificates. In order to create the store you must uncomment the three lines below in `platformio.ini`.
-
-```ini
-extra_scripts =
-    pre:scripts/generate_cert_bundle.py
-board_build.embed_files = src/certs/x509_crt_bundle.bin
-board_ssl_cert_source = adafruit
-```
-
-The script will download a public certificate store from Mozilla (`board_ssl_cert_source = mozilla`) or a repository curated by Adafruit (`board_ssl_cert_source = adafruit`) or (`board_ssl_cert_source = adafruit-full`), builds a binary containing all certs and embeds this into the firmware. This will add ~65kb to the firmware image. Should you only need a few known certificates you can place their `*.pem` or `*.der` files in the [ssl_certs](https://github.com/theelims/ESP32-sveltekit/blob/main/ssl_certs) folder and change `board_ssl_cert_source = folder`. Then only these certificates will be included in the store. This is especially useful, if you only need to connect to know servers and need to shave some kb off the firmware image:
-
-!!! info
-
-     To enable SSL the feature `FT_NTP=1` must be enabled as well.
-
-!!! bug
-
-    At the moment there is a bug with the certificate bundle when using the firmware download e.g. from Github. By using the build flag `-D DOWNLOAD_OTA_SKIP_CERT_VERIFY` you may skip certificate validation to keep OTA working. Only OTA seems affected, not MQTT. Keep in mind, that this voids the main security feature of SSL and allows man-in-the-middle attacks.
-
-## Vite and LittleFS 32 Character Limit
-
-The static files for the website are build using vite. By default vite adds a unique hash value to all filenames for improved caching performance. However, LittleFS on the ESP32 is limited to filenames with 32 characters. This restricts the number of characters available for the user to name svelte files. To give a little bit more headroom a vite-plugin removes all hash values, as they offer no benefit on an ESP32. However, have the 32 character limit in mind when naming files. Excessively long names may still cause some issues when building the LittleFS binary.
-
-## Firmware build and release artifacts
-
-Run the normal PlatformIO build from the project root:
+## Build flow
 
 ```sh
 pio run -e waveshare-relay-6ch
 python scripts/check_firmware_size.py waveshare-relay-6ch
 ```
 
-`pio run` uses `waveshare-relay-6ch` by default. Other environments in
-`platformio.ini` use the same release hooks. The build flow is:
+1. `scripts/build_interface.py` builds and compresses the UI when its change check
+   requires it. With default `EMBED_WWW`, assets become `lib/framework/WWWData.h`.
+2. `scripts/generate_cert_bundle.py` prepares the configured Adafruit CA bundle.
+3. PlatformIO compiles `.pio/build/<environment>/firmware.bin` and `firmware.elf`.
+4. Existing hooks archive symbols in `build/elf/`, merged images in `build/merged/`,
+   and OTA files in `build/release/`.
+5. `scripts/package_release.py` packages the current outputs into `buildRelease/`,
+   including on incremental normal builds. Filesystem-only/clean/erase targets
+   do not create release packages.
 
-1. `build_interface.py` rebuilds changed frontend sources and embeds the compressed
-   UI when `EMBED_WWW` is enabled (the default).
-2. `generate_cert_bundle.py` prepares the configured certificate bundle.
-3. PlatformIO compiles and links the application and produces `firmware.elf` and
-   `firmware.bin` under `.pio/build/<environment>/`.
-4. Existing hooks archive the ELF by SHA-256 under `build/elf/`, merge the boot and
-   application images under `build/merged/`, and copy the OTA binary plus its MD5
-   under `build/release/`. These legacy paths and filenames remain supported,
-   including for `scripts/build_manifest.py`.
-5. `package_release.py` packages the current build in **`buildRelease/` at the project
-   root**, creating the folder automatically. It also runs on incremental normal
-   builds, so running the command again restores deleted release files.
+The embedded-UI freshness check uses timestamps under `interface/src/`. Changes
+only to static assets, dependencies or Vite configuration can be missed. For those
+changes, remove the generated `lib/framework/WWWData.h` before building to force
+regeneration. See the [source review](actuator-source-review.md).
 
-The new filenames use `edge_switch_actuator`, followed by the exact PlatformIO
-environment and the effective firmware `APP_VERSION` from the build flags. Dots in
-the version are preserved. For version `0.6.3` and the default board:
+The size checker compares the actual application binary to generated application
+slots. A successful linker estimate alone is insufficient, especially on the
+constrained `esp32dev` and `esp32-wt32-eth01` profiles, which use LTO.
 
-| File in `buildRelease/` | Purpose |
+## Firmware build and release artifacts
+
+For the default board and version 0.6.3:
+
+| File in `buildRelease/` | Use |
 | --- | --- |
-| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_ota.bin` | Application-only image for manual upload or URL-based OTA |
-| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_ota.md5` | Plain hexadecimal MD5 of the OTA image; optionally upload this first in the firmware-update UI |
-| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_webflash.bin` | Merged initial-flash image containing the configured bootloader, partition table, boot application, and firmware; flash at offset `0x0` |
-| `edge_switch_actuator_waveshare-relay-6ch_0.6.3.elf` | Matching debug symbols for diagnosing this firmware |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_ota.bin` | Application-only OTA image |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_ota.md5` | Plain hexadecimal MD5; optional first upload in update UI |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_webflash.bin` | Merged bootloader/partition/boot application/firmware image, initial flash at offset `0x0` |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.3.elf` | Matching debug symbols |
 
-Use **`_ota.bin` for OTA**, never `_webflash.bin`. The default embedded UI travels
-with the OTA application. When `EMBED_WWW` is disabled, filesystem generation and
-upload remain separate (`pio run -e <environment> -t buildfs` / `-t uploadfs`);
-the release package does not include or overwrite device filesystem settings.
+Names use the effective `APP_VERSION` and PlatformIO environment. Rebuilding the
+same pair replaces its files; other versions are retained. Generation is staged
+before replacing files, and a merge failure fails the build. Packaging tests
+exercise this behavior. At the reviewed baseline, four default-board 0.6.3 files
+in `buildRelease/` are tracked in Git; this directory is **not** ignored.
 
-Updating `APP_VERSION` changes the filename version segment automatically. Rebuilding the
-same version and environment replaces its release files; other versions and
-environments are retained. Release generation uses the current compiler outputs
-and flash layout, fails the build if merging fails, and finishes generation in a
-temporary directory before replacing previous release files. Generated files in
-`buildRelease/` are ignored by Git. Clean, filesystem-only, and erase targets do not
-generate this package; use a normal `pio run` to prepare release files.
+Use **`_ota.bin` for OTA**, never `_webflash.bin`. With `EMBED_WWW`, the application
+and UI update together without deliberately replacing filesystem settings.
+Removing `EMBED_WWW` switches UI delivery to LittleFS: `buildfs` / `uploadfs` are
+separate operations, and the release package does not contain that filesystem
+image. A filesystem upload can replace stored settings; plan backups accordingly.
 
-The firmware matrix in `.github/workflows/mcp-tests.yml` runs the packaging tests,
-builds and checks each image's partition fit, and retains `buildRelease/` as a workflow
-artifact for 14 days. It does not create a Git tag or publish a GitHub Release.
-The existing GitHub OTA UI matches `.bin` assets by board-name substring, so only
-attach the intended board's OTA binary to a GitHub Release used by that UI; keep
-merged images and alternate profiles in the workflow artifact or a separate
-download destination.
+## Updating a device
+
+An administrator can upload the matching OTA image under **System → Firmware
+Update**. Confirm the board/environment and preserve matching debug symbols.
+The MD5 file detects accidental corruption; it is not a firmware signature.
+The build pipeline does not establish signed-image authenticity.
+
+The GitHub release picker has two known source-level limitations at this baseline:
+
+- `page.data.github` includes `/tree/dev`, but release components expect only
+  `owner/repository` when constructing GitHub API requests. Release lookup fails.
+- Asset matching checks `.bin` and a board-name substring, so merged images and
+  alternate MCP profiles can also match. Use manual OTA until lookup and exact
+  artifact selection are corrected. Do not publish ambiguous assets to a release
+  consumed by the existing picker.
+
+Firmware CI retains `buildRelease/` artifacts for 14 days; it does not create tags
+or GitHub Releases. Publishing this documentation does not flash a device or
+publish a firmware release.
+
+## Certificates and factory settings
+
+`board_ssl_cert_source = adafruit` and `src/certs/x509_crt_bundle.bin` configure the
+embedded trust bundle. MCP checks WSS hostname/certificate trust and waits for
+plausible time. `DOWNLOAD_OTA_SKIP_CERT_VERIFY` is commented out in the reviewed
+profile; there is no reason to enable an insecure download bypass for routine use.
+
+Factory values are in `factory_settings.ini`. They are defaults for unset values,
+not a migration mechanism for commissioned units. Verify NTP's label and POSIX
+zone together: the current `Europe/Berlin` label is paired with a UK-style format,
+which is recorded as a review finding. Use **Connections → NTP** to select a
+matching zone after provisioning.
+
+For KNX artifact generation, see the
+[package README](https://github.com/betamoojw/edge_switch_actuator/blob/dev/knx/README.md).
+For docs builds and publication, see [documentation publishing](documentation.md).

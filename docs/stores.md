@@ -58,12 +58,12 @@ It exposes the following properties you can subscribe to:
 | ---------------------------------- | --------- | ------------------------------------------- |
 | `$telemetry.rssi.rssi`             | `Number`  | The RSSI signal strength of the WiFi in dBm |
 | `$telemetry.rssi.ssid`             | `String`  | Name of the connected WiFi station          |
-| `$telemetry.rssi.connected`        | `Boolean` | Connection status of the WiFi               |
+| `$telemetry.rssi.disconnected`     | `Boolean` | True when Wi-Fi RSSI is unavailable         |
 | `$telemetry.battery.soc`           | `Number`  | Battery state of charge                     |
 | `$telemetry.battery.charging`      | `Boolean` | Is battery connected to charger             |
-| `$telemetry.download_ota.status`   | `String`  | Status of OTA                               |
-| `$telemetry.download_ota.progress` | `Number`  | Progress of OTA                             |
-| `$telemetry.download_ota.error`    | `String`  | Error Message of OTA                        |
+| `$telemetry.ota_status.status`     | `String`  | Status of OTA                               |
+| `$telemetry.ota_status.progress`   | `Number`  | Progress of OTA                             |
+| `$telemetry.ota_status.error`      | `String`  | Error message of OTA                        |
 | `$telemetry.ethernet.connected`    | `Boolean` | Connection status of the ethernet interface |
 
 ## Analytics

@@ -1,5 +1,12 @@
 # Six-channel actuator implementation
 
+!!! info "Historical implementation record"
+
+    The sections below retain their original implementation and test dates. For
+    current behavior, including MQTT/Home Assistant and MCP added later, use
+    [architecture](architecture.md), [source review](actuator-source-review.md)
+    and [validation](validation.md). Earlier statements describe their dated baseline.
+
 Network follow-up: [unified Arduino-ESP32 Network API migration](network-api-migration.md).
 
 Implementation date: 2026-09-27. Based on local `dev` at `81827a2af9410b91741ece1a23cf6ee95877b757`. The earlier production-design documents describe the target architecture; this document records the implemented behavior and remaining qualification work.
@@ -43,7 +50,7 @@ Button, dashboard and ETS share the stack's programming state. Programming expir
 
 ## Reproduce checks
 
-For the ETS message **No valid license found to test the unregistered product(s) in this file**, see the [licensing diagnosis and import prerequisites](../knx/README.md). Structural generation success does not establish ETS import eligibility.
+For the ETS message **No valid license found to test the unregistered product(s) in this file**, see the [licensing diagnosis and import prerequisites](https://github.com/betamoojw/edge_switch_actuator/blob/dev/knx/README.md). Structural generation success does not establish ETS import eligibility.
 
 ```text
 python scripts/generate_knx_product.py

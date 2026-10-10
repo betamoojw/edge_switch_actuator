@@ -108,7 +108,7 @@ and call one of the 4 toast methods:
 | `notification.info(msg:string, timeout:number)`    | :octicons-info-16: Shows an info message            |
 | `notification.success(msg:string, timeout:number)` | :octicons-check-circle-16: Shows as success message |
 
-Each method takes an `msg`-string as an argument, which will be shown as the message body. It accepts HTML to enrich your toasts, if you should desire to do so. The `timeout` argument specifies how many milliseconds the toast notification shall be shown to the user.
+Each method takes an `msg`-string as an argument, which will be shown as the message body. Messages are rendered as text; do not rely on HTML injection for formatting. The `timeout` argument specifies how many milliseconds the toast notification shall be shown to the user.
 
 ## Github Update Dialog
 
@@ -116,7 +116,10 @@ This is a modal showing the update progress, possible error messages and makes a
 
 ## Update Indicator
 
-The update indicator is a small widget shown in the upper right corner of the status bar. It indicates the availability of a newer firmware release then the current one. Upon pressing the icon it will automatically update the firmware to the latest release. By default this works through the Github Latest Release API. This must be customized should you use a different update server. Have a look at the [source file](https://github.com/theelims/ESP32-sveltekit/blob/main/interface/src/lib/components/GithubUpdateDialog.svelte) to see what portions to update.
+The reviewed dev branch has release lookup and artifact-selection limitations;
+see [build and firmware updates](buildprocess.md#updating-a-device) before use.
+
+The update indicator is a small widget shown in the upper right corner of the status bar. It indicates the availability of a newer firmware release then the current one. Upon pressing the icon it will automatically update the firmware to the latest release. By default this works through the Github Latest Release API. This must be customized should you use a different update server. Have a look at the [source file](https://github.com/betamoojw/edge_switch_actuator/blob/dev/interface/src/lib/components/UpdateIndicator.svelte) to see what portions to update.
 
 ## Info Dialog
 

@@ -1,7 +1,7 @@
 # Six-channel switching actuator production design
 
 Implementation follow-up: [implemented behavior, build steps and qualification status](actuator-implementation.md).
-Status: proposed implementation contract, 2026-09-26. Preserves the `dev` ESP32 SvelteKit framework. Firmware/UI implementation, hardware qualification and the ETS-importable product artifact remain future work. See [source review](actuator-source-review.md), [hardware reference](esp32-s3-relay-6ch-hardware.md), [Modbus contract](actuator-modbus-map.md) and [KNX contract](actuator-knx-design.md).
+Historical design contract, 2026-09-26. Firmware/UI and a KNX product package have since been implemented; qualification remains scoped by the validation record. This document preserves original requirements, including proposals that are not implemented. Use [current architecture](architecture.md) for actual behavior. See [source review](actuator-source-review.md), [hardware reference](esp32-s3-relay-6ch-hardware.md), [Modbus contract](actuator-modbus-map.md) and [KNX contract](actuator-knx-design.md).
 
 ## Product decisions
 

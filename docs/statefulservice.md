@@ -1,12 +1,18 @@
 # Developing with the Framework
 
-The back end is a set of REST endpoints hosted by a [PsychicHttp](https://github.com/hoeken/PsychicHttp) instance. The ['lib/framework'](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework) directory contains the majority of the back end code. The framework contains a number of useful utility classes which you can use when extending it. The project also comes with a demo project to give you some help getting started.
+This is an extension tutorial using the retained light-demo examples. The actuator
+composition, authorization and persistence lifecycle are described in
+[architecture](architecture.md) and the [current API](restfulapi.md). Example
+endpoint counts and optional sleep/battery features are not the product profile.
+Do not expose a writable EventEndpoint without explicit operation authorization.
 
-The framework's source is split up by feature, for example [WiFiScanner.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/WiFiScanner.h) implements the end points for scanning for available networks where as [WiFiSettingsService.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/WiFiSettingsService.h) handles configuring the WiFi settings and managing the WiFi connection.
+The back end is a set of REST endpoints hosted by a [PsychicHttp](https://github.com/hoeken/PsychicHttp) instance. The ['lib/framework'](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework) directory contains the majority of the back end code. The framework contains a number of useful utility classes which you can use when extending it. The project also comes with a demo project to give you some help getting started.
+
+The framework's source is split up by feature, for example [WiFiScanner.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/WiFiScanner.h) implements the end points for scanning for available networks where as [WiFiSettingsService.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/WiFiSettingsService.h) handles configuring the WiFi settings and managing the WiFi connection.
 
 ## Initializing the framework
 
-The ['src/main.cpp'](https://github.com/theelims/ESP32-sveltekit/blob/main/src/main.cpp) file constructs the web server and initializes the framework. You can add endpoints to the server here to support your IoT project. The main loop is also accessible so you can run your own code easily.
+The ['src/main.cpp'](https://github.com/betamoojw/edge_switch_actuator/blob/dev/src/main.cpp) file constructs the web server and initializes the framework. You can add endpoints to the server here to support your IoT project. The Arduino loop deletes its task; the actuator uses a dedicated task. See the architecture reference for product task ownership.
 
 The following code creates the web server and esp32sveltekit framework:
 
@@ -39,7 +45,7 @@ The following diagram visualizes how the framework's modular components fit toge
 
 ![framework diagram](media/framework.png)
 
-The [StatefulService.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/StatefulService.h) class is responsible for managing state. It has an API which allows other code to update or respond to updates in the state it manages. You can define a data class to hold state, then build a StatefulService class to manage it. After that you may attach HTTP endpoints, WebSockets or MQTT topics to the StatefulService instance to provide commonly required features.
+The [StatefulService.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/StatefulService.h) class is responsible for managing state. It has an API which allows other code to update or respond to updates in the state it manages. You can define a data class to hold state, then build a StatefulService class to manage it. After that you may attach HTTP endpoints, WebSockets or MQTT topics to the StatefulService instance to provide commonly required features.
 
 Here is a simple example of a state class and a StatefulService to manage it:
 
@@ -173,7 +179,7 @@ lightStateService->update(jsonObject, LightState::update, "timer");
 
 ### HTTP RESTful Endpoint
 
-The framework provides an [HttpEndpoint.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/HttpEndpoint.h) class which may be used to register GET and POST handlers to read and update the state over HTTP. You may construct an HttpEndpoint as a part of the StatefulService or separately if you prefer.
+The framework provides an [HttpEndpoint.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/HttpEndpoint.h) class which may be used to register GET and POST handlers to read and update the state over HTTP. You may construct an HttpEndpoint as a part of the StatefulService or separately if you prefer.
 
 The code below demonstrates how to extend the LightStateService class to provide an endpoint:
 
@@ -199,7 +205,7 @@ To register the HTTP endpoints with the web server the function `_httpEndpoint.b
 
 ### File System Persistence
 
-[FSPersistence.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/FSPersistence.h) allows you to save state to the filesystem. FSPersistence automatically writes changes to the file system when state is updated. This feature can be disabled by calling `disableUpdateHandler()` if manual control of persistence is required.
+[FSPersistence.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/FSPersistence.h) allows you to save state to the filesystem. FSPersistence automatically writes changes to the file system when state is updated. This feature can be disabled by calling `disableUpdateHandler()` if manual control of persistence is required.
 
 The code below demonstrates how to extend the LightStateService class to provide persistence:
 
@@ -217,7 +223,7 @@ class LightStateService : public StatefulService<LightState> {
 
 ### Event Socket Endpoint
 
-[EventEndpoint.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/EventEndpoint.h) wraps the [Event Socket](#event-socket) into an endpoint compatible with a stateful service. The client may subscribe and unsubscribe to this event to receive updates or push updates to the ESP32. The current state is synchronized upon subscription.
+[EventEndpoint.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/EventEndpoint.h) wraps the [Event Socket](#event-socket) into an endpoint compatible with a stateful service. The client may subscribe and unsubscribe to this event to receive updates or push updates to the ESP32. The current state is synchronized upon subscription.
 
 The code below demonstrates how to extend the LightStateService class to provide an WebSocket:
 
@@ -243,7 +249,7 @@ Since all events run through one websocket connection it is not possible to use 
 
 ### WebSocket Server
 
-[WebSocketServer.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/WebSocketServer.h) allows you to read and update state over a WebSocket connection. WebSocketServer automatically pushes changes to all connected clients when state is updated.
+[WebSocketServer.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/WebSocketServer.h) allows you to read and update state over a WebSocket connection. WebSocketServer automatically pushes changes to all connected clients when state is updated.
 
 The code below demonstrates how to extend the LightStateService class to provide an WebSocket:
 
@@ -271,7 +277,7 @@ To register the WS endpoint with the web server the function `_webSocketServer.b
 
 The framework includes an MQTT client which can be configured via the UI. MQTT requirements will differ from project to project so the framework exposes the client for you to use as you see fit. The framework does however provide a utility to interface StatefulService to a pair of pub/sub (state/set) topics. This utility can be used to synchronize state with software such as Home Assistant.
 
-[MqttEndpoint.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/MqttEndpoint.h) allows you to publish and subscribe to synchronize state over a pair of MQTT topics. MqttEndpoint automatically pushes changes to the "pub" topic and reads updates from the "sub" topic.
+[MqttEndpoint.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/MqttEndpoint.h) allows you to publish and subscribe to synchronize state over a pair of MQTT topics. MqttEndpoint automatically pushes changes to the "pub" topic and reads updates from the "sub" topic.
 
 The code below demonstrates how to extend the LightStateService class to interface with MQTT:
 
@@ -375,9 +381,9 @@ or keep a local pointer to the `EventSocket` instance. It is possible to send `P
 
 ## Security features
 
-The framework has security features to prevent unauthorized use of the device. This is driven by [SecurityManager.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/SecurityManager.h).
+The framework has security features to prevent unauthorized use of the device. This is driven by [SecurityManager.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/SecurityManager.h).
 
-On successful authentication, the /rest/signIn endpoint issues a [JSON Web Token (JWT)](https://jwt.io/) which is then sent using Bearer Authentication. For this add an `Authorization`-Header to the request with the Content `Bearer {JWT-Secret}`. The framework come with built-in predicates for verifying a users access privileges. The built in AuthenticationPredicates can be found in [SecurityManager.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/SecurityManager.h) and are as follows:
+On successful authentication, the /rest/signIn endpoint issues a [JSON Web Token (JWT)](https://jwt.io/) which is then sent using Bearer Authentication. For this add an `Authorization`-Header to the request with the Content `Bearer {access_token}`. The framework come with built-in predicates for verifying a users access privileges. The built in AuthenticationPredicates can be found in [SecurityManager.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/SecurityManager.h) and are as follows:
 
 | Predicate        | Description                                   |
 | ---------------- | --------------------------------------------- |
@@ -401,7 +407,7 @@ In case of a websocket connection the JWT token is supplied as a search paramete
 
 ## Placeholder substitution
 
-Various settings support placeholder substitution, indicated by comments in [factory_settings.ini](https://github.com/theelims/ESP32-sveltekit/blob/main/factory_settings.ini). This can be particularly useful where settings need to be unique, such as the Access Point SSID or MQTT client id. Strings must be properly escaped in the ini-file. The following placeholders are supported:
+Various settings support placeholder substitution, indicated by comments in [factory_settings.ini](https://github.com/betamoojw/edge_switch_actuator/blob/dev/factory_settings.ini). This can be particularly useful where settings need to be unique, such as the Access Point SSID or MQTT client id. Strings must be properly escaped in the ini-file. The following placeholders are supported:
 
 | Placeholder  | Substituted value                                                     |
 | ------------ | --------------------------------------------------------------------- |
@@ -438,7 +444,7 @@ The framework supplies access to various features via getter functions:
 | getSleepService()            | Send the ESP32 into deep sleep                     |
 | getBatteryService()          | Update battery information on the client           |
 
-The core features use the [StatefulService.h](https://github.com/theelims/ESP32-sveltekit/blob/main/lib/framework/StatefulService.h) class and therefore you can change settings or observe changes to settings through the read/update API.
+The core features use the [StatefulService.h](https://github.com/betamoojw/edge_switch_actuator/blob/dev/lib/framework/StatefulService.h) class and therefore you can change settings or observe changes to settings through the read/update API.
 
 Inspect the current WiFi settings:
 
@@ -513,7 +519,7 @@ will force a start of the AP regardless of the AP settings. It will not change t
 
 This API service can place the ESP32 in the lowest power deep sleep mode consuming only a few µA. It uses the EXT1 wakeup source, so the ESP32 can be woken up with a button or from a peripherals interrupt. Consult the [ESP-IDF Api Reference](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/sleep_modes.html#_CPPv428esp_sleep_enable_ext1_wakeup8uint64_t28esp_sleep_ext1_wakeup_mode_t) which GPIOs can be used for this. The RTC will also be powered down, so an external pull-up or pull-down resistor is required. It is not possible to persist variable state through the deep sleep. To optimize the deep sleep power consumption it is advisable to use the callback function to put pins with external pull-up's or pull-down's in a special isolated state to prevent current leakage. Please consult the [ESP-IDF Api Reference](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/sleep_modes.html#configuring-ios-deep-sleep-only) for this.
 
-The settings wakeup pin definition and the signal polarity need to be defined in [factory_settings.ini](https://github.com/theelims/ESP32-sveltekit/blob/main/factory_settings.ini):
+The settings wakeup pin definition and the signal polarity need to be defined in [factory_settings.ini](https://github.com/betamoojw/edge_switch_actuator/blob/dev/factory_settings.ini):
 
 ```ini
 ; Deep Sleep Configuration
@@ -543,7 +549,7 @@ esp32sveltekit.getSleepService()->sleepNow();
 
 ### Battery State of Charge
 
-A small helper class let's you update the battery icon in the status bar. This is useful if you have a battery operated IoT device. It must be enabled in [features.ini](https://github.com/theelims/ESP32-sveltekit/blob/main/features.ini). It uses the [Event Socket](#event-socket) and exposes two functions that can be used to update the clients.
+A small helper class let's you update the battery icon in the status bar. This is useful if you have a battery operated IoT device. It must be enabled in [features.ini](https://github.com/betamoojw/edge_switch_actuator/blob/dev/features.ini). It uses the [Event Socket](#event-socket) and exposes two functions that can be used to update the clients.
 
 ```cpp
 esp32sveltekit.getBatteryService()->updateSOC(float stateOfCharge); // update state of charge in percent (0 - 100%)
@@ -583,11 +589,11 @@ ESP32-SvelteKit offers two different ways to roll out firmware updates to field 
 
 ### Firmware Upload
 
-Enabling `FT_UPLOAD_FIRMWARE=1` in [features.ini](https://github.com/theelims/ESP32-sveltekit/blob/main/features.ini) creates a REST endpoint that one can post a firmware binary to. The frontend has a file drop zone to upload a new firmware binary from the browser.
+Enabling `FT_UPLOAD_FIRMWARE=1` in [features.ini](https://github.com/betamoojw/edge_switch_actuator/blob/dev/features.ini) creates a REST endpoint that one can post a firmware binary to. The frontend has a file drop zone to upload a new firmware binary from the browser.
 
 ### Firmware Download from Update Server
 
-By enabling `FT_DOWNLOAD_FIRMWARE=1` in [features.ini](https://github.com/theelims/ESP32-sveltekit/blob/main/features.ini) one can POST a link to a firmware binary which is downloaded for the OTA process. This feature requires SSL and is thus dependent on `FT_NTP=1`. The Frontend contains an implementation which uses GitHub's Releases section as the update server. By specifying a firmware version in [platformio.ini](https://github.com/theelims/ESP32-sveltekit/blob/main/platformio.ini) one can make use of semantic versioning to determine the correct firmware:
+By enabling `FT_DOWNLOAD_FIRMWARE=1` in [features.ini](https://github.com/betamoojw/edge_switch_actuator/blob/dev/features.ini) one can POST a link to a firmware binary which is downloaded for the OTA process. This feature requires SSL and is thus dependent on `FT_NTP=1`. The Frontend contains an implementation which uses GitHub's Releases section as the update server. By specifying a firmware version in [platformio.ini](https://github.com/betamoojw/edge_switch_actuator/blob/dev/platformio.ini) one can make use of semantic versioning to determine the correct firmware:
 
 ```ini
     -D BUILD_TARGET="$PIOENV"
@@ -604,6 +610,6 @@ A build script copies the firmware binary files for all build environment to `bu
 #### Custom Update Server
 
 If Github is not desired as the update server this can be easily modified to any other custom server. The REST API will accept any valid HTTPS-Link. However, SSL is mandatory and may require a different Root CA Certificate then Github to validate correctly.
-Follow the instructions here how to change the [SSL CA Certificate](buildprocess.md#ssl-root-certificate-for-download-ota).
+Follow the instructions here how to change the [SSL CA Certificate](buildprocess.md#certificates-and-factory-settings).
 
-If you use a custom update server you must also adapt the [frontend](structure.md#custom-update-server) code to suit your needs.
+If you use a custom update server you must also adapt the [frontend](buildprocess.md#updating-a-device) code to suit your needs.

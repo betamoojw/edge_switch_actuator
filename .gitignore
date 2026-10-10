@@ -26,3 +26,4 @@ ssl_certs/cacert.pem
 /interface/playwright-report/
 /interface/test-results/
 /interface/.env.local
+/site/
