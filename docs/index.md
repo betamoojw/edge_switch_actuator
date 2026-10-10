@@ -11,6 +11,11 @@ documentation, not a declaration that every feature is production-qualified.
 
 ## Start here
 
+[![Edge Switching Actuator six-channel relay enclosure with external antenna and screw terminals.](edge_switch_actuator_waveshare-relay.png)](esp32-s3-relay-6ch-hardware.md#hardware-overview)
+
+*Project-supplied hardware image. See the [hardware guide](esp32-s3-relay-6ch-hardware.md)
+for pin assignments, wiring guidance and the [dimensioned enclosure view](esp32-s3-relay-6ch-hardware.md#enclosure-dimensions).*
+
 [Connect your first device](quick-start.md){ .md-button .md-button--primary }
 [Explore the real interface](interface-tour.md){ .md-button }
 

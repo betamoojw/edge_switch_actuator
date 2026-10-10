@@ -5,6 +5,15 @@ SKU 26756. Pin assignments below agree with `src/device/BoardProfile.h` in the
 reviewed source. Agreement between source and vendor documentation is not a
 physical continuity test or electrical qualification of the installed board.
 
+## Hardware overview
+
+[![Edge Switching Actuator enclosure with external antenna, six relay terminal groups and mounting flanges.](edge_switch_actuator_waveshare-relay.png)](edge_switch_actuator_waveshare-relay.png)
+
+*Project-supplied hardware image. Open the image for a full-resolution view.*
+Use it to identify the enclosure and connection areas. For wiring, use the
+verified assignments below and the labels on the fitted PCB; the two supplied
+images show different top-terminal legends.
+
 ## Verified vendor information
 
 | Resource | Assignment |
@@ -41,6 +50,17 @@ These are product engineering decisions, not additional vendor specifications:
 - Bench-verify buzzer usable frequency/duty limits, RGB color order and brightness, UART baud/parity combinations, automatic direction timing and termination position.
 - Use a low-voltage test fixture for firmware bring-up. Product qualification must establish load derating, thermal limits, inrush handling and installation protection for its actual loads; the contact maximum is not a six-channel simultaneous-load qualification.
 - Wi-Fi is the baseline IP interface. Onboard Ethernet and KNX TP hardware are not part of this board profile. RS485 is not a KNX TP interface.
+
+## Enclosure dimensions
+
+[![Dimensioned enclosure image with millimetre annotations including 145 overall length, 90 width, 125 and 70 mounting dimensions, and 30 and 10 height details.](edge_switch_actuator_waveshare-relay-size.png)](edge_switch_actuator_waveshare-relay-size.png)
+
+*Project-supplied dimension image; units are millimetres as marked. Open the image
+to inspect its dimension arrows.* The annotations describe the illustrated
+enclosure and have not been independently measured during the documentation
+inspection. Confirm the actual enclosure, mounting-hole positions and clearance
+for wiring and antenna before drilling or planning an installation. These
+enclosure dimensions are separate from the Waveshare board specification.
 
 ## Installation and wiring workflow
 
@@ -84,8 +104,8 @@ operation of all channels.
 The [live system page](interface-tour.md#7-system-status-and-navigation) reported
 approximately 16 MiB flash on one unit. Keep the source's 8 MB partition selection
 and fitted flash identification distinct. Neither observation verifies every
-procurement revision. Dimensions and terminal positions in unverified renders
-are deliberately not installation references.
+procurement revision. The supplied enclosure images provide visual context;
+confirm their dimensions and terminal positions against the fitted hardware.
 
 ## Manufacturing record to retain
 

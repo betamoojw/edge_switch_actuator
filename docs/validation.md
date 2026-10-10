@@ -22,7 +22,7 @@ Earlier software tests below were not rerun merely for prose/image changes.
 | Mobile | 390 × 844 viewport: quick start, navigation drawer and wiring diagram inspected; document width did not overflow |
 | Diagrams | Wiring diagram rendered on mobile and architecture diagram on desktop; source text remains available in Markdown |
 | External links | Hardware overview, Arduino guide, schematic, resources, HA MQTT and repository/attribution links checked; obsolete Waveshare resources URL corrected |
-| Workspace scope | Firmware source unchanged from reviewed baseline; existing untracked renders preserved and excluded from site |
+| Workspace scope | Firmware source unchanged from reviewed baseline; supplied hardware images initially preserved and excluded, then published in the hardware guide at the owner's request |
 
 Publication uses the existing Documentation workflow. Its build/deploy result and
 the live content are verified after pushing; the workflow run is the authoritative

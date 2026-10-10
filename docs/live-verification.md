@@ -43,9 +43,11 @@ only selects the relevant UI; captions provide the annotations. No settings or
 telemetry values were painted over or fabricated. Each published image was
 visually checked for passwords, tokens, setup QR codes and private endpoint data.
 
-Two pre-existing, untracked product/dimension illustrations were left untouched
-and excluded from the site. Their terminal labels and dimensions have not been
-verified against the installed hardware revision.
+Two project-supplied hardware images were initially left untouched and excluded
+from this inspection's publication. They were subsequently added at the project
+owner's request to the [hardware guide](esp32-s3-relay-6ch-hardware.md).
+Their terminal labels and dimensions have not been independently verified
+against the installed hardware revision; they are separate from live UI captures.
 
 ## What this session did not do
 

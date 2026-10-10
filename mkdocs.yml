@@ -101,9 +101,6 @@ plugins:
 
 not_in_nav: |
   /tasks/**
-exclude_docs: |
-  /edge_switch_actuator_waveshare-relay-size.png
-  /edge_switch_actuator_waveshare-relay.png
 validation:
   nav:
     omitted_files: info
