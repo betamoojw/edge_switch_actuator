@@ -16,6 +16,7 @@ Keep credentials, raw core dumps and configuration exports private. See
 | RTU timeout | Unit ID, baud/parity, A/B labeling, termination, selected mode | Start with reads; inspect CRC/frame counters and master wiring |
 | TCP timeout | Selected mode, uplink address, port, peer restriction and firewall | Verify routing and client count; idle sessions close after 60 seconds |
 | KNX edit conflicts | Current KNX revision and owner | Reload snapshot and reconcile edits; do not blindly overwrite an ETS download |
+| KNX page reports HTTP 401 and disables controls | Browser authentication is no longer accepted | Sign in again and reload the snapshot before editing; see the [web takeover screenshot](knx-address-entry.md#taking-over-for-web-editing) |
 | HA entities missing/stale | MQTT enabled/connected, HA discovery, prefix and broker ACLs | Check retained discovery cleanup and HA birth topic in the [HA guide](home-assistant.md) |
 | MCP missing from navigation | Running build and embedded UI feature availability | Compare image identity to current source; version 0.6.3 alone is insufficient |
 | MCP waiting for time / retrying | NTP, DNS, uplink and endpoint validity | Use the [MCP error guide](xiaozhi-mcp.md#runtime-and-troubleshooting); do not disable TLS verification |

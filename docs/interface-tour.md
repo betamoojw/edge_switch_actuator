@@ -83,6 +83,10 @@ factory binding and is misleading for this unit's saved single-click binding.
 Use the actual [Button settings](#3-button) and [KNX guide](knx-address-entry.md).
 The development identity warning does not establish KNX certification.
 
+For project-supplied views of ETS downloads and the web takeover control, see
+the [ETS and web ownership walkthrough](knx-address-entry.md#ets-download-and-web-ownership-screenshot-walkthrough).
+Those images are separate evidence from this read-only device capture.
+
 ## 6. Maintenance
 
 ![Maintenance tab with configuration revision, empty factory-reset confirmation field and disabled erase button.](media/live/maintenance.jpg)

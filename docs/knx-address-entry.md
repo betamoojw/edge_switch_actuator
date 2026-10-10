@@ -42,6 +42,74 @@ current firmware contract. Firmware also enforces global table limits and
 commissioning ownership. Apply remains disabled while any address is invalid;
 server-side validation remains authoritative.
 
+## ETS download and web ownership: screenshot walkthrough
+
+The following project-supplied screenshots were added on **11 October 2026**.
+They illustrate ETS and the device's web interface; their capture date, exact
+firmware build and ETS version were not supplied. No download or configuration
+change was performed to prepare this documentation. Open each image for its
+full-resolution view. Addresses shown belong to the example installation and
+are not defaults to copy into another project.
+
+### Before the ownership change
+
+[![ETS download operation beside the actuator KNX page, which shows programming ON, web ownership, revision 2 and individual address 1.2.1.](with_ets_download_before.png)](with_ets_download_before.png)
+
+The image named `with_ets_download_before.png` already shows an active ETS
+download/restart operation. On the right, the web page reports **Programming ON**
+and **Owner: web · Revision 2 · Ready**. The ETS group-object list contains the
+six channels' Switch, Block and Status objects. The individual address is
+`1.2.1`; visible group associations include `8/0/0` for channel 1 Switch and
+`8/1/0` for its Status.
+
+Treat this as the state before the illustrated ownership change, not an idle
+pre-download screen. Do not edit web commissioning while ETS is downloading.
+
+### After the ownership change
+
+[![ETS application download beside the actuator KNX page now reporting ETS ownership and revision 3, with individual address 1.2.1.](with_ets_download_after.png)](with_ets_download_after.png)
+
+In `with_ets_download_after.png`, the web page reports **Owner: ets · Revision 3 ·
+Ready**. The visible individual address and channel 1 associations remain the
+same. This illustrates the change from web ownership to ETS ownership and a new
+KNX revision.
+
+ETS still displays **Downloading** in the supplied image. The filename and web
+Ready label alone do not establish a completed, successful ETS download. Wait
+for ETS's final operation result, then reload the device's KNX snapshot and
+compare addresses, associations and application parameters with the intended
+project. Retain the ETS result and firmware identity for acceptance records.
+
+### Taking over for web editing
+
+[![KNX page with Take over for web editing selected, owner still ETS at revision 3, and an HTTP 401 warning stating that controls are disabled.](knx_config_web_edit.png)](knx_config_web_edit.png)
+
+The checkbox requests explicit takeover when saving an ETS-owned configuration;
+selecting it alone does not transfer ownership. A later ETS download can replace
+web changes, so keep the installation's ETS project and local edits coordinated.
+
+This screenshot also shows **Connection unavailable. Controls are disabled.
+Error: Request failed (401)**. It is an authentication-error example, not proof
+of a successful web save. Sign in again and reload the current KNX snapshot
+before continuing; values left on a disconnected page may be stale.
+
+For an authorized installer or administrator, the source-derived workflow is:
+
+1. Finish the ETS operation and ensure KNX is active with no download in progress.
+2. Load the current snapshot and review its owner and KNX revision.
+3. Select **Take over for web editing**, make the intended valid edits and choose
+   **Apply KNX commissioning**. Applying changes is an active commissioning action.
+4. Verify the successful response and read back the committed configuration and
+   web ownership. On a revision conflict, reload and reconcile the changes.
+
+The firmware rejects web saves during an ETS download and requires explicit
+takeover for ETS-owned settings. See [REST revisions](restfulapi.md#revisions-and-retries)
+and [commissioning acceptance](commissioning.md) for validation boundaries.
+These screenshots do not establish relay operation, full ETS interoperability
+or KNX certification.
+
+## Historical browser validation
+
 Browser regression cases `HOME-01` and `KNX-04` cover startup, placeholders,
 invalid boundaries, reserved and duplicate addresses, and saving valid extremes.
 
