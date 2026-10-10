@@ -8,12 +8,16 @@ edit_uri: edit/dev/docs/
 nav:
   - Overview: index.md
   - User guide:
-      - Getting started: gettingstarted.md
+      - Your first session: quick-start.md
+      - Interface tour: interface-tour.md
       - Device operation: device-operation.md
+      - Troubleshooting and recovery: troubleshooting.md
       - Credentials and setup labels: device-credentials.md
       - UI preferences: ui-preferences.md
       - Hardware reference: esp32-s3-relay-6ch-hardware.md
+      - Commissioning acceptance: commissioning.md
   - Protocols and integrations:
+      - Choose an integration: integrations.md
       - Modbus register map: actuator-modbus-map.md
       - Modbus verifier: modbus-verifier-quickstart.md
       - KNX commissioning: knx-address-entry.md
@@ -21,6 +25,7 @@ nav:
       - Home Assistant: home-assistant.md
       - Xiaozhi MCP: xiaozhi-mcp.md
   - Development:
+      - Set up and build: gettingstarted.md
       - Architecture: architecture.md
       - Build and firmware updates: buildprocess.md
       - REST and events: restfulapi.md
@@ -31,8 +36,10 @@ nav:
       - Components: components.md
       - Framework services: statefulservice.md
       - Code style: code-style.md
+      - Contributing: contributing.md
       - Documentation publishing: documentation.md
   - Review and validation:
+      - Live device inspection: live-verification.md
       - Current dev review: actuator-source-review.md
       - Validation record: validation.md
       - Implementation history: actuator-implementation.md
@@ -65,7 +72,6 @@ theme:
         icon: material/weather-sunny
         name: Switch to light mode
   features:
-    - navigation.instant
     - navigation.tracking
     - navigation.tabs
     - navigation.sections
@@ -95,6 +101,9 @@ plugins:
 
 not_in_nav: |
   /tasks/**
+exclude_docs: |
+  /edge_switch_actuator_waveshare-relay-size.png
+  /edge_switch_actuator_waveshare-relay.png
 validation:
   nav:
     omitted_files: info

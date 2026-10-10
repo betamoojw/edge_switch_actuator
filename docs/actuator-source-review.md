@@ -2,7 +2,8 @@
 
 Reviewed on **10 October 2026**, against `dev` commit
 [`ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9`](https://github.com/betamoojw/edge_switch_actuator/tree/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9),
-firmware version **0.6.3**. The remote `dev` head matched this baseline.
+firmware version **0.6.3**. The remote `dev` head matched this baseline at the
+initial source review; subsequent documentation commits do not change that code.
 This is a source review with selected software regressions, not a comprehensive
 security audit or a new hardware/ETS qualification campaign.
 
@@ -25,13 +26,18 @@ historical intent; [architecture](architecture.md) describes actual code.
 | P2 | `EventSocket::begin()` authenticates socket admission; `onFrame()` and outbound delivery do not re-check token lifetime/account state | Existing sockets can outlive REST session expiry or account edits. Define and test explicit socket revocation. Actuator `device.state` is read-only, but remains observable on an admitted connection. |
 
 These are review findings, not firmware fixes made by this documentation refresh.
-The first two are directly visible from URL/filename construction; no firmware
+The two release-picker issues are visible from URL/filename construction; no firmware
 update was attempted. Source links for inspection:
 [frontend layout](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/interface/src/routes/%2Blayout.ts),
 [update indicator](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/interface/src/lib/components/UpdateIndicator.svelte),
 [release manager](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/interface/src/routes/system/update/GithubFirmwareManager.svelte),
 [embedding script](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/scripts/build_interface.py),
 [event socket](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/lib/framework/EventSocket.cpp).
+
+The later [live inspection](live-verification.md) also found that the KNX helper's
+fixed triple-click wording can disagree with configured button bindings, and
+that the inspected 0.6.3 device had no MCP menu. The latter does not identify a
+source defect without establishing the running image and embedded UI identity.
 
 ## Implemented improvements since the template review
 

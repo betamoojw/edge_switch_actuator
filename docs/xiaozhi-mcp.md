@@ -4,6 +4,10 @@ The actuator can expose a small set of tools to Xiaozhi through an outbound, cer
 
 ## Setup
 
+This guide describes current source behavior. The [inspected device](live-verification.md)
+reported 0.6.3 but had no MCP navigation entry; its exact image identity was not
+established. Check the compiled feature and embedded UI when this menu is absent.
+
 1. Sign in as administrator and open **Connections → Xiaozhi MCP**, below MQTT and NTP.
 2. Enter a device alias and your own Xiaozhi MCP endpoint (`wss://…`). The endpoint usually includes a credential. The firmware never supplies a shared/default credential.
 3. Select the relay channels Xiaozhi may see and control. Initially none are exposed.

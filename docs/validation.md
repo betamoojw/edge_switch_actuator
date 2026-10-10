@@ -1,5 +1,34 @@
 # Validation record
 
+## Live documentation expansion — 10 October 2026
+
+The later [read-only inspection](live-verification.md) used a running unit,
+unlike the earlier source-only refresh below. Seven authentic screenshots now
+support the operator tour. Login, displayed configuration and system telemetry
+were observed; no physical output or configuration-changing test was performed.
+The exact running build hash remains unknown despite the matching 0.6.3 version.
+
+The expansion adds onboarding, integration selection, wiring guidance,
+troubleshooting, contribution guidance and explicit commissioning procedures.
+Earlier software tests below were not rerun merely for prose/image changes.
+
+| Documentation check | Result |
+| --- | --- |
+| Strict MkDocs build | Passed |
+| Generated links and anchors | 53 HTML pages; 3,568 local references checked with the GitHub Pages base path; no missing targets or anchors |
+| Screenshots | Seven real-device JPEGs visually checked; no credentials or setup QR codes; no EXIF/comment metadata; descriptive alt text |
+| Desktop | Landing page, screenshot tour and navigation inspected; all seven tour images loaded |
+| Search | Keyboard query `startup` returned 26 documents including the new tour; result navigation worked |
+| Mobile | 390 × 844 viewport: quick start, navigation drawer and wiring diagram inspected; document width did not overflow |
+| Diagrams | Wiring diagram rendered on mobile and architecture diagram on desktop; source text remains available in Markdown |
+| External links | Hardware overview, Arduino guide, schematic, resources, HA MQTT and repository/attribution links checked; obsolete Waveshare resources URL corrected |
+| Workspace scope | Firmware source unchanged from reviewed baseline; existing untracked renders preserved and excluded from site |
+
+Publication uses the existing Documentation workflow. Its build/deploy result and
+the live content are verified after pushing; the workflow run is the authoritative
+deployment record for each commit. This table is documentation validation, not
+physical-device acceptance.
+
 ## Documentation refresh — 10 October 2026
 
 Reviewed firmware source: `dev` at `ced3e6d`, version 0.6.3. This refresh changes
@@ -26,7 +55,8 @@ The first sandboxed run could not start Zig and denied some localhost/file
 operations; these checks passed when rerun with the required host access. Python
 credential-label tests initially lacked their optional image dependencies and
 passed after installation. No physical device was connected, flashed, reset
-or operated during this documentation task.
+or operated during that earlier source-only refresh. The later browser-only
+inspection is separately scoped above.
 
 ## Reproduce software checks
 

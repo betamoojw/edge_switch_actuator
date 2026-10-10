@@ -4,6 +4,9 @@ The browser opens at `/device`. Its sections cover Outputs, Indicators, Button,
 Protocol Interface, KNX and Maintenance. Available controls depend on the current
 user's capabilities and the compiled firmware features.
 
+See the [annotated interface tour](interface-tour.md) for real-device screenshots
+and [your first session](quick-start.md) for a guided onboarding path.
+
 ## Outputs
 
 Channel labels in the UI run from **1 to 6**. Each channel has an enable flag,
@@ -21,6 +24,9 @@ commanded output state, not measured contact state.
 Default startup is OFF. Choosing startup ON deliberately changes behavior after
 restart. In KNX mode, once commissioned, edit relay parameters in the KNX section.
 Reload after a revision conflict instead of overwriting newer settings.
+
+The `startup` label shown beside Enabled in a channel card is the last command
+source. Read the channel's saved startup setting to determine restart behavior.
 
 ## Protocol selection
 

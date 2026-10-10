@@ -32,7 +32,7 @@ Use a broker account/ACL that permits only trusted controllers to publish device
 | `<base>/event` | `{"event_type":"single"}` (or `double`/`triple`), QoS 1, **not retained** |
 | Existing framework status topic | Retained `online` and last-will `offline`, shared by every discovered entity |
 
-The discovery prefix and HA birth topic are fixed to the defaults in this version. Discovery and current state are resent on broker reconnect, Home Assistant's `online` birth message, and relay rename. Commands delivered with MQTT's retained flag are discarded. Malformed topics/payloads are ignored; no toggle, factory-reset, protocol-selection, or configuration-write command is exposed. The bounded 16-command queue drops excess commands, and snapshots always report actual output state rather than optimistic success.
+The discovery prefix and HA birth topic are fixed to the defaults in this version. Discovery and current state are resent on broker reconnect, Home Assistant's `online` birth message, and relay rename. Commands delivered with MQTT's retained flag are discarded. Malformed topics/payloads are ignored; no toggle, factory-reset, protocol-selection, or configuration-write command is exposed. The bounded 16-command queue drops excess commands. Snapshots report applied commanded output state, not measured contact or load feedback.
 
 ## Compatibility and lifecycle
 
@@ -43,6 +43,10 @@ Disabling **Home Assistant discovery** while MQTT remains connected clears the r
 With `FT_MQTT=0`, the actuator adapter compiles out. The optional settings field is exposed only on the actuator profile. Existing REST endpoints and actuator configuration schema are unchanged; `/rest/mqttSettings` adds `home_assistant_discovery: false` for this profile.
 
 ## Review and validation
+
+The [10 October read-only inspection](live-verification.md) found MQTT disabled;
+it did not exercise discovery or Home Assistant. The records below are historical
+software evidence, not current live integration acceptance.
 
 Reviewed local `dev` baseline `16e5935`. The existing application task is the sole serialization point for relay and protocol work; networking callbacks must not write GPIO or acquire its lock. The new MQTT callback only queues validated commands or requests rediscovery. State is sampled inside the existing actuator task, covering REST, button, Modbus, KNX, pulse and watchdog changes without adding transport logic to each source.
 

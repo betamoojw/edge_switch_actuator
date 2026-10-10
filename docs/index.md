@@ -11,9 +11,20 @@ documentation, not a declaration that every feature is production-qualified.
 
 ## Start here
 
+[Connect your first device](quick-start.md){ .md-button .md-button--primary }
+[Explore the real interface](interface-tour.md){ .md-button }
+
+![Six relay controls on the running device, all reporting OFF during read-only inspection.](media/live/outputs.jpg)
+
+*Actual device capture, 10 October 2026. Saved settings may differ from defaults;
+read the [inspection scope](live-verification.md) before treating a screenshot as
+verification of physical behavior.*
+
 | I want to… | Guide |
 | --- | --- |
-| Build firmware, connect a unit or try it without hardware | [Getting started](gettingstarted.md) |
+| Connect a pre-flashed unit | [Your first session](quick-start.md) |
+| Build firmware or try it without hardware | [Developer setup](gettingstarted.md) |
+| Plan wiring and handover | [Hardware](esp32-s3-relay-6ch-hardware.md) and [commissioning](commissioning.md) |
 | Operate relays, indicators and button gestures | [Device operation](device-operation.md) |
 | Find a unit's setup password or print its setup label | [Device credentials](device-credentials.md) |
 | Connect a Modbus master | [Register map](actuator-modbus-map.md) and [verifier](modbus-verifier-quickstart.md) |
@@ -21,6 +32,25 @@ documentation, not a declaration that every feature is production-qualified.
 | Integrate automation services | [Home Assistant](home-assistant.md) or [Xiaozhi MCP](xiaozhi-mcp.md) |
 | Understand or extend the code | [Architecture](architecture.md), [API](restfulapi.md), [frontend](structure.md) |
 | Assess readiness | [Source review](actuator-source-review.md) and [validation](validation.md) |
+| Diagnose a problem | [Troubleshooting and recovery](troubleshooting.md) |
+
+## Practical uses
+
+- **Local control panel:** give operators browser access to named channels,
+  bounded pulses and current commanded state, with role and channel permissions.
+- **Building automation evaluation:** integrate independent relay loads with a
+  Modbus master or KNX/IP routing installation, subject to load suitability and
+  commissioning. This is not a motor interlock or safety controller.
+- **Home automation:** discover relay and diagnostic entities through MQTT and
+  Home Assistant, with broker access controls.
+- **Voice/agent integration:** expose selected channels through Xiaozhi MCP using
+  a private WSS endpoint and explicit channel selection.
+- **Development and bench work:** explore the UI simulator, portable protocol
+  tests and a fixed hardware profile before authorizing physical output tests.
+
+Use the [integration chooser](integrations.md) to match prerequisites to your
+installation. Polished documentation does not imply hardware certification or
+qualification of these use cases.
 
 ## What the product implements
 

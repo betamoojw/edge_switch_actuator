@@ -6,8 +6,13 @@ and navigation identity describe Switching Actuator. `/demo` remains available
 only as an explicitly opened template development page.
 
 The UI and application documentation use **Protocol Interface** for protocol
-selection and access settings. Select KNXnet/IP under Modbus → Protocol Interface
+selection and access settings. Select KNXnet/IP under Protocol → Protocol Interface
 selection and apply the profile before commissioning on the KNX tab.
+
+The [live KNX screenshot](interface-tour.md#5-knx-commissioning) shows a configured
+unit. Its fixed triple-click helper assumes factory bindings; inspect the Button
+tab because saved bindings can differ. Applying commissioning or entering
+programming mode is an active operation.
 
 ## Individual address
 
