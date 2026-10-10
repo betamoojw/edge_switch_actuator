@@ -1,0 +1,169 @@
+{
+  "startedAt": "2026-10-09T23:44:36.035642+00:00",
+  "completedAt": "2026-10-09T23:47:37.163693+00:00",
+  "elapsedSeconds": 181.128,
+  "transport": "tcp",
+  "target": "192.168.71.48",
+  "unit": 1,
+  "writeChannel": null,
+  "relaySequence": {
+    "enabled": true,
+    "onSecondsPerChannel": 30.0,
+    "safeLoadsConfirmed": true,
+    "standardAlignment": "IEC 62381 FAT/SAT; Modbus Application Protocol Specification V1.1b3",
+    "certificationClaim": false
+  },
+  "checks": [
+    {
+      "name": "device_identity",
+      "passed": true,
+      "detail": "{'0x00': 'Edge Actuator', '0x01': 'EDGE-S3-6CH', '0x02': '0.6.2'}"
+    },
+    {
+      "name": "map_version",
+      "passed": true,
+      "detail": "1"
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "detail": "[255, 2, 3]"
+    },
+    {
+      "name": "relay_coils",
+      "passed": true,
+      "detail": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "relay_outputs",
+      "passed": true,
+      "detail": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "transport_status",
+      "passed": true,
+      "detail": "[True, False, True, False]"
+    },
+    {
+      "name": "transport_configuration",
+      "passed": true,
+      "detail": "[1, 1, 0, 502, 1]"
+    },
+    {
+      "name": "reserved_coil_exception",
+      "passed": true,
+      "detail": "8102"
+    },
+    {
+      "name": "invalid_coil_value_exception",
+      "passed": true,
+      "detail": "8503"
+    },
+    {
+      "name": "relay_sequence_preflight",
+      "passed": true,
+      "detail": "All six coils and outputs are OFF"
+    },
+    {
+      "name": "relay_1_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_1_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON for 30 seconds"
+    },
+    {
+      "name": "relay_1_off",
+      "passed": true,
+      "detail": "Coil and output read back OFF"
+    },
+    {
+      "name": "relay_2_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_2_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON for 30 seconds"
+    },
+    {
+      "name": "relay_2_off",
+      "passed": true,
+      "detail": "Coil and output read back OFF"
+    },
+    {
+      "name": "relay_3_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_3_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON for 30 seconds"
+    },
+    {
+      "name": "relay_3_off",
+      "passed": true,
+      "detail": "Coil and output read back OFF"
+    },
+    {
+      "name": "relay_4_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_4_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON for 30 seconds"
+    },
+    {
+      "name": "relay_4_off",
+      "passed": true,
+      "detail": "Coil and output read back OFF"
+    },
+    {
+      "name": "relay_5_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_5_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON for 30 seconds"
+    },
+    {
+      "name": "relay_5_off",
+      "passed": true,
+      "detail": "Coil and output read back OFF"
+    },
+    {
+      "name": "relay_6_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_6_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON for 30 seconds"
+    },
+    {
+      "name": "relay_6_off",
+      "passed": true,
+      "detail": "Coil and output read back OFF"
+    },
+    {
+      "name": "relay_sequence_final_state",
+      "passed": true,
+      "detail": "All six coils and outputs are OFF"
+    },
+    {
+      "name": "relay_sequence",
+      "passed": true,
+      "detail": "all six relays held ON for 30 seconds individually and restored OFF"
+    }
+  ],
+  "passed": true
+}

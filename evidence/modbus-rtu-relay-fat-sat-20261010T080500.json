@@ -1,0 +1,600 @@
+{
+  "startedAt": "2026-10-10T00:07:03.267408+00:00",
+  "completedAt": "2026-10-10T00:12:08.030436+00:00",
+  "elapsedSeconds": 304.763,
+  "transport": "rtu",
+  "target": "COM22",
+  "unit": 10,
+  "writeChannel": null,
+  "relaySequence": {
+    "enabled": true,
+    "preparedInitiallyOnChannels": [
+      4
+    ],
+    "profile": {
+      "toggleCyclesPerChannel": 3,
+      "toggleOnSeconds": 1.0,
+      "toggleOffSeconds": 1.0,
+      "longOnSeconds": 30.0,
+      "finalOffSeconds": 5.0
+    },
+    "serialProfile": {
+      "port": "COM22",
+      "baud": 19200,
+      "parity": "E",
+      "dataBits": 8,
+      "stopBits": 1
+    },
+    "safeLoadsConfirmed": true,
+    "standardAlignment": "IEC 62381 FAT/SAT; Modbus Application Protocol Specification V1.1b3; Modbus Serial Line Protocol and Implementation Guide V1.02",
+    "certificationClaim": false
+  },
+  "checks": [
+    {
+      "name": "device_identity",
+      "passed": true,
+      "detail": "{'0x00': 'Edge Actuator', '0x01': 'EDGE-S3-6CH', '0x02': '0.6.2'}"
+    },
+    {
+      "name": "map_version",
+      "passed": true,
+      "detail": "1"
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "detail": "[255, 1, 3]"
+    },
+    {
+      "name": "effective_protocol",
+      "passed": true,
+      "detail": "1"
+    },
+    {
+      "name": "relay_coils",
+      "passed": true,
+      "detail": "[False, False, False, True, False, False]"
+    },
+    {
+      "name": "relay_outputs",
+      "passed": true,
+      "detail": "[False, False, False, True, False, False]"
+    },
+    {
+      "name": "transport_status",
+      "passed": true,
+      "detail": "[True, True, True, False]"
+    },
+    {
+      "name": "transport_configuration",
+      "passed": true,
+      "detail": "[10, 1, 0, 502, 0]"
+    },
+    {
+      "name": "rtu_counters_before",
+      "passed": true,
+      "detail": "[0, 35, 0, 0, 0, 4]"
+    },
+    {
+      "name": "reserved_coil_exception",
+      "passed": true,
+      "detail": "8102"
+    },
+    {
+      "name": "invalid_coil_value_exception",
+      "passed": true,
+      "detail": "8503"
+    },
+    {
+      "name": "rtu_diagnostics_echo",
+      "passed": true,
+      "detail": "0800001234"
+    },
+    {
+      "name": "relay_sequence_preparation",
+      "passed": true,
+      "detail": "Explicitly prepared these initially ON channels OFF: [4]"
+    },
+    {
+      "name": "relay_sequence_preflight",
+      "passed": true,
+      "detail": "All six coils and outputs are OFF"
+    },
+    {
+      "name": "relay_1_cycle_1_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_1_cycle_1_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.450 seconds"
+    },
+    {
+      "name": "relay_1_cycle_1_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_1_cycle_1_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.449 seconds"
+    },
+    {
+      "name": "relay_1_cycle_2_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_1_cycle_2_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.467 seconds"
+    },
+    {
+      "name": "relay_1_cycle_2_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_1_cycle_2_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.464 seconds"
+    },
+    {
+      "name": "relay_1_cycle_3_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_1_cycle_3_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.434 seconds"
+    },
+    {
+      "name": "relay_1_cycle_3_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_1_cycle_3_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.448 seconds"
+    },
+    {
+      "name": "relay_1_dwell_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_1_dwell_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 30.446 seconds"
+    },
+    {
+      "name": "relay_1_dwell_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_1_dwell_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 5.440 seconds"
+    },
+    {
+      "name": "relay_2_cycle_1_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_2_cycle_1_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.449 seconds"
+    },
+    {
+      "name": "relay_2_cycle_1_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_2_cycle_1_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.450 seconds"
+    },
+    {
+      "name": "relay_2_cycle_2_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_2_cycle_2_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.451 seconds"
+    },
+    {
+      "name": "relay_2_cycle_2_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_2_cycle_2_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.450 seconds"
+    },
+    {
+      "name": "relay_2_cycle_3_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_2_cycle_3_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.448 seconds"
+    },
+    {
+      "name": "relay_2_cycle_3_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_2_cycle_3_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.452 seconds"
+    },
+    {
+      "name": "relay_2_dwell_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_2_dwell_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 30.447 seconds"
+    },
+    {
+      "name": "relay_2_dwell_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_2_dwell_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 5.447 seconds"
+    },
+    {
+      "name": "relay_3_cycle_1_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_3_cycle_1_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.435 seconds"
+    },
+    {
+      "name": "relay_3_cycle_1_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_3_cycle_1_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.466 seconds"
+    },
+    {
+      "name": "relay_3_cycle_2_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_3_cycle_2_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.450 seconds"
+    },
+    {
+      "name": "relay_3_cycle_2_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_3_cycle_2_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.451 seconds"
+    },
+    {
+      "name": "relay_3_cycle_3_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_3_cycle_3_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.449 seconds"
+    },
+    {
+      "name": "relay_3_cycle_3_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_3_cycle_3_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.435 seconds"
+    },
+    {
+      "name": "relay_3_dwell_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_3_dwell_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 30.448 seconds"
+    },
+    {
+      "name": "relay_3_dwell_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_3_dwell_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 5.450 seconds"
+    },
+    {
+      "name": "relay_4_cycle_1_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_4_cycle_1_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.454 seconds"
+    },
+    {
+      "name": "relay_4_cycle_1_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_4_cycle_1_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.435 seconds"
+    },
+    {
+      "name": "relay_4_cycle_2_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_4_cycle_2_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.436 seconds"
+    },
+    {
+      "name": "relay_4_cycle_2_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_4_cycle_2_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.432 seconds"
+    },
+    {
+      "name": "relay_4_cycle_3_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_4_cycle_3_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.432 seconds"
+    },
+    {
+      "name": "relay_4_cycle_3_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_4_cycle_3_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.451 seconds"
+    },
+    {
+      "name": "relay_4_dwell_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_4_dwell_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 30.431 seconds"
+    },
+    {
+      "name": "relay_4_dwell_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_4_dwell_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 5.465 seconds"
+    },
+    {
+      "name": "relay_5_cycle_1_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_5_cycle_1_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.433 seconds"
+    },
+    {
+      "name": "relay_5_cycle_1_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_5_cycle_1_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.450 seconds"
+    },
+    {
+      "name": "relay_5_cycle_2_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_5_cycle_2_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.449 seconds"
+    },
+    {
+      "name": "relay_5_cycle_2_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_5_cycle_2_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.433 seconds"
+    },
+    {
+      "name": "relay_5_cycle_3_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_5_cycle_3_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.467 seconds"
+    },
+    {
+      "name": "relay_5_cycle_3_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_5_cycle_3_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.467 seconds"
+    },
+    {
+      "name": "relay_5_dwell_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_5_dwell_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 30.465 seconds"
+    },
+    {
+      "name": "relay_5_dwell_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_5_dwell_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 5.461 seconds"
+    },
+    {
+      "name": "relay_6_cycle_1_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_6_cycle_1_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.435 seconds"
+    },
+    {
+      "name": "relay_6_cycle_1_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_6_cycle_1_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.467 seconds"
+    },
+    {
+      "name": "relay_6_cycle_2_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_6_cycle_2_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.449 seconds"
+    },
+    {
+      "name": "relay_6_cycle_2_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_6_cycle_2_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.448 seconds"
+    },
+    {
+      "name": "relay_6_cycle_3_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_6_cycle_3_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 1.450 seconds"
+    },
+    {
+      "name": "relay_6_cycle_3_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_6_cycle_3_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 1.466 seconds"
+    },
+    {
+      "name": "relay_6_dwell_on",
+      "passed": true,
+      "detail": "Only this channel read ON"
+    },
+    {
+      "name": "relay_6_dwell_on_hold",
+      "passed": true,
+      "detail": "Only this channel remained ON; hold observed for 30.449 seconds"
+    },
+    {
+      "name": "relay_6_dwell_off",
+      "passed": true,
+      "detail": "All six channels read OFF"
+    },
+    {
+      "name": "relay_6_dwell_off_hold",
+      "passed": true,
+      "detail": "All six channels remained OFF; hold observed for 5.450 seconds"
+    },
+    {
+      "name": "relay_sequence_final_state",
+      "passed": true,
+      "detail": "All six coils and outputs are OFF"
+    },
+    {
+      "name": "relay_sequence",
+      "passed": true,
+      "detail": "all six relays completed 3 cycles of 1s ON/1s OFF, 30s ON dwell, and 5s OFF dwell"
+    },
+    {
+      "name": "rtu_counters_after",
+      "passed": true,
+      "detail": "[0, 288, 0, 0, 0, 6]"
+    }
+  ],
+  "passed": true
+}

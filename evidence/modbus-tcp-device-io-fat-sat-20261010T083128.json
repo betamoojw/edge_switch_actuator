@@ -1,0 +1,90 @@
+{
+  "startedAt": "2026-10-10T00:31:29.127705+00:00",
+  "completedAt": "2026-10-10T00:33:29.967900+00:00",
+  "elapsedSeconds": 120.84,
+  "transport": "tcp",
+  "target": "192.168.71.48",
+  "unit": 10,
+  "writeChannel": null,
+  "relaySequence": null,
+  "deviceIoSequence": {
+    "enabled": true,
+    "modbusIdentifyAttempted": true,
+    "modbusIdentifyPassed": true,
+    "physicalGesture": "double-click",
+    "physicalButtonAttempted": true,
+    "physicalButtonPassed": false,
+    "buttonTimeoutSeconds": 120.0,
+    "indicatorObserverPresent": true,
+    "visualLedMeasurement": "Not measured by Modbus; record operator observation separately",
+    "relayStateMustRemainUnchanged": true
+  },
+  "checks": [
+    {
+      "name": "device_identity",
+      "passed": true,
+      "detail": "{'0x00': 'Edge Actuator', '0x01': 'EDGE-S3-6CH', '0x02': '0.6.2'}"
+    },
+    {
+      "name": "map_version",
+      "passed": true,
+      "detail": "1"
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "detail": "[255, 2, 3]"
+    },
+    {
+      "name": "effective_protocol",
+      "passed": true,
+      "detail": "2"
+    },
+    {
+      "name": "relay_coils",
+      "passed": true,
+      "detail": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "relay_outputs",
+      "passed": true,
+      "detail": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "transport_status",
+      "passed": true,
+      "detail": "[True, False, True, False]"
+    },
+    {
+      "name": "transport_configuration",
+      "passed": true,
+      "detail": "[10, 1, 0, 502, 1]"
+    },
+    {
+      "name": "reserved_coil_exception",
+      "passed": true,
+      "detail": "8102"
+    },
+    {
+      "name": "invalid_coil_value_exception",
+      "passed": true,
+      "detail": "8503"
+    },
+    {
+      "name": "device_io_preflight",
+      "passed": true,
+      "detail": "{'relayCoils': [False, False, False, False, False, False], 'relayOutputs': [False, False, False, False, False, False], 'brightness': 10, 'doubleClickAction': 6, 'gestureState': [2, 0, 1]}"
+    },
+    {
+      "name": "modbus_rgb_identify",
+      "passed": true,
+      "detail": "Modbus identify sequence 2 applied; RGB register output=[25, 25, 25]; visual LED output requires observer confirmation"
+    },
+    {
+      "name": "physical_button_double_click",
+      "passed": false,
+      "detail": "no physical double-click gesture observed within 120 seconds"
+    }
+  ],
+  "passed": false
+}

@@ -11,6 +11,8 @@ This plan verifies the implemented Modbus application contract and validates bot
 KNX has already been verified against its design and is outside this campaign. KNX is used only as a known-good mode when checking protocol exclusivity and transitions; its package, commissioning, and group communication tests do not need to be repeated.
 
 This plan does not claim formal Modbus conformance certification or electrical safety certification.
+The focused production-board relay acceptance procedure is [the Modbus TCP relay FAT/SAT plan](modbus-tcp-relay-fat-sat.md).
+For serial commissioning, use the [Modbus RTU relay FAT/SAT plan](modbus-rtu-relay-fat-sat.md), including its COM-port/profile matching and RS-485 safety prerequisites.
 
 ## 2. Release criteria
 
@@ -106,6 +108,9 @@ Acceptance:
 
 Every result records requirement ID, case ID, exact configuration/steps, expected result, actual result, pass/fail, defect, and evidence filenames.
 
+For a dedicated six-channel Modbus TCP acceptance run, use the [relay FAT/SAT procedure](modbus-tcp-relay-fat-sat.md). It requires isolated safe loads, a clean all-OFF preflight, sequential ON/hold/OFF checks, and independent physical-contact evidence when physical actuation is claimed.
+For the equivalent serial acceptance sequence, use the [Modbus RTU relay FAT/SAT procedure](modbus-rtu-relay-fat-sat.md). Its profile checks include the selected unit, baud, serial format, RS-485 readiness, FC08 echo, and frame-error count.
+
 ## 8. Host verification tool
 
 The repository includes `scripts/verify_modbus.py`. TCP uses only the Python standard library. RTU additionally requires `pyserial`. For setup, command examples, output interpretation, and troubleshooting, use the [Modbus verifier quick start](modbus-verifier-quickstart.md).
@@ -127,6 +132,8 @@ py scripts/verify_modbus.py --transport rtu --serial-port COM4 --unit 1 `
 ```
 
 The default probe checks identity, map version, capabilities, relay/state reads, transport status/configuration, a reserved address, invalid FC05 value handling, and RTU diagnostics echo. It does not request a relay state change. The invalid FC05 value must return exception 03 before backend mutation.
+
+The opt-in `--exercise-all-relays` mode runs a serialized six-channel acceptance sequence and requires `--confirm-safe-loads`. Repeated `--prepare-off-channel N` options explicitly authorize OFF writes to individually selected initially-ON channels only when their coil and output states match; otherwise the runner fails closed. See the [TCP relay FAT/SAT procedure](modbus-tcp-relay-fat-sat.md) and [RTU relay FAT/SAT procedure](modbus-rtu-relay-fat-sat.md) for transport-specific safety, acceptance, abort, and evidence requirements. The runner does not measure relay contacts.
 
 For physical actuation on an isolated load, add `--write-channel 1`. The tool reads the original coil, changes it, verifies coil and discrete-input state, and restores the original value in a `finally` path. Independently verify the contact transition and final state. Do not rely on software restoration as the only safety control.
 

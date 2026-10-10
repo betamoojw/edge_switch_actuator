@@ -1,0 +1,105 @@
+{
+  "startedAt": "2026-10-10T00:30:16.789365+00:00",
+  "completedAt": "2026-10-10T00:30:33.461880+00:00",
+  "elapsedSeconds": 16.672,
+  "transport": "rtu",
+  "target": "COM22",
+  "unit": 10,
+  "writeChannel": null,
+  "relaySequence": null,
+  "deviceIoSequence": {
+    "enabled": true,
+    "modbusIdentifyAttempted": true,
+    "modbusIdentifyPassed": true,
+    "physicalGesture": "double-click",
+    "physicalButtonAttempted": true,
+    "physicalButtonPassed": true,
+    "buttonTimeoutSeconds": 120.0,
+    "indicatorObserverPresent": true,
+    "visualLedMeasurement": "Not measured by Modbus; record operator observation separately",
+    "relayStateMustRemainUnchanged": true
+  },
+  "checks": [
+    {
+      "name": "device_identity",
+      "passed": true,
+      "detail": "{'0x00': 'Edge Actuator', '0x01': 'EDGE-S3-6CH', '0x02': '0.6.2'}"
+    },
+    {
+      "name": "map_version",
+      "passed": true,
+      "detail": "1"
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "detail": "[255, 1, 3]"
+    },
+    {
+      "name": "effective_protocol",
+      "passed": true,
+      "detail": "1"
+    },
+    {
+      "name": "relay_coils",
+      "passed": true,
+      "detail": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "relay_outputs",
+      "passed": true,
+      "detail": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "transport_status",
+      "passed": true,
+      "detail": "[True, True, True, False]"
+    },
+    {
+      "name": "transport_configuration",
+      "passed": true,
+      "detail": "[10, 1, 0, 502, 0]"
+    },
+    {
+      "name": "rtu_counters_before",
+      "passed": true,
+      "detail": "[0, 317, 0, 0, 0, 8]"
+    },
+    {
+      "name": "reserved_coil_exception",
+      "passed": true,
+      "detail": "8102"
+    },
+    {
+      "name": "invalid_coil_value_exception",
+      "passed": true,
+      "detail": "8503"
+    },
+    {
+      "name": "rtu_diagnostics_echo",
+      "passed": true,
+      "detail": "0800001234"
+    },
+    {
+      "name": "device_io_preflight",
+      "passed": true,
+      "detail": "{'relayCoils': [False, False, False, False, False, False], 'relayOutputs': [False, False, False, False, False, False], 'brightness': 10, 'doubleClickAction': 6, 'gestureState': [0, 0, 0]}"
+    },
+    {
+      "name": "modbus_rgb_identify",
+      "passed": true,
+      "detail": "Modbus identify sequence 1 applied; RGB register output=[25, 25, 25]; visual LED output requires observer confirmation"
+    },
+    {
+      "name": "physical_button_double_click",
+      "passed": true,
+      "detail": "physical double-click observed once; debounced-pressed sample=True; RGB register output=[25, 25, 25]; visual LED output requires observer confirmation"
+    },
+    {
+      "name": "rtu_counters_after",
+      "passed": true,
+      "detail": "[0, 378, 0, 0, 0, 10]"
+    }
+  ],
+  "passed": true
+}

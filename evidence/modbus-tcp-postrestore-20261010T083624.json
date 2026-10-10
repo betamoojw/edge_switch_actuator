@@ -1,0 +1,64 @@
+{
+  "startedAt": "2026-10-10T00:36:24.331055+00:00",
+  "completedAt": "2026-10-10T00:36:24.895972+00:00",
+  "elapsedSeconds": 0.565,
+  "transport": "tcp",
+  "target": "192.168.71.48",
+  "unit": 10,
+  "writeChannel": null,
+  "relaySequence": null,
+  "deviceIoSequence": null,
+  "checks": [
+    {
+      "name": "device_identity",
+      "passed": true,
+      "detail": "{'0x00': 'Edge Actuator', '0x01': 'EDGE-S3-6CH', '0x02': '0.6.2'}"
+    },
+    {
+      "name": "map_version",
+      "passed": true,
+      "detail": "1"
+    },
+    {
+      "name": "capabilities",
+      "passed": true,
+      "detail": "[255, 2, 3]"
+    },
+    {
+      "name": "effective_protocol",
+      "passed": true,
+      "detail": "2"
+    },
+    {
+      "name": "relay_coils",
+      "passed": true,
+      "detail": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "relay_outputs",
+      "passed": true,
+      "detail": "[False, False, False, False, False, False]"
+    },
+    {
+      "name": "transport_status",
+      "passed": true,
+      "detail": "[True, False, True, False]"
+    },
+    {
+      "name": "transport_configuration",
+      "passed": true,
+      "detail": "[10, 1, 0, 502, 1]"
+    },
+    {
+      "name": "reserved_coil_exception",
+      "passed": true,
+      "detail": "8102"
+    },
+    {
+      "name": "invalid_coil_value_exception",
+      "passed": true,
+      "detail": "8503"
+    }
+  ],
+  "passed": true
+}

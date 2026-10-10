@@ -1,0 +1,80 @@
+{
+  "startedAt": "2026-10-10T00:30:58.185702+00:00",
+  "completedAt": "2026-10-10T00:30:58.323955+00:00",
+  "elapsedSeconds": 0.138,
+  "transport": "tcp",
+  "target": "192.168.71.48",
+  "unit": 1,
+  "writeChannel": null,
+  "relaySequence": null,
+  "deviceIoSequence": {
+    "enabled": true,
+    "modbusIdentifyAttempted": false,
+    "modbusIdentifyPassed": null,
+    "physicalGesture": "double-click",
+    "physicalButtonAttempted": false,
+    "physicalButtonPassed": null,
+    "buttonTimeoutSeconds": 120.0,
+    "indicatorObserverPresent": true,
+    "visualLedMeasurement": "Not measured by Modbus; record operator observation separately",
+    "relayStateMustRemainUnchanged": true
+  },
+  "checks": [
+    {
+      "name": "device_identity",
+      "passed": false,
+      "detail": "Modbus exception 0x0B"
+    },
+    {
+      "name": "map_version",
+      "passed": false,
+      "detail": "Modbus exception 0x0B"
+    },
+    {
+      "name": "capabilities",
+      "passed": false,
+      "detail": "Modbus exception 0x0B"
+    },
+    {
+      "name": "effective_protocol",
+      "passed": false,
+      "detail": "Modbus exception 0x0B"
+    },
+    {
+      "name": "relay_coils",
+      "passed": false,
+      "detail": "Modbus exception 0x0B"
+    },
+    {
+      "name": "relay_outputs",
+      "passed": false,
+      "detail": "Modbus exception 0x0B"
+    },
+    {
+      "name": "transport_status",
+      "passed": false,
+      "detail": "Modbus exception 0x0B"
+    },
+    {
+      "name": "transport_configuration",
+      "passed": false,
+      "detail": "Modbus exception 0x0B"
+    },
+    {
+      "name": "reserved_coil_exception",
+      "passed": false,
+      "detail": "Modbus exception 0x0B"
+    },
+    {
+      "name": "invalid_coil_value_exception",
+      "passed": false,
+      "detail": "Modbus exception 0x0B"
+    },
+    {
+      "name": "device_io_preflight",
+      "passed": false,
+      "detail": "Skipped because a Modbus preflight or relay check failed"
+    }
+  ],
+  "passed": false
+}

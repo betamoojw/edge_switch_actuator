@@ -101,6 +101,84 @@ The tool reads the original coil state, requests the opposite state, checks the 
 
 The selected channel must be enabled, unblocked, and allowed by the configured Modbus channel/write policy. A rejected write is expected when those conditions are not met.
 
+### All-channel FAT/SAT sequence
+
+Use the separate [Modbus TCP relay FAT/SAT plan](modbus-tcp-relay-fat-sat.md) for prerequisites, operator responsibilities, instrumented physical checks, acceptance criteria, and recovery. This sequence briefly energizes each channel and must only be run with isolated safe loads, independent contact observation as required, and an emergency disconnect.
+
+```powershell
+py scripts/verify_modbus.py --transport tcp `
+  --host 192.168.1.111 --port 502 --unit 1 --timeout 5 `
+  --exercise-all-relays --toggle-cycles 3 `
+  --toggle-on-seconds 1 --toggle-off-seconds 1 `
+  --on-seconds 30 --off-seconds 5 --confirm-safe-loads `
+  --output evidence/modbus-tcp-relay-fat-sat.json
+```
+
+The runner defaults to three 1-second ON/OFF toggle cycles, followed by a
+30-second ON dwell and 5-second OFF dwell per channel. It checks all six coil
+and output states before and during each step, aborts at the first failure,
+and attempts to restore the channel under test OFF. `--confirm-safe-loads` is
+an operator declaration, not an electrical or firmware interlock. The JSON
+report does not prove physical contact movement; capture that separately.
+
+For RTU using COM22 and a device configured at unit 10, 19200 8E1, follow the
+[Modbus RTU relay FAT/SAT plan](modbus-rtu-relay-fat-sat.md) and use:
+
+```powershell
+& .venv\Scripts\python.exe scripts\verify_modbus.py --transport rtu `
+  --serial-port COM22 --unit 10 --baud 19200 --parity E --stop-bits 1 `
+  --timeout 5 --exercise-all-relays --toggle-cycles 3 `
+  --toggle-on-seconds 1 --toggle-off-seconds 1 `
+  --on-seconds 30 --off-seconds 5 --confirm-safe-loads `
+  --prepare-off-channel 4 `
+  --output evidence\modbus-rtu-relay-fat-sat.json
+```
+
+RTU additionally checks FC08 diagnostics echo, selected unit/serial-profile
+match and the frame-error counter before/after the sequence. Repeat
+`--prepare-off-channel N` only for initially-ON channels the operator has
+explicitly authorized to turn OFF; omit it when all six states already read
+OFF. Mismatched or unreadable states always fail closed, as do other ON
+channels that were not individually authorized.
+
+### RGB indicator and physical-button test
+
+Use the transport-specific FAT/SAT plan before running this optional test. It
+requires RGB and button actions enabled, double-click mapped to identify,
+nonzero manual RGB brightness, all relay coils/outputs OFF, an observer able to
+see the LED, and the installer permission **Allow manual indicators and
+diagnostic commands**. The runner invokes identify through the FC16 mailbox,
+then waits for one brief physical double-click and verifies the gesture
+counter, last-gesture value, and identify RGB output over Modbus. It never
+changes button bindings or energizes relay coils. Do not hold the BOOT button:
+reset-hold gestures are not tested.
+
+RTU on the verified COM22/unit 10/19200 8E1 profile:
+
+```powershell
+& .venv\Scripts\python.exe scripts\verify_modbus.py --transport rtu `
+  --serial-port COM22 --unit 10 --baud 19200 --parity E --stop-bits 1 `
+  --timeout 5 --exercise-device-io --confirm-indicator-observation `
+  --button-timeout-seconds 60 `
+  --output evidence\modbus-rtu-device-io-fat-sat.json
+```
+
+TCP (substitute the configured address and unit):
+
+```powershell
+py scripts/verify_modbus.py --transport tcp `
+  --host 192.168.1.111 --port 502 --unit 1 --timeout 5 `
+  --exercise-device-io --confirm-indicator-observation `
+  --button-timeout-seconds 60 `
+  --output evidence/modbus-tcp-device-io-fat-sat.json
+```
+
+The confirmation flag records that an observer is present; it does not
+measure emitted light. The operator must record whether white illumination was
+actually visible. If the mailbox is denied, enable the installer permission
+through the authenticated UI and rerun; do not bypass the device's access
+policy.
+
 ## 6. Understand the report
 
 The tool prints JSON and writes the same JSON to `--output` when supplied. Each item under `checks` contains:
@@ -119,6 +197,8 @@ A normal run checks:
 - Exception 03 for an invalid FC05 value, without changing a relay.
 - FC08 diagnostics echo when using RTU.
 - Relay state change and restoration only when `--write-channel` is present.
+- Modbus identify and physical double-click monitoring only when
+  `--exercise-device-io` is present.
 
 Interpret the process result in PowerShell with:
 
