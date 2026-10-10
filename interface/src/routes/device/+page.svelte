@@ -896,12 +896,8 @@
 								'Select KNXnet/IP in Protocol Interface selection, then Apply. Hardware triple-click and this control share programming state.'
 							)}
 						</p>
-						{#if knx}<div class="alert alert-warning">
-								{$t(
-									'Development product identity. ETS interoperability and hardware qualification are required before production release.'
-								)}
-							</div>
-							<p>
+						{#if knx}
+						<p>
 								{$t('Owner: {owner} · Revision {revision} · {state}', {
 									owner: knx.owner,
 									revision: knx.revision,

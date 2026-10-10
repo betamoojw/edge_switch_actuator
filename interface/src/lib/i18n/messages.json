@@ -1159,14 +1159,6 @@
 		"在协议接口选择中选择 KNXnet/IP，然后应用。硬件三击与此控件共用编程状态。",
 		"在協定介面選擇中選擇 KNXnet/IP，然後套用。硬體三擊與此控制項共用程式設定狀態。"
 	],
-	"Development product identity. ETS interoperability and hardware qualification are required before production release.": [
-		"Produktkennung für die Entwicklung. Vor Serienfreigabe sind ETS-Interoperabilität und Hardwarequalifizierung erforderlich.",
-		"Identidad de producto de desarrollo. Se requiere validar la interoperabilidad ETS y el hardware antes de la producción.",
-		"Identité de produit de développement. L’interopérabilité ETS et la qualification matérielle sont requises avant la mise en production.",
-		"Identyfikator produktu rozwojowego. Przed wydaniem produkcyjnym wymagana jest weryfikacja współpracy z ETS i kwalifikacja sprzętu.",
-		"当前为开发产品标识。正式发布前需完成 ETS 互操作性测试和硬件验证。",
-		"目前為開發產品識別。正式發布前需完成 ETS 互通性測試和硬體驗證。"
-	],
 	"Owner:": [
 		"Verantwortlich:",
 		"Propietario:",

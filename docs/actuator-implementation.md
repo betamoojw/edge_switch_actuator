@@ -39,7 +39,7 @@ Uses pinned `thelsing/knx` commit `980c047ad7fc5e27bf2fae95e48acde5d5e0b4fd`, ma
 
 Button, dashboard and ETS share the stack's programming state. Programming expires after five minutes when a download is not busy. Web commissioning edits the actual stack tables and persists the same image used by ETS; it requires explicit takeover from ETS ownership. Commissioned relay parameters must be edited in the KNX panel, not the general Outputs panel. Group-address order determines the first transmit association.
 
-`knx/product-model.json` generates the XML source and firmware constants. `knx/Edge_S3_Relay_6CH.knxprod` is a real packaged development product produced by OpenKNXproducer 4.3.5. Manufacturer 0x00FA/application 600 is a development identity, not a registered commercial product. The producer's structural checks passed; it reported no local XSD, so schema validation and ETS import/download are not established by that build.
+`knx/product-model.json` generates the XML source and firmware constants. `knx/Edge_S3_Relay_6CH.knxprod` was produced by OpenKNXproducer 4.3.5. The producer's structural checks passed; it reported no local XSD, so schema validation and ETS import/download are not established by that build.
 
 ## Reproduce checks
 
