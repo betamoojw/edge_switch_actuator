@@ -54,7 +54,7 @@ Built `waveshare-relay-6ch` successfully and passed the binary-size guard:
 `83550f94e1215e223f44955f4ce8178e48845486e86754b4065541df9028d78a`.
 Version remains `0.6.2`.
 
-OTA to `192.168.71.28` (MAC `CC:BA:97:34:D9:AC`) returned HTTP 200. After the
+OTA to `device.example` (MAC `CC:BA:97:34:D9:AC`) returned HTTP 200. After the
 expected OTA reboot, actuator and KNX configuration matched the pre-update
 snapshots; KNX was running with fault 0 and all relays OFF. All 11 embedded UI
 assets matched the build. MCP reached `ready` with six tools; a subsequent

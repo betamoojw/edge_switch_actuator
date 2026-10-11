@@ -19,7 +19,7 @@ Repository-relative paths below identify the implementation authority. C++ seria
 | Static bundle | `interface/svelte.config.js`: adapter-static outputs build/, index.html fallback, single bundle strategy. `vite-plugin-littlefs.ts` removes hash segments for LittleFS filename limits. |
 | Device packaging | `scripts/build_interface.py`: npm install/build, gzip into `data/www` for LittleFS or generated `lib/framework/WWWData.h` for EMBED_WWW. `platformio.ini` registers the prebuild hook. Do not edit generated WWWData.h. |
 | Serving | `lib/framework/ESP32SvelteKit.cpp`: PsychicHttp port 80, embedded asset handlers/default index or filesystem assets/index fallback. Deep links depend on that fallback. |
-| Desktop proxy | `interface/vite.config.ts`: /rest → http://192.168.1.111 and /ws → ws://192.168.1.111, changeOrigin, WebSocket upgrade enabled. Comments mention a different obsolete IP. |
+| Desktop proxy | `interface/vite.config.ts`: /rest → http://192.0.2.10 and /ws → ws://192.0.2.10, changeOrigin, WebSocket upgrade enabled. Comments mention a different obsolete IP. |
 | Shared UI state | `lib/stores/user.ts` persists username/admin/bearer_token in localStorage key user. socket.ts owns connection/subscriptions; telemetry.ts, analytics.ts, battery.ts hold live data/history. Device page owns config/status/KNX, dirty/busy/offline state locally. |
 | Actuator | `src/device/ActuatorApi.cpp`: authenticated GETs and queued POSTs; queue capacity eight in Actuator.cpp. `DeviceConfig.cpp` validates complete profiles; Actuator.cpp owns relay state, timers, protocol transitions, durable writes and reset. |
 | Protocol Interface | `src/protocols/KnxAdapter.cpp`, `Modbus.cpp`, `ModbusPdu.h`; `src/generated/KnxProduct.h` supplies KNX product definitions. |
@@ -218,7 +218,7 @@ npm run test:e2e                 # Playwright owns simulator and Vite lifecycle
 npm run test:e2e:device          # explicit device target, non-destructive default
 ```
 
-PowerShell: `$env:DEVICE_HOST='192.168.1.111'` then `npm run dev:device`. POSIX: `DEVICE_HOST=192.168.1.111 npm run dev:device`. Implement orchestration as a Node script rather than shell-specific environment assignments. Make npm run dev honor DEVICE_HOST too; document migration from hard-coded default. Never silently fall back to real hardware when simulator startup fails. Use strict ports and readiness checks. Provide an additional built-SPA smoke server with index fallback and the same proxies; do not assume unconfigured vite preview handles API routing correctly.
+PowerShell: `$env:DEVICE_HOST='192.0.2.10'` then `npm run dev:device`. POSIX: `DEVICE_HOST=192.0.2.10 npm run dev:device`. Implement orchestration as a Node script rather than shell-specific environment assignments. Make npm run dev honor DEVICE_HOST too; document migration from hard-coded default. Never silently fall back to real hardware when simulator startup fails. Use strict ports and readiness checks. Provide an additional built-SPA smoke server with index fallback and the same proxies; do not assume unconfigured vite preview handles API routing correctly.
 
 ## 7. Proposed simulator modules and state model
 

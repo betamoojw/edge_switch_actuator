@@ -20,7 +20,7 @@ Keep credentials, raw core dumps and configuration exports private. See
 | HA entities missing/stale | MQTT enabled/connected, HA discovery, prefix and broker ACLs | Check retained discovery cleanup and HA birth topic in the [HA guide](home-assistant.md) |
 | MCP missing from navigation | Running build and embedded UI feature availability | Compare image identity to current source; version 0.6.3 alone is insufficient |
 | MCP waiting for time / retrying | NTP, DNS, uplink and endpoint validity | Use the [MCP error guide](xiaozhi-mcp.md#runtime-and-troubleshooting); do not disable TLS verification |
-| GitHub update list fails | Known repository-URL and asset-selection defects | Use a verified matching manual `_ota.bin`; see [updates](buildprocess.md#updating-a-device) |
+| GitHub update list fails | Running version, GitHub connectivity/rate limits and available release assets; the repository URL is fixed in 0.6.4 | Use a verified matching manual `_ota.bin`; see [updates](buildprocess.md#updating-a-device) |
 | RGB test not visible / no tone | Enabled state and indicator priority | Fault/programming/reset indications take priority; buzzer must be enabled |
 
 ## Configuration and recovery boundaries

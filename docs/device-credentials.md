@@ -13,14 +13,14 @@ python -m pip install -r scripts/requirements-credentials.txt
 python scripts/get_device_credentials.py --list-ports
 ```
 
-Copy the device's `port` and `usb_serial` from the JSON output. The following example uses COM21 and MAC CC:BA:97:34:CA:20; replace both for a different board.
+Copy the device's `port` and `usb_serial` from the JSON output. The following example uses COM21 and MAC 02:00:00:00:00:01; replace both for a different board.
 
 **2. Recover credentials and generate a label.**
 
 ```powershell
 python scripts/get_device_credentials.py `
   --port COM21 `
-  --expect-mac CC:BA:97:34:CA:20 `
+  --expect-mac 02:00:00:00:00:01 `
   --reset `
   --label-png .pio/labels/ccba9734ca20-setup.png `
   --label-dpi 300
@@ -44,10 +44,10 @@ For this workspace's existing Python, replace `python` in any command with `& .p
 | Task | Arguments after `python scripts/get_device_credentials.py` |
 | --- | --- |
 | Find USB devices | `--list-ports` |
-| Show factory credentials | `--port COM21 --expect-mac CC:BA:97:34:CA:20 --reset --show-secrets` |
-| Generate a thermal-printer label | `--port COM21 --expect-mac CC:BA:97:34:CA:20 --reset --label-png .pio/labels/setup-203.png --label-dpi 203` |
-| Wait for a manual restart | `--port COM21 --expect-mac CC:BA:97:34:CA:20 --timeout 120 --show-secrets` |
-| Verify live AP/login settings | `--port COM21 --expect-mac CC:BA:97:34:CA:20 --reset --device-url http://192.168.1.102 --show-secrets` |
+| Show factory credentials | `--port COM21 --expect-mac 02:00:00:00:00:01 --reset --show-secrets` |
+| Generate a thermal-printer label | `--port COM21 --expect-mac 02:00:00:00:00:01 --reset --label-png .pio/labels/setup-203.png --label-dpi 203` |
+| Wait for a manual restart | `--port COM21 --expect-mac 02:00:00:00:00:01 --timeout 120 --show-secrets` |
+| Verify live AP/login settings | `--port COM21 --expect-mac 02:00:00:00:00:01 --reset --device-url http://192.0.2.10 --show-secrets` |
 | Verify a known customized login | Add `--username admin --ask-password` to the live-verification command |
 | View all options | `--help` |
 
@@ -87,7 +87,7 @@ Both `--port` and `--expect-mac` are mandatory for capture. Native USB must repo
 For the second board used during development:
 
 ```powershell
-python scripts/get_device_credentials.py --port COM21 --expect-mac CC:BA:97:34:CA:20 --reset --show-secrets
+python scripts/get_device_credentials.py --port COM21 --expect-mac 02:00:00:00:00:01 --reset --show-secrets
 ```
 
 `--reset` explicitly permits restarting that board. Restart interrupts control and applies its configured startup policy. The command uses esptool's read-only `flash-id` operation, followed by the normal application reset; no flash writes occur. Without `--reset`, the tool only opens the port and waits up to 60 seconds: manually restart the board while it is listening. DTR/RTS are deasserted before opening, but some OS/drivers can still pulse reset lines on serial open/close.
@@ -101,7 +101,7 @@ Passwords are masked unless `--show-secrets` is supplied. With that flag, stdout
 ## Print-ready PNG setup labels
 
 ```powershell
-python scripts/get_device_credentials.py --port COM21 --expect-mac CC:BA:97:34:CA:20 --reset --label-png .pio/labels/ccba9734ca20.png
+python scripts/get_device_credentials.py --port COM21 --expect-mac 02:00:00:00:00:01 --reset --label-png .pio/labels/ccba9734ca20.png
 ```
 
 The image contains the actual factory setup password, even when stdout is masked. `--label-png` is explicit permission to save those credentials. Existing files are never overwritten, including symlinks. Parent directories are created as needed. POSIX creation uses mode 0600; Windows uses the destination directory's inherited ACL. Keep these commissioning labels with controlled installation materials rather than publicly accessible equipment surfaces. `.pio/` is already excluded from Git.
@@ -125,7 +125,7 @@ These engineering choices do not constitute ISO/IEC 15415 print-quality certific
 When the PC can reach the board, specify its origin explicitly:
 
 ```powershell
-python scripts/get_device_credentials.py --port COM21 --expect-mac CC:BA:97:34:CA:20 --reset --device-url http://192.168.1.102 --show-secrets
+python scripts/get_device_credentials.py --port COM21 --expect-mac 02:00:00:00:00:01 --reset --device-url http://192.0.2.10 --show-secrets
 ```
 
 The tool waits up to 30 seconds for `/rest/features` to report the Waveshare firmware target (`--network-wait` adjusts this). Only one login attempt is made, using the recovered setup password. After login, the tool compares the station MAC when available, then reads `/rest/apSettings`. A mismatch stops retrieval. If the station is offline (for example, AP-only provisioning), its API omits the MAC: `current.identity` explicitly reports that it could not verify network identity. The supplied URL must therefore belong to the intended device. Reported AP settings do not prove the AP is currently broadcasting.
@@ -135,7 +135,7 @@ Use HTTPS when supported. The firmware normally serves HTTP, which transmits the
 If the saved administrator password is different, it cannot be recovered from the stored PBKDF2 hash. To verify a password you already know and read the actual AP password, use a hidden prompt:
 
 ```powershell
-python scripts/get_device_credentials.py --port COM21 --expect-mac CC:BA:97:34:CA:20 --reset --device-url http://192.168.4.1 --username admin --ask-password --show-secrets
+python scripts/get_device_credentials.py --port COM21 --expect-mac 02:00:00:00:00:01 --reset --device-url http://192.168.4.1 --username admin --ask-password --show-secrets
 ```
 
 The `current` section is populated only after successful login and AP retrieval. A 401 means the supplied login was rejected; a 403 can mean the account lacks administrator permission. On failure, the report preserves factory setup results and describes verification failure without raw server bodies. No reset-to-factory fallback is performed.

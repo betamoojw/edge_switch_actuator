@@ -1,6 +1,6 @@
 # Device UI stability validation — 2026-10-07
 
-Target: Waveshare ESP32-S3-Relay-6CH, MAC `CC:BA:97:34:D9:AC`, `http://192.168.71.28`, USB COM20.
+Target: Waveshare ESP32-S3-Relay-6CH, MAC `CC:BA:97:34:D9:AC`, `http://device.example`, USB COM20.
 
 The [agent prompt](device-ui-stability-agent-prompt.md) was saved before implementation.
 

@@ -113,3 +113,11 @@ Those images are separate evidence from this read-only device capture.
 The observed Connections menu offered MQTT and NTP, but no Xiaozhi MCP entry.
 MQTT reported Disabled. MCP and Home Assistant instructions therefore remain
 source-derived for current `dev`, not end-to-end verification on this unit.
+
+## Screenshot currency
+
+The `media/live/` screenshots show the English interface on firmware **0.6.3**,
+captured on 10 October 2026. The 0.6.4 sidebar replaces the old Discord link
+with **Project website**. These images are historical UI observations, not
+0.6.4 hardware validation. User-supplied KNX screenshots have no verified firmware
+version; their captions describe only visible evidence.

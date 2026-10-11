@@ -18,6 +18,7 @@ Open the localhost address printed by MkDocs. For the deployment build:
 
 ```sh
 python -m mkdocs build --strict
+python scripts/check_docs.py
 ```
 
 Generated HTML is under `site/`, which is ignored by Git. Broken internal page,
@@ -59,10 +60,35 @@ and [MkDocs deployment](https://www.mkdocs.org/user-guide/deploying-your-docs/).
 
 Use code as the source for current behavior. When reviewing a new firmware
 baseline, update the source commit/version in the home page, README and review;
-record the actual checks in `validation.md`. Preserve dates and limitations for
+record new checks in a dated release-notes section or a new validation record.
+Do not overwrite historical `validation.md` results. Preserve dates and limitations for
 older hardware evidence. Add new user-facing pages to `nav` in `mkdocs.yml`.
 Task records under `docs/tasks/` remain linked historical material, outside the
 main navigation.
+
+## Languages and translation maintenance
+
+English is served at the site root, Simplified Chinese at `/zh/`, and Traditional
+Chinese at `/zh-TW/`. `mkdocs-static-i18n` uses suffix files: `guide.md`,
+`guide.zh.md`, `guide.zh-TW.md`. The Material selector opens the equivalent page.
+Navigation labels are translated in `mkdocs.yml`; headings use stable explicit
+anchors when needed so links keep working across languages. Chinese search uses
+the pinned `jieba` dependency and the Material search integration.
+
+`docs-languages.json` lists every current page and the explicitly historical
+records. `scripts/docs_hook.py` fails builds when any current translation is
+missing. Historical fallback carries a localized original-language notice;
+it must never substitute for a current translation. Keep dated evidence intact
+and redact private endpoints even in historical records.
+
+Write Simplified Chinese for mainland technical usage and Traditional Chinese
+with natural Taiwan terminology. Do not derive one solely by character conversion.
+Keep identifiers and executable examples stable; localize explanations, captions,
+alt text and diagram labels. State screenshot language/version and known drift.
+Review completeness and fluency, not merely file existence. The automated checker
+verifies page presence, generated links/anchors, image alternatives, language
+selectors and search-index content; browser testing must still verify search
+results, language switching, diagrams and desktop/mobile layout.
 
 Do not place endpoint tokens, setup labels with real credentials, configuration
 dumps or raw device secrets in the public documentation. This site publishes

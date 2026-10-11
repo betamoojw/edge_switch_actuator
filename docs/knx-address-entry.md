@@ -53,6 +53,10 @@ are not defaults to copy into another project.
 
 ### Before the ownership change
 
+Private network addresses and unrelated browser bookmarks in the three KNX images
+are covered with opaque masks. Commissioning controls and results are otherwise
+unchanged. KNX individual/group addresses remain illustrative protocol values.
+
 [![ETS download operation beside the actuator KNX page, which shows programming ON, web ownership, revision 2 and individual address 1.2.1.](with_ets_download_before.png)](with_ets_download_before.png)
 
 The image named `with_ets_download_before.png` already shows an active ETS

@@ -20,9 +20,13 @@ In addition to the properties it provides two methods for initializing the user 
 
 !!! warning "User credentials are stored in the browsers local storage"
 
-    The user credentials including the JWT token are stored in the browsers local storage. Any javascript executed on the browser can access this making it extremely vulnerable to XSS attacks. Also the HTTP connection between ESP32 and front end is not encrypted making it possible for everyone to read the JWT token in the same network. Fixing these severe security issues is on the todo list for upcoming releases.
+    The JWT is stored in browser local storage and is accessible to scripts executing in the same origin. Prevent script injection and keep management on a controlled network. The default device HTTP connection does not encrypt credentials or tokens in transit. Do not infer a scheduled security fix from this limitation.
 
 ## Event Socket
+
+The `led` example below belongs to the generic framework demo. The actuator
+subscribes to read-only `device.state` and uses REST for mutations; sending a
+`device.state` event does not operate its relays.
 
 The [Event Socket System](statefulservice.md#event-socket) is conveniently provided as a Svelte store. Import the store, subscribe to the data interested with `socket.on`. To unsubscribe simply call `socket.off`. Data can be sent to the ESP32 by calling `socket.sendEvent`
 
@@ -74,16 +78,19 @@ The analytics store holds a log of heap and other debug information via the [Eve
 import { analytics } from "$lib/stores/analytics";
 ```
 
-It exposes an array of the following properties you can subscribe to:
+Each analytics property is a `number[]`, not a scalar. Heap, filesystem and
+PSRAM values are divided by 1000 in the store (decimal kB); temperature and uptime
+retain their incoming units. Additional arrays include `used_heap`, `total_heap`,
+`free_psram`, `used_psram` and `psram_size`.
 
 | Property                    | Type     | Description                                    |
 | --------------------------- | -------- | ---------------------------------------------- |
-| `$analytics.uptime`         | `Number` | Uptime of the chip in seconds since last reset |
-| `$analytics.free_heap`      | `Number` | Current free heap                              |
-| `$analytics.min_free_heap`  | `Number` | Minimum free heap that has been                |
-| `$analytics.max_alloc_heap` | `Number` | Biggest continues free chunk of heap           |
-| `$analytics.fs_used`        | `Number` | Bytes used on the file system                  |
-| `$analytics.fs_total`       | `Number` | Total bytes of the file system                 |
-| `$analytics.core_temp`      | `Number` | Core temperature (on some chips)               |
+| `$analytics.uptime`         | `number[]` | Uptime of the chip in seconds since last reset |
+| `$analytics.free_heap`      | `number[]` | Free heap in decimal kB                              |
+| `$analytics.min_free_heap`  | `number[]` | Minimum free heap in decimal kB                |
+| `$analytics.max_alloc_heap` | `number[]` | Largest free contiguous block in decimal kB           |
+| `$analytics.fs_used`        | `number[]` | Filesystem use in decimal kB                  |
+| `$analytics.fs_total`       | `number[]` | Filesystem capacity in decimal kB                 |
+| `$analytics.core_temp`      | `number[]` | Core temperature (on some chips)               |
 
 By default there is one data point every 2 seconds. It holds 1000 data points worth roughly 33 Minutes of data.

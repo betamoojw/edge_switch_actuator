@@ -7,6 +7,7 @@ edit_uri: edit/dev/docs/
 
 nav:
   - Overview: index.md
+  - Release notes: release-notes.md
   - User guide:
       - Your first session: quick-start.md
       - Interface tour: interface-tour.md
@@ -21,7 +22,6 @@ nav:
       - Modbus register map: actuator-modbus-map.md
       - Modbus verifier: modbus-verifier-quickstart.md
       - KNX commissioning: knx-address-entry.md
-      - KNX implementation: actuator-knx-design.md
       - Home Assistant: home-assistant.md
       - Xiaozhi MCP: xiaozhi-mcp.md
   - Development:
@@ -39,16 +39,20 @@ nav:
       - Contributing: contributing.md
       - Documentation publishing: documentation.md
   - Review and validation:
-      - Live device inspection: live-verification.md
       - Current dev review: actuator-source-review.md
+      - TCP acceptance procedure: modbus-tcp-relay-fat-sat.md
+      - RTU acceptance procedure: modbus-rtu-relay-fat-sat.md
+  - Historical records (original language):
+      - Live device inspection: live-verification.md
       - Validation record: validation.md
+      - Previous source review: source-review-2026-10-10.md
+      - KNX design history: actuator-knx-design.md
       - Implementation history: actuator-implementation.md
       - Network API migration: network-api-migration.md
       - Modbus validation plan: MODBUS_VERIFICATION_VALIDATION_PLAN.md
-      - TCP acceptance procedure: modbus-tcp-relay-fat-sat.md
-      - RTU acceptance procedure: modbus-rtu-relay-fat-sat.md
       - Frontend test plan: FRONTEND_HARDWARE_INDEPENDENT_TEST_PLAN.md
       - Original design: actuator-production-design.md
+      - Framework tutorial archive: framework-tutorial-legacy.md
 
 theme:
   name: material
@@ -96,8 +100,154 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
+hooks:
+  - scripts/docs_hook.py
+
 plugins:
-  - search
+  - search:
+      lang: [en, zh]
+      separator: '[\s\-\u200b]+'
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: zh
+          name: 简体中文
+          build: true
+          theme:
+            language: zh
+            palette:
+              - scheme: default
+                primary: teal
+                accent: teal
+                toggle:
+                  icon: material/weather-night
+                  name: 切换至深色模式
+              - scheme: slate
+                primary: teal
+                accent: teal
+                toggle:
+                  icon: material/weather-sunny
+                  name: 切换至浅色模式
+          nav_translations:
+            "Overview": "项目概览"
+            "Release notes": "版本变更"
+            "User guide": "使用指南"
+            "Your first session": "首次使用"
+            "Interface tour": "界面导览"
+            "Device operation": "设备操作"
+            "Troubleshooting and recovery": "故障排查与恢复"
+            "Credentials and setup labels": "凭据与设置标签"
+            "UI preferences": "界面偏好设置"
+            "Hardware reference": "硬件参考"
+            "Commissioning acceptance": "调试与验收"
+            "Protocols and integrations": "协议与集成"
+            "Choose an integration": "选择集成方式"
+            "Modbus register map": "Modbus 寄存器映射"
+            "Modbus verifier": "Modbus 验证工具"
+            "KNX commissioning": "KNX 调试"
+            "Home Assistant": "Home Assistant"
+            "Xiaozhi MCP": "小智 MCP"
+            "Development": "开发指南"
+            "Set up and build": "环境搭建与构建"
+            "Architecture": "系统架构"
+            "Build and firmware updates": "构建与固件更新"
+            "REST and events": "REST 与事件接口"
+            "Frontend structure": "前端结构"
+            "SvelteKit and theming": "SvelteKit 与主题"
+            "Frontend testing": "前端测试"
+            "Stores": "状态存储"
+            "Components": "界面组件"
+            "Framework services": "框架服务"
+            "Code style": "代码规范"
+            "Contributing": "参与贡献"
+            "Documentation publishing": "文档维护与发布"
+            "Review and validation": "审查与验证"
+            "Current dev review": "当前源码审查"
+            "TCP acceptance procedure": "TCP 验收步骤"
+            "RTU acceptance procedure": "RTU 验收步骤"
+            "Historical records (original language)": "历史资料（原文）"
+            "Live device inspection": "设备检查记录"
+            "Validation record": "验证记录"
+            "Previous source review": "以往源码审查"
+            "KNX design history": "KNX 设计历史"
+            "Implementation history": "实现历史"
+            "Network API migration": "网络 API 迁移"
+            "Modbus validation plan": "Modbus 历史验证计划"
+            "Frontend test plan": "前端历史测试计划"
+            "Original design": "原始设计"
+            "Framework tutorial archive": "框架教程存档"
+        - locale: zh-TW
+          name: 繁體中文
+          build: true
+          theme:
+            language: zh-TW
+            palette:
+              - scheme: default
+                primary: teal
+                accent: teal
+                toggle:
+                  icon: material/weather-night
+                  name: 切換為深色模式
+              - scheme: slate
+                primary: teal
+                accent: teal
+                toggle:
+                  icon: material/weather-sunny
+                  name: 切換為淺色模式
+          nav_translations:
+            "Overview": "專案概覽"
+            "Release notes": "版本更新"
+            "User guide": "使用指南"
+            "Your first session": "初次使用"
+            "Interface tour": "介面導覽"
+            "Device operation": "裝置操作"
+            "Troubleshooting and recovery": "疑難排解與復原"
+            "Credentials and setup labels": "認證資訊與設定標籤"
+            "UI preferences": "介面偏好設定"
+            "Hardware reference": "硬體參考"
+            "Commissioning acceptance": "試運轉與驗收"
+            "Protocols and integrations": "通訊協定與整合"
+            "Choose an integration": "選擇整合方式"
+            "Modbus register map": "Modbus 暫存器對照"
+            "Modbus verifier": "Modbus 驗證工具"
+            "KNX commissioning": "KNX 設定與試運轉"
+            "Home Assistant": "Home Assistant"
+            "Xiaozhi MCP": "小智 MCP"
+            "Development": "開發指南"
+            "Set up and build": "環境建置與編譯"
+            "Architecture": "系統架構"
+            "Build and firmware updates": "編譯與韌體更新"
+            "REST and events": "REST 與事件介面"
+            "Frontend structure": "前端結構"
+            "SvelteKit and theming": "SvelteKit 與佈景主題"
+            "Frontend testing": "前端測試"
+            "Stores": "狀態儲存"
+            "Components": "介面元件"
+            "Framework services": "框架服務"
+            "Code style": "程式碼規範"
+            "Contributing": "參與貢獻"
+            "Documentation publishing": "文件維護與發佈"
+            "Review and validation": "審查與驗證"
+            "Current dev review": "目前原始碼審查"
+            "TCP acceptance procedure": "TCP 驗收程序"
+            "RTU acceptance procedure": "RTU 驗收程序"
+            "Historical records (original language)": "歷史資料（原文）"
+            "Live device inspection": "裝置檢查紀錄"
+            "Validation record": "驗證紀錄"
+            "Previous source review": "先前原始碼審查"
+            "KNX design history": "KNX 設計歷程"
+            "Implementation history": "實作歷程"
+            "Network API migration": "網路 API 遷移"
+            "Modbus validation plan": "Modbus 歷史驗證計畫"
+            "Frontend test plan": "前端歷史測試計畫"
+            "Original design": "原始設計"
+            "Framework tutorial archive": "框架教學封存"
 
 not_in_nav: |
   /tasks/**

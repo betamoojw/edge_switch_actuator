@@ -144,7 +144,7 @@ Example (from the repository root; use a new report filename for each run):
 
 ```powershell
 py scripts/verify_modbus.py --transport tcp `
-  --host 192.168.1.111 --port 502 --unit 1 --timeout 5 `
+  --host 192.0.2.10 --port 502 --unit 1 --timeout 5 `
   --exercise-all-relays --toggle-cycles 3 `
   --toggle-on-seconds 1 --toggle-off-seconds 1 `
   --on-seconds 30 --off-seconds 5 --confirm-safe-loads `
@@ -156,7 +156,7 @@ indicator permission and that an observer can see the device LED:
 
 ```powershell
 py scripts/verify_modbus.py --transport tcp `
-  --host 192.168.71.48 --port 502 --unit 10 --timeout 5 `
+  --host 192.0.2.10 --port 502 --unit 10 --timeout 5 `
   --exercise-device-io --confirm-indicator-observation `
   --button-timeout-seconds 60 `
   --output evidence/modbus-tcp-device-io-fat-sat.json

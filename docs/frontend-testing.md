@@ -28,12 +28,12 @@ local WSS peer. Browser cases `MCP-*` exercise configuration and access roles.
 For a real device, set DEVICE_HOST explicitly:
 
 ```powershell
-$env:DEVICE_HOST='192.168.1.111'
+$env:DEVICE_HOST='192.0.2.10'
 npm run dev:device
 ```
 
 ```sh
-DEVICE_HOST=192.168.1.111 npm run dev:device
+DEVICE_HOST=192.0.2.10 npm run dev:device
 ```
 
 Both modes proxy `/rest` and `/ws` unchanged. `npm run dev` and `npm run preview`
@@ -220,8 +220,9 @@ MkDocs deployment workflow is unchanged.
 The startup and address-entry changes add `HOME-01` and `KNX-04`: opening `/`
 starts Switching Actuator, and invalid individual/group address entries disable
 commissioning Apply. See [KNX address entry](knx-address-entry.md) for notation,
-placeholders and firmware limits. The browser suite now contains 39 scenarios
-per project; the 37-test results below describe the earlier implementation run.
+placeholders and firmware limits. The address-entry validation recorded 39 scenarios
+per project at that baseline; the 37-test results below describe an earlier run.
+These historical counts are not the current suite inventory or a new test result.
 
 Browser tests are named with matrix IDs from
 [the design plan](FRONTEND_HARDWARE_INDEPENDENT_TEST_PLAN.md). They cover login,
@@ -237,7 +238,7 @@ automatable against a simulator.
 To run the read-only physical actuator smoke test:
 
 ```powershell
-$env:DEVICE_HOST='192.168.1.111'
+$env:DEVICE_HOST='192.0.2.10'
 $env:DEVICE_USERNAME='admin'
 $env:DEVICE_PASSWORD='YOUR_DEVICE_SETUP_PASSWORD'
 npm run test:e2e:device -- --project=chromium

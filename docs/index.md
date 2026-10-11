@@ -5,8 +5,8 @@ combines ESP32-S3 firmware, a Svelte 5 / SvelteKit interface, and tools for
 commissioning, testing and firmware packaging.
 
 This site describes **`dev`**, reviewed at
-[`ced3e6d`](https://github.com/betamoojw/edge_switch_actuator/tree/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9)
-on **10 October 2026**, with firmware version **0.6.3**. It is development-branch
+[`bf8cb12`](https://github.com/betamoojw/edge_switch_actuator/tree/bf8cb12ab9ada4337751968332c7d5e17e056ccc)
+on **11 October 2026**, with firmware version **0.6.4**. It is development-branch
 documentation, not a declaration that every feature is production-qualified.
 
 ## Start here
@@ -89,3 +89,11 @@ profiles; it is not enabled by the default Waveshare profile.
 Based on [ESP32-SvelteKit](https://github.com/theelims/ESP32-sveltekit) and its
 ESP8266 React predecessor. Backend LGPL-3.0 and frontend MIT terms are recorded
 in the project's [LICENSE](https://github.com/betamoojw/edge_switch_actuator/blob/dev/LICENSE).
+
+## Screenshot currency
+
+The `media/live/` screenshots show the English interface on firmware **0.6.3**,
+captured on 10 October 2026. The 0.6.4 sidebar replaces the old Discord link
+with **Project website**. These images are historical UI observations, not
+0.6.4 hardware validation. User-supplied KNX screenshots have no verified firmware
+version; their captions describe only visible evidence.

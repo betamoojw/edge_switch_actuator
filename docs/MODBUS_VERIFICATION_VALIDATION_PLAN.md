@@ -118,7 +118,7 @@ The repository includes `scripts/verify_modbus.py`. TCP uses only the Python sta
 TCP read and negative checks:
 
 ```powershell
-py scripts/verify_modbus.py --transport tcp --host 192.168.1.111 --unit 1 `
+py scripts/verify_modbus.py --transport tcp --host 192.0.2.10 --unit 1 `
   --output evidence/modbus-tcp-smoke.json
 ```
 

@@ -2,6 +2,11 @@
 
 Use `scripts/verify_modbus.py` to perform repeatable smoke checks against the actuator over Modbus TCP or Modbus RTU. The default run does not request a relay state change. See the [full qualification plan](MODBUS_VERIFICATION_VALIDATION_PLAN.md) for transport timing, malformed-frame, concurrency, endurance, and physical-output testing.
 
+The default run includes an invalid FC05 write request to verify rejection. It is
+not a strictly read-only inspection, even though it does not request a valid relay
+state change. Obtain authorization before running it against connected equipment.
+Addresses such as `192.0.2.10` below are documentation placeholders.
+
 ## 1. Start safely
 
 1. Use isolated low-voltage loads or disconnect mains loads.
@@ -43,7 +48,7 @@ Run the safe smoke test, replacing the host, port, and unit when needed:
 
 ```powershell
 py scripts/verify_modbus.py --transport tcp `
-  --host 192.168.1.111 `
+  --host 192.0.2.10 `
   --port 502 `
   --unit 1 `
   --output evidence/modbus-tcp-smoke.json
@@ -54,7 +59,7 @@ The default TCP values are port `502`, unit `1`, and a two-second timeout. A cus
 Optional connectivity check before running the verifier:
 
 ```powershell
-Test-NetConnection 192.168.1.111 -Port 502
+Test-NetConnection 192.0.2.10 -Port 502
 ```
 
 ## 4. Modbus RTU quick start
@@ -91,7 +96,7 @@ Only perform this step with an isolated test load and a known safe relay state. 
 
 ```powershell
 py scripts/verify_modbus.py --transport tcp `
-  --host 192.168.1.111 `
+  --host 192.0.2.10 `
   --unit 1 `
   --write-channel 1 `
   --output evidence/modbus-tcp-channel-1.json
@@ -107,7 +112,7 @@ Use the separate [Modbus TCP relay FAT/SAT plan](modbus-tcp-relay-fat-sat.md) fo
 
 ```powershell
 py scripts/verify_modbus.py --transport tcp `
-  --host 192.168.1.111 --port 502 --unit 1 --timeout 5 `
+  --host 192.0.2.10 --port 502 --unit 1 --timeout 5 `
   --exercise-all-relays --toggle-cycles 3 `
   --toggle-on-seconds 1 --toggle-off-seconds 1 `
   --on-seconds 30 --off-seconds 5 --confirm-safe-loads `
@@ -167,7 +172,7 @@ TCP (substitute the configured address and unit):
 
 ```powershell
 py scripts/verify_modbus.py --transport tcp `
-  --host 192.168.1.111 --port 502 --unit 1 --timeout 5 `
+  --host 192.0.2.10 --port 502 --unit 1 --timeout 5 `
   --exercise-device-io --confirm-indicator-observation `
   --button-timeout-seconds 60 `
   --output evidence/modbus-tcp-device-io-fat-sat.json

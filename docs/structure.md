@@ -30,10 +30,10 @@ screens use these flags for compiled capabilities. Actuator status/configuration
 also returns per-user capabilities. UI visibility is not authorization: firmware
 REST handlers enforce roles and channel masks before mutations.
 
-The root route opens `/device`. At the reviewed baseline, layout metadata has
-`title: 'Edge Switching Actuator'`, `appName: 'IoT Platform'` and a source link
-ending in `/tree/dev`. That source-link value currently breaks release API URL
-construction; see [source review](actuator-source-review.md).
+The layout metadata uses `github: 'betamoojw/edge_switch_actuator'` in 0.6.4.
+Release components require this `owner/repository` identifier; the sidebar uses
+a separate documentation-site URL. Asset selection remains broad; see
+[firmware updates](buildprocess.md#updating-a-device).
 
 ## State and interaction
 

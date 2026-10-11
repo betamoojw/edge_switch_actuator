@@ -18,11 +18,13 @@ See [frontend development](frontend-testing.md).
 
 ## Changing the app name
 
-Product metadata is returned by `interface/src/routes/+layout.ts`; icons and
-installable-app metadata live under `interface/static/` and images under
-`interface/src/lib/assets/`. Keep display names separate from the GitHub
-`owner/repository` identifier used to construct API URLs. The current shared
-value contains `/tree/dev`, a known release-picker issue documented in the
+Edit display metadata (`title`, `appName`, `copyright`) in
+`interface/src/routes/+layout.ts`. Browser assets live under `interface/static/`;
+keep display changes consistent with the shared layout and manifest.
+
+Firmware 0.6.4 corrects the shared GitHub identifier to
+`betamoojw/edge_switch_actuator`. Keep browser links separate from the
+`owner/repository` value consumed by release APIs; see the
 [source review](actuator-source-review.md).
 
 Firmware identity comes from `APP_NAME`, `APP_VERSION` and `BUILD_TARGET` in

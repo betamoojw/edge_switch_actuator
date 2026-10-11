@@ -43,7 +43,7 @@ validate this change.
 
 ## Device deployment and validation
 
-Built and deployed firmware 0.6.3 to `192.168.71.28`
+Built and deployed firmware 0.6.3 to `device.example`
 (`CC:BA:97:34:D9:AC`). Application image: 2,162,160 bytes; SHA-256:
 `68cf767b7dea3885e0e1b2ad269da70121d8cf2ea06120e011970117aed3a9f4`.
 OTA returned HTTP 200, and all 11 embedded frontend assets fetched directly

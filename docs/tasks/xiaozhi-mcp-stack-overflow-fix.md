@@ -1,7 +1,7 @@
 # Xiaozhi MCP settings-save reboot: diagnosis and validation
 
 Date: 2026-10-10. Branch: `dev`, based on `cb1beb2`.
-Hardware: Waveshare ESP32-S3-Relay-6CH, MAC `CC:BA:97:34:D9:AC`, `192.168.71.28`.
+Hardware: Waveshare ESP32-S3-Relay-6CH, MAC `CC:BA:97:34:D9:AC`, `device.example`.
 
 ## Root cause
 
@@ -133,7 +133,7 @@ Local evidence (ignored by Git): `.pio/mcp-stack-fix-build.log`,
 ## Visual UI follow-up — 2026-10-10
 
 Completed in the Codex in-app browser on the same hardware. The configured
-hostname `esp32-ccba9734d9ac.local` was resolved to `192.168.71.28` before use.
+hostname `esp32-ccba9734d9ac.local` was resolved to `device.example` before use.
 The browser's IP-address origin retained an older JavaScript bundle with no MCP
 route; the hostname loaded the current firmware-served interface. The device's
 served bundle matched the local build (SHA-256

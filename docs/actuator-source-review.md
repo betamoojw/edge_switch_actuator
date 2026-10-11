@@ -1,8 +1,8 @@
 # Current dev source review
 
-Reviewed on **10 October 2026**, against `dev` commit
-[`ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9`](https://github.com/betamoojw/edge_switch_actuator/tree/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9),
-firmware version **0.6.3**. The remote `dev` head matched this baseline at the
+Reviewed on **11 October 2026**, against `dev` commit
+[`bf8cb12ab9ada4337751968332c7d5e17e056ccc`](https://github.com/betamoojw/edge_switch_actuator/tree/bf8cb12ab9ada4337751968332c7d5e17e056ccc),
+firmware version **0.6.4**. The remote `dev` head matched this baseline at the
 initial source review; subsequent documentation commits do not change that code.
 This is a source review with selected software regressions, not a comprehensive
 security audit or a new hardware/ETS qualification campaign.
@@ -12,13 +12,23 @@ Modbus, KNX, credentials, MQTT and MCP implementations now exist. The
 [original production design](actuator-production-design.md) remains useful as
 historical intent; [architecture](architecture.md) describes actual code.
 
+## Changes since the 10 October review
+
+Firmware 0.6.4 fixes the GitHub release API repository identifier and replaces the
+Discord sidebar link with the project documentation link. The checked-in default
+board binaries are now named 0.6.4, and `buildRelease/Edge_S3_Relay_6CH.knxprod`
+is included. No backend API or actuator behavior changed between the previous
+`ced3e6d` baseline and this source baseline. See [release notes](release-notes.md).
+
+The [10 October review](source-review-2026-10-10.md) preserves the earlier findings,
+including the C3 size failure from that commit. It is historical evidence, not a
+new build result for 0.6.4. No device update or active hardware test was performed.
+
 ## Findings still present at the reviewed baseline
 
 | Priority | Evidence | Impact and next change |
 | --- | --- | --- |
-| P1 | GitHub CI for `ced3e6d`, `esp32-c3-devkitm-1`, fails `checkprogsize`: 2,039,455 > 1,966,080 bytes | The generic C3 profile does not fit its configured application slot. Reduce its image or qualify an appropriate partition/profile change; see the [CI evidence](validation.md#existing-evidence-and-its-limits). The default Waveshare profile passed. |
 | P1 | `lib/framework/FSPersistence.h`, `writeToFS()` opens the active file with `w`; read failure applies and writes defaults | Generic Wi-Fi/security/MQTT settings can be lost after an interrupted write. Unlike actuator/KNX/MCP storage, these files do not use verified generations. Migrate them to durable commits and test interrupted writes and recovery. |
-| P1 | `interface/src/routes/+layout.ts` sets `github` to `betamoojw/edge_switch_actuator/tree/dev`; both release components append `/releases` to it | GitHub OTA lookup constructs an invalid repository API path. Separate the browsable source URL from the `owner/repository` API identifier. Use manual OTA meanwhile. |
 | P1 | `UpdateIndicator.svelte` and `GithubFirmwareManager.svelte` select assets using `.bin` and board-name substring checks; `scripts/release_artifacts.py` emits both OTA and merged binaries | If both image kinds or related MCP profiles appear in a release, the wrong image can be selected. Match the exact target and `_ota.bin` suffix, with explicit artifact metadata/validation. |
 | P2 | `scripts/build_interface.py`, `find_latest_timestamp_for_app()` scans only `interface/src/` | Static assets, package/lock files and Vite configuration can change without rebuilding the embedded UI. Include all build inputs in freshness tracking; delete the generated `WWWData.h` to force rebuilding in the meantime. |
 | P2 | `factory_settings.ini` pairs `Europe/Berlin` with `GMT0BST,M3.5.0/1,M10.5.0` | Factory time-zone label and actual offset disagree. Select a matching NTP zone at provisioning and correct the default pair. |
@@ -26,13 +36,13 @@ historical intent; [architecture](architecture.md) describes actual code.
 | P2 | `EventSocket::begin()` authenticates socket admission; `onFrame()` and outbound delivery do not re-check token lifetime/account state | Existing sockets can outlive REST session expiry or account edits. Define and test explicit socket revocation. Actuator `device.state` is read-only, but remains observable on an admitted connection. |
 
 These are review findings, not firmware fixes made by this documentation refresh.
-The two release-picker issues are visible from URL/filename construction; no firmware
+The remaining release-picker issue is visible from filename matching; no firmware
 update was attempted. Source links for inspection:
-[frontend layout](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/interface/src/routes/%2Blayout.ts),
-[update indicator](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/interface/src/lib/components/UpdateIndicator.svelte),
-[release manager](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/interface/src/routes/system/update/GithubFirmwareManager.svelte),
-[embedding script](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/scripts/build_interface.py),
-[event socket](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/lib/framework/EventSocket.cpp).
+[frontend layout](https://github.com/betamoojw/edge_switch_actuator/blob/bf8cb12ab9ada4337751968332c7d5e17e056ccc/interface/src/routes/%2Blayout.ts),
+[update indicator](https://github.com/betamoojw/edge_switch_actuator/blob/bf8cb12ab9ada4337751968332c7d5e17e056ccc/interface/src/lib/components/UpdateIndicator.svelte),
+[release manager](https://github.com/betamoojw/edge_switch_actuator/blob/bf8cb12ab9ada4337751968332c7d5e17e056ccc/interface/src/routes/system/update/GithubFirmwareManager.svelte),
+[embedding script](https://github.com/betamoojw/edge_switch_actuator/blob/bf8cb12ab9ada4337751968332c7d5e17e056ccc/scripts/build_interface.py),
+[event socket](https://github.com/betamoojw/edge_switch_actuator/blob/bf8cb12ab9ada4337751968332c7d5e17e056ccc/lib/framework/EventSocket.cpp).
 
 The later [live inspection](live-verification.md) also found that the KNX helper's
 fixed triple-click wording can disagree with configured button bindings, and

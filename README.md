@@ -8,6 +8,10 @@ Modbus TCP or KNXnet/IP routing, plus optional Home Assistant and Xiaozhi MCP.
 [Getting started](docs/gettingstarted.md) · [Architecture](docs/architecture.md) ·
 [Current source review](docs/actuator-source-review.md)
 
+Documentation: [English](https://betamoojw.github.io/edge_switch_actuator/) ·
+[简体中文](https://betamoojw.github.io/edge_switch_actuator/zh/) ·
+[繁體中文](https://betamoojw.github.io/edge_switch_actuator/zh-TW/)
+
 ## Capabilities
 
 - Six independent relay channels: names, enable flags, startup state, pulses,
@@ -52,14 +56,15 @@ setup password printed on the local serial console at 115200 baud, with username
 
 ## Status and scope
 
-The reviewed source baseline is `dev` commit `ced3e6d` (firmware `0.6.3`). Generic
+The reviewed source baseline is `dev` commit `bf8cb12` (firmware `0.6.4`). Generic
 ESP32 profiles retain framework demonstrations; they are not six-relay board
 ports. Reported relay state is commanded GPIO state, not contact feedback.
 Management uses HTTP; deploy on a controlled network. KNX package generation
 does not establish ETS acceptance or certification.
 
-See the [validation record](docs/validation.md) for checks performed during this
-documentation refresh and the remaining hardware qualification work.
+See the [release notes](docs/release-notes.md) for the current source baseline and
+verification limits. The [historical validation record](docs/validation.md) retains
+its original results; it does not establish hardware qualification for 0.6.4.
 
 ## Documentation development
 
@@ -67,6 +72,7 @@ documentation refresh and the remaining hardware qualification work.
 python -m pip install -r requirements-docs.txt
 python -m mkdocs serve
 python -m mkdocs build --strict
+python scripts/check_docs.py
 ```
 
 Documentation changes pushed to `dev` are built and published by GitHub Actions.

@@ -1,8 +1,8 @@
 # REST API and events
 
-This reference describes the actuator profile at `dev` commit `ced3e6d`.
+This reference describes the actuator profile at `dev` commit `bf8cb12`.
 The implementation is
-[`ActuatorApi.cpp`](https://github.com/betamoojw/edge_switch_actuator/blob/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9/src/device/ActuatorApi.cpp).
+[`ActuatorApi.cpp`](https://github.com/betamoojw/edge_switch_actuator/blob/bf8cb12ab9ada4337751968332c7d5e17e056ccc/src/device/ActuatorApi.cpp).
 Feature-dependent framework routes disappear when compiled out.
 
 ## Authentication and permissions

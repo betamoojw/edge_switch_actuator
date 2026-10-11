@@ -10,15 +10,15 @@ A collapsible container to hide / show content by clicking on the arrow button.
 import Collapsible from "$lib/components/Collapsible.svelte";
 ```
 
-It exports a closed / open state with `export open` which you can use to determine the mounting behavior of the component.
+Its Svelte 5 `open` prop is bindable and defaults to `false`.
 
-### Slots
+### Snippets
 
-The component has two slots. A named slot `title` for the collapsible title and the main slot for the content that can be hidden or shown.
+Use Svelte 5 `title`, `icon` and `children` snippets. The `isDirty` prop marks unsaved changes.
 
 ```
-<Collapsible open={false} class="shadow-lg" on:closed={doSomething}>
-  <span slot="title">Title</span>
+<Collapsible open={false} class="shadow-lg" closed={doSomething}>
+  {#snippet title()}Title{/snippet}
   ...
 </Collapsible>
 ```
@@ -27,7 +27,7 @@ The `class` attribute may be used as normal to style the container. By default t
 
 ### Events
 
-The collapsible component dispatches two events. `on:closed` when the collapsible is closed and `on:opened` when it is opened. You can bind to them as to any other event.
+Pass `closed` and `opened` callback props, called after the user toggles the panel. These are not Svelte 4 `on:closed` / `on:opened` events.
 
 ## InputPassword
 
@@ -61,20 +61,20 @@ Two exports control the behavior of the component. `rssi_dbm` accepts a negative
 
 ## Settings Card
 
-A Settings Card is in many ways similar to a [collapsible](#collapsible). However, it is styled and is the main element of many settings menus. It also accepts an icon in a dedicate slot and unlike collapsible has no events.
+A Settings Card is a styled [collapsible](#collapsible) with `title`, `icon` and `children` snippets. It has no opened/closed callbacks. `open` defaults to true, `collapsible` to true, `maxwidth` to `max-w-2xl`, and `isDirty` to false.
 
 ```ts
 import SettingsCard from "$lib/components/SettingsCard.svelte";
 ```
 
-### Slots
+### Child snippets
 
-Three slots are available. Besides the main slot for the content there is a named slot for the `title` and s second one for the `icon`.
+Supply content with Svelte 5 snippets:
 
 ```
 <SettingsCard collapsible={true} open={false}>
-	<Icon slot="icon" class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
-	<span slot="title">Title</span>
+	{#snippet icon()}<Icon class="mr-2 h-6 w-6" />{/snippet}
+	{#snippet title()}Title{/snippet}
     ...
 </SettingsCard>
 ```
@@ -103,10 +103,10 @@ and call one of the 4 toast methods:
 
 | Method                                             | Description                                         |
 | -------------------------------------------------- | --------------------------------------------------- |
-| `notification.error(msg:string, timeout:number)`   | :octicons-x-circle-16: Shows an error message       |
-| `notification.warning(msg:string, timeout:number)` | :octicons-alert-16: Shows a warning message         |
-| `notification.info(msg:string, timeout:number)`    | :octicons-info-16: Shows an info message            |
-| `notification.success(msg:string, timeout:number)` | :octicons-check-circle-16: Shows as success message |
+| `notifications.error(msg:string, timeout:number)`   | :octicons-x-circle-16: Shows an error message       |
+| `notifications.warning(msg:string, timeout:number)` | :octicons-alert-16: Shows a warning message         |
+| `notifications.info(msg:string, timeout:number)`    | :octicons-info-16: Shows an info message            |
+| `notifications.success(msg:string, timeout:number)` | :octicons-check-circle-16: Shows as success message |
 
 Each method takes an `msg`-string as an argument, which will be shown as the message body. Messages are rendered as text; do not rely on HTML injection for formatting. The `timeout` argument specifies how many milliseconds the toast notification shall be shown to the user.
 
@@ -116,7 +116,7 @@ This is a modal showing the update progress, possible error messages and makes a
 
 ## Update Indicator
 
-The reviewed dev branch has release lookup and artifact-selection limitations;
+The reviewed dev branch has an artifact-selection limitation (the release URL was fixed in 0.6.4);
 see [build and firmware updates](buildprocess.md#updating-a-device) before use.
 
 The update indicator is a small widget shown in the upper right corner of the status bar. It indicates the availability of a newer firmware release then the current one. Upon pressing the icon it will automatically update the firmware to the latest release. By default this works through the Github Latest Release API. This must be customized should you use a different update server. Have a look at the [source file](https://github.com/betamoojw/edge_switch_actuator/blob/dev/interface/src/lib/components/UpdateIndicator.svelte) to see what portions to update.
@@ -133,7 +133,7 @@ modals.open(InfoDialog, {
   message:
     'Something really important happened that justifies showing you a modal which must be clicked away.',
   dismiss: { label: 'OK', icon: Check },
-  onDismiss: () => modals.close();
+  onDismiss: () => modals.close()
 });
 ```
 

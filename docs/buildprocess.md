@@ -5,7 +5,7 @@
 Use Python 3.11+ and Node.js 24. Install `requirements-dev.txt` and run `npm ci`
 in `interface/`; see [getting started](gettingstarted.md). `platformio.ini`
 pins the pioarduino platform to `55.03.312-1`, uses Arduino, and isolates its core
-under `.pio/network-platformio`. Firmware `APP_VERSION` is currently `0.6.3`.
+under `.pio/network-platformio`. Firmware `APP_VERSION` is currently `0.6.4`.
 
 | Environment | Application / purpose |
 | --- | --- |
@@ -60,20 +60,23 @@ constrained `esp32dev` and `esp32-wt32-eth01` profiles, which use LTO.
 
 ## Firmware build and release artifacts
 
-For the default board and version 0.6.3:
+For the default board and version 0.6.4:
 
 | File in `buildRelease/` | Use |
 | --- | --- |
-| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_ota.bin` | Application-only OTA image |
-| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_ota.md5` | Plain hexadecimal MD5; optional first upload in update UI |
-| `edge_switch_actuator_waveshare-relay-6ch_0.6.3_webflash.bin` | Merged bootloader/partition/boot application/firmware image, initial flash at offset `0x0` |
-| `edge_switch_actuator_waveshare-relay-6ch_0.6.3.elf` | Matching debug symbols |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.4_ota.bin` | Application-only OTA image |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.4_ota.md5` | Plain hexadecimal MD5; optional first upload in update UI |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.4_webflash.bin` | Merged bootloader/partition/boot application/firmware image, initial flash at offset `0x0` |
+| `edge_switch_actuator_waveshare-relay-6ch_0.6.4.elf` | Matching debug symbols |
 
 Names use the effective `APP_VERSION` and PlatformIO environment. Rebuilding the
 same pair replaces its files; other versions are retained. Generation is staged
 before replacing files, and a merge failure fails the build. Packaging tests
-exercise this behavior. At the reviewed baseline, four default-board 0.6.3 files
-in `buildRelease/` are tracked in Git; this directory is **not** ignored.
+exercise this behavior. At the reviewed baseline, four default-board 0.6.4 files
+in `buildRelease/` are tracked in Git. The directory also contains
+`Edge_S3_Relay_6CH.knxprod` for KNX commissioning; the firmware packaging hook
+does not generate that package automatically. Verify it separately.
+This directory is tracked; this directory is **not** ignored.
 
 Use **`_ota.bin` for OTA**, never `_webflash.bin`. With `EMBED_WWW`, the application
 and UI update together without deliberately replacing filesystem settings.
@@ -88,14 +91,14 @@ Update**. Confirm the board/environment and preserve matching debug symbols.
 The MD5 file detects accidental corruption; it is not a firmware signature.
 The build pipeline does not establish signed-image authenticity.
 
-The GitHub release picker has two known source-level limitations at this baseline:
+Firmware 0.6.4 fixes the GitHub repository identifier used by the release picker:
+`page.data.github` is now `betamoojw/edge_switch_actuator`, without `/tree/dev`.
+The sidebar also links directly to this documentation site. These are source-verified
+changes, not evidence of a live OTA test.
 
-- `page.data.github` includes `/tree/dev`, but release components expect only
-  `owner/repository` when constructing GitHub API requests. Release lookup fails.
-- Asset matching checks `.bin` and a board-name substring, so merged images and
-  alternate MCP profiles can also match. Use manual OTA until lookup and exact
-  artifact selection are corrected. Do not publish ambiguous assets to a release
-  consumed by the existing picker.
+Asset matching still checks `.bin` and a board-name substring, so merged images
+and alternate MCP profiles can also match. Prefer a verified, matching manual
+`_ota.bin` and do not publish ambiguous assets to a release consumed by this picker.
 
 Firmware CI retains `buildRelease/` artifacts for 14 days; it does not create tags
 or GitHub Releases. Publishing this documentation does not flash a device or

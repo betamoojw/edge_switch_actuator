@@ -1,7 +1,7 @@
 # Architecture
 
-Source baseline: `dev` at `ced3e6d`, firmware 0.6.3. Paths below are repository-relative;
-[the reviewed tree](https://github.com/betamoojw/edge_switch_actuator/tree/ced3e6d8588f5bc3650d31cdd54e1f80f8bc06e9)
+Source baseline: `dev` at `bf8cb12`, firmware 0.6.4. Paths below are repository-relative;
+[the reviewed tree](https://github.com/betamoojw/edge_switch_actuator/tree/bf8cb12ab9ada4337751968332c7d5e17e056ccc)
 is the reference when later changes differ.
 
 ## Composition and ownership

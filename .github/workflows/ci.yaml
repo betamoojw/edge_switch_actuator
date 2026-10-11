@@ -3,9 +3,9 @@ name: Documentation
 on:
   push:
     branches: [dev]
-    paths: ['docs/**', 'mkdocs.yml', 'requirements-docs.txt', '.github/workflows/ci.yaml']
+    paths: ['docs/**', 'mkdocs.yml', 'requirements-docs.txt', 'docs-languages.json', 'scripts/docs_hook.py', 'scripts/check_docs.py', '.github/workflows/ci.yaml']
   pull_request:
-    paths: ['docs/**', 'mkdocs.yml', 'requirements-docs.txt', '.github/workflows/ci.yaml']
+    paths: ['docs/**', 'mkdocs.yml', 'requirements-docs.txt', 'docs-languages.json', 'scripts/docs_hook.py', 'scripts/check_docs.py', '.github/workflows/ci.yaml']
   workflow_dispatch:
 
 permissions:
@@ -27,6 +27,7 @@ jobs:
           cache-dependency-path: requirements-docs.txt
       - run: python -m pip install -r requirements-docs.txt
       - run: python -m mkdocs build --strict
+      - run: python scripts/check_docs.py
       - uses: actions/upload-pages-artifact@v3
         if: github.ref == 'refs/heads/dev' && github.event_name != 'pull_request'
         with:

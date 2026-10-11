@@ -1,6 +1,6 @@
 # Xiaozhi MCP hardware validation — 2026-10-09
 
-Target: Waveshare ESP32-S3-Relay-6CH, USB COM20, MAC `CC:BA:97:34:D9:AC`, device at `http://192.168.71.28`.
+Target: Waveshare ESP32-S3-Relay-6CH, USB COM20, MAC `CC:BA:97:34:D9:AC`, device at `http://device.example`.
 
 ## Firmware and upload
 
